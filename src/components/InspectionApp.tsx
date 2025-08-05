@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import { useReactToPrint } from 'react-to-print';
+import { SupabaseService, SavedInspection } from '@/services/supabase-service';
 
 // Types
 interface InspectionItem {
@@ -72,6 +74,13 @@ const BackIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const LoadingSpinner = ({ className }: { className?: string }) => (
+  <svg className={cn("animate-spin h-5 w-5", className)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+  </svg>
+);
+
 // Inspection Categories
 const inspectionCategories = {
   "Structural & Interior": ["Hairline Cracks", "Ceilings", "Walls", "Floors", "Doors & Locks", "Wardrobes & Cabinets Functionality", "Switch Logic & Placement", "Stoppers & Door Closers", "Window Lock & Roller Mechanism", "Curtain Box Provision"],
@@ -92,33 +101,52 @@ const inspectionCategories = {
 export default function InspectionApp() {
   const [currentPage, setCurrentPage] = useState('dashboard');
   const [selectedInspectionId, setSelectedInspectionId] = useState<string | null>(null);
-  const [inspections, setInspections] = useState<(InspectionData & { id: string })[]>([]);
+  const [inspections, setInspections] = useState<SavedInspection[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
-  // Load inspections from localStorage
+  // Load inspections from Supabase
   useEffect(() => {
-    const savedInspections = localStorage.getItem('inspections');
-    if (savedInspections) {
-      setInspections(JSON.parse(savedInspections));
-    }
+    loadInspections();
   }, []);
+
+  const loadInspections = async () => {
+    setIsLoading(true);
+    try {
+      const data = await SupabaseService.getInspections();
+      setInspections(data);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to load inspections",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const navigateTo = (page: string, inspectionId: string | null = null) => {
     setCurrentPage(page);
     setSelectedInspectionId(inspectionId);
   };
 
-  const saveInspection = (inspection: InspectionData) => {
-    const id = `inspection_${Date.now()}`;
-    const newInspection = { ...inspection, id };
-    const updatedInspections = [...inspections, newInspection];
-    setInspections(updatedInspections);
-    localStorage.setItem('inspections', JSON.stringify(updatedInspections));
-    toast({
-      title: "Success",
-      description: "Inspection saved successfully!",
-    });
-    navigateTo('dashboard');
+  const saveInspection = async (inspection: InspectionData) => {
+    const savedInspection = await SupabaseService.saveInspection(inspection);
+    if (savedInspection) {
+      await loadInspections();
+      toast({
+        title: "Success",
+        description: "Inspection saved successfully!",
+      });
+      navigateTo('dashboard');
+    } else {
+      toast({
+        title: "Error",
+        description: "Failed to save inspection",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -129,6 +157,7 @@ export default function InspectionApp() {
           <Dashboard 
             navigateTo={navigateTo} 
             inspections={inspections} 
+            isLoading={isLoading}
           />
         )}
         {currentPage === 'newInspection' && (
@@ -172,10 +201,12 @@ function Header() {
 // Dashboard Component
 function Dashboard({ 
   navigateTo, 
-  inspections 
+  inspections,
+  isLoading
 }: { 
   navigateTo: (page: string, id?: string) => void;
-  inspections: (InspectionData & { id: string })[];
+  inspections: SavedInspection[];
+  isLoading: boolean;
 }) {
   return (
     <div className="space-y-6">
@@ -196,7 +227,11 @@ function Dashboard({
       <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
         <h3 className="text-xl font-semibold text-card-foreground mb-6">Recent Inspections</h3>
         
-        {inspections.length > 0 ? (
+        {isLoading ? (
+          <div className="flex items-center justify-center py-12">
+            <LoadingSpinner className="text-primary" />
+          </div>
+        ) : inspections.length > 0 ? (
           <div className="grid gap-4">
             {inspections.map((inspection) => (
               <div 
@@ -253,6 +288,7 @@ function InspectionForm({
     areas: [{ id: Date.now(), name: 'General Area', items: [] }]
   });
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
   const { toast } = useToast();
 
   const handleHeaderChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -326,29 +362,39 @@ function InspectionForm({
     }));
   };
 
-  const handlePhotoUpload = (areaId: number, itemId: number, file: File) => {
-    // Simulate photo upload - in real app, this would upload to cloud storage
-    const photoURL = URL.createObjectURL(file);
-    setInspectionData(prev => ({
-      ...prev,
-      areas: prev.areas.map(area => {
-        if (area.id === areaId) {
-          return {
-            ...area,
-            items: area.items.map(item => 
-              item.id === itemId 
-                ? { ...item, photos: [...item.photos, photoURL] } 
-                : item
-            )
-          };
-        }
-        return area;
-      })
-    }));
-    toast({
-      title: "Photo uploaded",
-      description: "Photo has been added to the inspection point",
-    });
+  const handlePhotoUpload = async (areaId: number, itemId: number, file: File) => {
+    setIsUploadingPhoto(true);
+    const photoURL = await SupabaseService.uploadPhoto(file);
+    
+    if (photoURL) {
+      setInspectionData(prev => ({
+        ...prev,
+        areas: prev.areas.map(area => {
+          if (area.id === areaId) {
+            return {
+              ...area,
+              items: area.items.map(item => 
+                item.id === itemId 
+                  ? { ...item, photos: [...item.photos, photoURL] } 
+                  : item
+              )
+            };
+          }
+          return area;
+        })
+      }));
+      toast({
+        title: "Photo uploaded",
+        description: "Photo has been added to the inspection point",
+      });
+    } else {
+      toast({
+        title: "Upload failed",
+        description: "Failed to upload photo. Please try again.",
+        variant: "destructive",
+      });
+    }
+    setIsUploadingPhoto(false);
   };
 
   const removeItem = (areaId: number, itemId: number) => {
@@ -366,7 +412,7 @@ function InspectionForm({
     }));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!inspectionData.propertyLocation || !inspectionData.inspectorName) {
       toast({
         title: "Error",
@@ -377,11 +423,8 @@ function InspectionForm({
     }
 
     setIsSaving(true);
-    // Simulate API call
-    setTimeout(() => {
-      onSave(inspectionData);
-      setIsSaving(false);
-    }, 1000);
+    await onSave(inspectionData);
+    setIsSaving(false);
   };
 
   return (
@@ -492,6 +535,7 @@ function InspectionForm({
               onPhotoUpload={handlePhotoUpload}
               onAddItem={addItemToArea}
               onRemoveItem={removeItem}
+              isUploadingPhoto={isUploadingPhoto}
             />
           ))}
         </div>
@@ -501,8 +545,9 @@ function InspectionForm({
           <button
             onClick={handleSave}
             disabled={isSaving}
-            className="bg-success text-success-foreground px-8 py-3 rounded-lg font-medium hover:bg-success/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+            className="bg-success text-success-foreground px-8 py-3 rounded-lg font-medium hover:bg-success/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md flex items-center gap-2"
           >
+            {isSaving && <LoadingSpinner />}
             {isSaving ? 'Saving...' : 'Save Inspection'}
           </button>
         </div>
@@ -517,13 +562,15 @@ function InspectionArea({
   onItemChange,
   onPhotoUpload,
   onAddItem,
-  onRemoveItem
+  onRemoveItem,
+  isUploadingPhoto
 }: {
   area: InspectionArea;
   onItemChange: (areaId: number, itemId: number, field: keyof InspectionItem, value: any) => void;
   onPhotoUpload: (areaId: number, itemId: number, file: File) => void;
   onAddItem: (areaId: number, category: string, point: string) => void;
   onRemoveItem: (areaId: number, itemId: number) => void;
+  isUploadingPhoto: boolean;
 }) {
   const [isOpen, setIsOpen] = useState(true);
   const [showAddItem, setShowAddItem] = useState(false);
@@ -557,6 +604,7 @@ function InspectionArea({
                 onChange={onItemChange}
                 onPhotoUpload={onPhotoUpload}
                 onRemove={onRemoveItem}
+                isUploadingPhoto={isUploadingPhoto}
               />
             ))}
             
@@ -618,13 +666,15 @@ function InspectionPoint({
   item,
   onChange,
   onPhotoUpload,
-  onRemove
+  onRemove,
+  isUploadingPhoto
 }: {
   areaId: number;
   item: InspectionItem;
   onChange: (areaId: number, itemId: number, field: keyof InspectionItem, value: any) => void;
   onPhotoUpload: (areaId: number, itemId: number, file: File) => void;
   onRemove: (areaId: number, itemId: number) => void;
+  isUploadingPhoto: boolean;
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -683,10 +733,11 @@ function InspectionPoint({
             <label className="block text-sm font-medium text-foreground mb-2">Photos</label>
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="flex items-center gap-2 bg-secondary text-secondary-foreground px-4 py-2 rounded-md hover:bg-secondary/80 transition-colors"
+              disabled={isUploadingPhoto}
+              className="flex items-center gap-2 bg-secondary text-secondary-foreground px-4 py-2 rounded-md hover:bg-secondary/80 transition-colors disabled:opacity-50"
             >
-              <CameraIcon />
-              Upload Photo
+              {isUploadingPhoto ? <LoadingSpinner /> : <CameraIcon />}
+              {isUploadingPhoto ? 'Uploading...' : 'Upload Photo'}
             </button>
             <input
               type="file"
@@ -706,7 +757,8 @@ function InspectionPoint({
                     key={index}
                     src={url}
                     alt={`Photo ${index + 1}`}
-                    className="w-16 h-16 object-cover rounded-lg border-2 border-border shadow-sm"
+                    className="w-16 h-16 object-cover rounded-lg border-2 border-border shadow-sm cursor-pointer hover:opacity-80"
+                    onClick={() => window.open(url, '_blank')}
                   />
                 ))}
               </div>
@@ -718,40 +770,47 @@ function InspectionPoint({
   );
 }
 
-// Inspection View Component
+// Inspection View Component with PDF Export
 function InspectionView({
   inspection,
   navigateTo
 }: {
-  inspection: InspectionData & { id: string };
+  inspection: SavedInspection;
   navigateTo: (page: string) => void;
 }) {
   const printRef = useRef<HTMLDivElement>(null);
 
-  const handlePrint = () => {
-    if (printRef.current) {
-      const printContent = printRef.current.innerHTML;
-      const originalContent = document.body.innerHTML;
-      document.body.innerHTML = `
-        <style>
-          body { font-family: 'Times New Roman', serif; margin: 0; padding: 20px; }
-          h1, h2, h3 { font-family: 'Georgia', serif; }
-          table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-          th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-          th { background-color: #f2f2f2; font-weight: bold; }
-          .status-pass { color: #22c55e; font-weight: bold; }
-          .status-fail { color: #ef4444; font-weight: bold; }
-          .status-na { color: #6b7280; font-weight: bold; }
-          .no-print { display: none; }
-          @media print { .no-print { display: none !important; } }
-        </style>
-        ${printContent}
-      `;
-      window.print();
-      document.body.innerHTML = originalContent;
-      window.location.reload();
-    }
-  };
+  const handlePrint = useReactToPrint({
+    content: () => printRef.current,
+    documentTitle: `Inspection_Report_${inspection.propertyLocation}_${new Date().toISOString().split('T')[0]}`,
+    pageStyle: `
+      @page {
+        size: A4;
+        margin: 20mm;
+      }
+      @media print {
+        body {
+          -webkit-print-color-adjust: exact;
+        }
+        .no-print {
+          display: none !important;
+        }
+        .page-break {
+          page-break-before: always;
+        }
+        img {
+          max-width: 100%;
+          page-break-inside: avoid;
+        }
+        table {
+          page-break-inside: avoid;
+        }
+        tr {
+          page-break-inside: avoid;
+        }
+      }
+    `,
+  });
 
   return (
     <div className="space-y-6">
@@ -768,7 +827,7 @@ function InspectionView({
           className="flex items-center gap-2 bg-secondary text-secondary-foreground px-4 py-2 rounded-lg hover:bg-secondary/80 transition-colors font-medium"
         >
           <PrintIcon />
-          Print Report
+          Print/Export PDF
         </button>
       </div>
 
@@ -789,8 +848,8 @@ function InspectionView({
         </section>
 
         <main className="space-y-8">
-          {inspection.areas.map(area => (
-            <div key={area.id}>
+          {inspection.areas.map((area, areaIndex) => (
+            <div key={area.id} className={areaIndex > 0 ? 'page-break' : ''}>
               <h2 className="text-xl font-bold bg-secondary/20 p-3 rounded-t-lg border-b-2 border-primary text-card-foreground">
                 Area: {area.name}
               </h2>
@@ -806,27 +865,48 @@ function InspectionView({
                     </thead>
                     <tbody>
                       {area.items.map(item => (
-                        <tr key={item.id} className="border-b border-border">
-                          <td className="border border-border p-3">
-                            <strong>{item.category}</strong><br />
-                            {item.point}
-                          </td>
-                          <td className={cn(
-                            "border border-border p-3 text-center font-bold",
-                            item.status === 'Pass' && "status-pass",
-                            item.status === 'Fail' && "status-fail",
-                            item.status === 'N/A' && "status-na"
-                          )}>
-                            {item.status}
-                          </td>
-                          <td className="border border-border p-3">
-                            {item.comments && <p><strong>Comments:</strong> {item.comments}</p>}
-                            {item.location && <p><strong>Location:</strong> {item.location}</p>}
-                            {item.photos.length > 0 && (
-                              <p><strong>Photos:</strong> {item.photos.length} attached</p>
-                            )}
-                          </td>
-                        </tr>
+                        <React.Fragment key={item.id}>
+                          <tr className="border-b border-border">
+                            <td className="border border-border p-3">
+                              <strong>{item.category}</strong><br />
+                              {item.point}
+                            </td>
+                            <td className={cn(
+                              "border border-border p-3 text-center font-bold",
+                              item.status === 'Pass' && "text-success",
+                              item.status === 'Fail' && "text-destructive",
+                              item.status === 'N/A' && "text-muted-foreground"
+                            )}>
+                              {item.status}
+                            </td>
+                            <td className="border border-border p-3">
+                              {item.comments && <p><strong>Comments:</strong> {item.comments}</p>}
+                              {item.location && <p><strong>Location:</strong> {item.location}</p>}
+                              {item.photos.length > 0 && (
+                                <p><strong>Photos:</strong> {item.photos.length} attached</p>
+                              )}
+                            </td>
+                          </tr>
+                          {item.photos.length > 0 && (
+                            <tr className="border-b border-border">
+                              <td colSpan={3} className="border border-border p-3">
+                                <div className="space-y-2">
+                                  <p className="font-semibold">Photos:</p>
+                                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                    {item.photos.map((photo, idx) => (
+                                      <img
+                                        key={idx}
+                                        src={photo}
+                                        alt={`${item.point} - Photo ${idx + 1}`}
+                                        className="w-full h-40 object-cover rounded border border-border"
+                                      />
+                                    ))}
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </React.Fragment>
                       ))}
                     </tbody>
                   </table>
