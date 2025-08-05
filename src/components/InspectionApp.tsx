@@ -105,6 +105,36 @@ const LoadingSpinner = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const InspectionsIcon = ({ className }: { className?: string }) => (
+  <svg className={cn("w-6 h-6", className)} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+  </svg>
+);
+
+const PassIcon = ({ className }: { className?: string }) => (
+  <svg className={cn("w-6 h-6", className)} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+);
+
+const FailIcon = ({ className }: { className?: string }) => (
+  <svg className={cn("w-6 h-6", className)} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+);
+
+const SnagsIcon = ({ className }: { className?: string }) => (
+  <svg className={cn("w-6 h-6", className)} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+  </svg>
+);
+
+const CalendarIcon = ({ className }: { className?: string }) => (
+  <svg className={cn("w-6 h-6", className)} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+  </svg>
+);
+
 // Inspection Categories
 const inspectionCategories = {
   "Structural & Interior": ["Hairline Cracks", "Ceilings", "Walls", "Floors", "Doors & Locks", "Wardrobes & Cabinets Functionality", "Switch Logic & Placement", "Stoppers & Door Closers", "Window Lock & Roller Mechanism", "Curtain Box Provision"],
@@ -287,6 +317,36 @@ function Header() {
   );
 }
 
+// KPI Card Component
+function KPICard({ 
+  title, 
+  value, 
+  icon, 
+  color, 
+  description 
+}: { 
+  title: string; 
+  value: string | number; 
+  icon: React.ReactNode; 
+  color: string; 
+  description: string; 
+}) {
+  return (
+    <div className="bg-card border border-border rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-200">
+      <div className="flex items-center justify-between">
+        <div className="flex-1">
+          <p className="text-sm font-medium text-muted-foreground mb-1">{title}</p>
+          <p className="text-3xl font-bold text-card-foreground mb-2">{value}</p>
+          <p className="text-xs text-muted-foreground">{description}</p>
+        </div>
+        <div className={cn("p-3 rounded-lg", color)}>
+          {icon}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Dashboard Component
 function Dashboard({ 
   navigateTo, 
@@ -299,6 +359,34 @@ function Dashboard({
   isLoading: boolean;
   onDeleteConfirmation: (id: string, name: string) => void;
 }) {
+  // Calculate KPI statistics
+  const totalInspections = inspections.length;
+  
+  // Calculate status statistics
+  const statusStats = inspections.reduce((acc, inspection) => {
+    inspection.areas.forEach(area => {
+      area.items.forEach(item => {
+        acc[item.status] = (acc[item.status] || 0) + 1;
+        acc.total = (acc.total || 0) + 1;
+      });
+    });
+    return acc;
+  }, {} as Record<string, number>);
+
+  const passCount = statusStats['Pass'] || 0;
+  const failCount = statusStats['Fail'] || 0;
+  const snagsCount = statusStats['Snags'] || 0;
+  const totalItems = statusStats.total || 0;
+
+  // Calculate recent inspections (last 30 days)
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  const recentInspections = inspections.filter(inspection => 
+    new Date(inspection.inspectionDate) >= thirtyDaysAgo
+  ).length;
+
+  // Calculate pass rate
+  const passRate = totalItems > 0 ? Math.round((passCount / totalItems) * 100) : 0;
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
@@ -314,6 +402,65 @@ function Dashboard({
           New Inspection
         </button>
       </div>
+
+      {/* KPI Cards Section */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <KPICard
+          title="Total Inspections"
+          value={totalInspections}
+          icon={<InspectionsIcon className="text-white" />}
+          color="bg-primary text-primary-foreground"
+          description="All completed inspections"
+        />
+        <KPICard
+          title="Recent Inspections"
+          value={recentInspections}
+          icon={<CalendarIcon className="text-white" />}
+          color="bg-blue-500 text-white"
+          description="Last 30 days"
+        />
+        <KPICard
+          title="Pass Rate"
+          value={`${passRate}%`}
+          icon={<PassIcon className="text-white" />}
+          color="bg-success text-success-foreground"
+          description="Overall success rate"
+        />
+        <KPICard
+          title="Issues Found"
+          value={failCount + snagsCount}
+          icon={<SnagsIcon className="text-white" />}
+          color="bg-orange-500 text-white"
+          description="Fails + Snags combined"
+        />
+      </div>
+
+      {/* Status Breakdown Cards */}
+      {totalItems > 0 && (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+          <KPICard
+            title="Pass Items"
+            value={passCount}
+            icon={<PassIcon className="text-white" />}
+            color="bg-success text-success-foreground"
+            description={`${Math.round((passCount / totalItems) * 100)}% of all items`}
+          />
+          <KPICard
+            title="Failed Items"
+            value={failCount}
+            icon={<FailIcon className="text-white" />}
+            color="bg-destructive text-destructive-foreground"
+            description={`${Math.round((failCount / totalItems) * 100)}% of all items`}
+          />
+          <KPICard
+            title="Snag Items"
+            value={snagsCount}
+            icon={<SnagsIcon className="text-white" />}
+            color="bg-gray-500 text-white"
+            description={`${Math.round((snagsCount / totalItems) * 100)}% of all items`}
+          />
+        </div>
+      )}
 
       <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
         <h3 className="text-xl font-semibold text-card-foreground mb-6">Recent Inspections</h3>
@@ -910,60 +1057,232 @@ function InspectionView({
         <head>
           <title>Solution Property - Inspection Report - ${inspection.propertyLocation}</title>
           <style>
+            @page {
+              size: A4;
+              margin: 15mm 15mm 20mm 15mm;
+            }
+            
+            body {
+              font-family: Arial, sans-serif;
+              line-height: 1.5;
+              color: #333;
+              font-size: 11pt;
+              margin: 0;
+              padding: 20px;
+              position: relative;
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
+              color-adjust: exact;
+            }
+            
+            /* Watermark that appears on every page */
+            body::before {
+              content: '';
+              position: fixed;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              width: 400px;
+              height: 400px;
+              background-image: url('/logo.jpeg');
+              background-repeat: no-repeat;
+              background-position: center;
+              background-size: contain;
+              opacity: 0.05;
+              z-index: -1;
+              pointer-events: none;
+            }
+            
+            .report-container {
+              position: relative;
+              z-index: 1;
+              background: white;
+            }
+            
+            .no-print {
+              display: none !important;
+            }
+            
+            .page-break {
+              page-break-before: always;
+              padding-top: 20px;
+            }
+            
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin: 15px 0;
+              font-size: 10pt;
+            }
+            
+            th, td {
+              border: 1px solid #ddd;
+              padding: 8px;
+              text-align: left;
+            }
+            
+            th {
+              background-color: #f2f2f2 !important;
+              font-weight: bold;
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
+            }
+            
+            .status-pass { color: #22c55e !important; font-weight: bold; }
+            .status-fail { color: #ef4444 !important; font-weight: bold; }
+            .status-snags { color: #6b7280 !important; font-weight: bold; }
+            
+            h1 { font-size: 24pt; color: #1a1a1a; margin: 10px 0; }
+            h2 { font-size: 20pt; color: #1a1a1a; margin: 8px 0; }
+            h3 { font-size: 14pt; color: #1a1a1a; margin: 8px 0; }
+            
+            /* Photo sizing - much smaller for print */
+            img.photo-item {
+              width: 120px !important;
+              height: 90px !important;
+              object-fit: cover;
+              page-break-inside: avoid;
+              border-radius: 4px;
+              border: 1px solid #ddd;
+              margin: 4px;
+              display: inline-block;
+            }
+            
+            .header {
+              text-align: center;
+              border-bottom: 2px solid #333;
+              padding-bottom: 15px;
+              margin-bottom: 20px;
+              position: relative;
+              padding-top: 15px;
+              page-break-after: avoid;
+            }
+            
+            .watermark-logo {
+              position: absolute;
+              top: 5px;
+              left: 50%;
+              transform: translateX(-50%);
+              z-index: 0;
+            }
+            
+            .watermark-logo img {
+              width: 80px !important;
+              height: 80px !important;
+              object-fit: contain;
+              opacity: 0.2;
+            }
+            
+            .header-content {
+              position: relative;
+              z-index: 1;
+              padding-top: 60px;
+            }
+            
+            .introduction-section {
+              margin-bottom: 20px;
+              padding: 15px;
+              background-color: #EBF8FF !important;
+              border: 1px solid #90CDF4;
+              border-radius: 6px;
+              page-break-inside: avoid;
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
+            }
+            
+            .introduction-section h3 {
+              font-weight: bold;
+              font-size: 12pt;
+              margin-bottom: 10px;
+              text-align: center;
+              color: #1E40AF !important;
+            }
+            
+            .introduction-section div {
+              font-size: 10pt;
+              color: #374151;
+            }
+            
+            .introduction-section p {
+              margin-bottom: 8px;
+              line-height: 1.4;
+            }
+            
+            .property-details {
+              font-size: 10pt;
+              margin-bottom: 20px;
+            }
+            
+            .disclaimer-section {
+              margin-top: 30px;
+              margin-bottom: 20px;
+              padding: 15px;
+              background-color: #F3F4F6 !important;
+              border: 1px solid #E5E7EB;
+              border-radius: 6px;
+              page-break-inside: avoid;
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
+            }
+            
+            .disclaimer-section h3 {
+              font-weight: bold;
+              font-size: 12pt;
+              margin-bottom: 10px;
+              text-align: center;
+            }
+            
+            .disclaimer-section div {
+              font-size: 9pt;
+              color: #374151;
+            }
+            
+            .disclaimer-section p {
+              margin-bottom: 6px;
+              line-height: 1.3;
+            }
+            
+            .footer {
+              margin-top: 30px;
+              padding-top: 20px;
+              border-top: 2px solid #333;
+              page-break-inside: avoid;
+            }
+            
+            .signature-box {
+              border-bottom: 2px solid #999;
+              height: 50px;
+              margin-top: 8px;
+            }
+            
+            .signature-section {
+              display: table;
+              width: 100%;
+              table-layout: fixed;
+            }
+            
+            .signature-column {
+              display: table-cell;
+              width: 45%;
+              padding-right: 5%;
+            }
+            
+            .photo-grid {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 8px;
+              margin-top: 8px;
+            }
+            
             @media print {
-              @page {
-                size: A4;
-                margin: 20mm;
-              }
               body {
-                font-family: Arial, sans-serif;
-                line-height: 1.6;
-                color: #333;
+                margin: 0;
+                padding: 0;
               }
-              .no-print {
-                display: none !important;
-              }
-              .page-break {
-                page-break-before: always;
-              }
-              table {
-                width: 100%;
-                border-collapse: collapse;
-                margin: 20px 0;
-              }
-              th, td {
-                border: 1px solid #ddd;
-                padding: 12px;
-                text-align: left;
-              }
-              th {
-                background-color: #f2f2f2;
-                font-weight: bold;
-              }
-              .status-pass { color: #22c55e; font-weight: bold; }
-              .status-fail { color: #ef4444; font-weight: bold; }
-              .status-snags { color: #6b7280; font-weight: bold; }
-              h1, h2, h3 { color: #1a1a1a; }
-              img {
-                max-width: 100%;
-                height: auto;
-                page-break-inside: avoid;
-              }
-              .header {
-                text-align: center;
-                border-bottom: 2px solid #333;
-                padding-bottom: 20px;
-                margin-bottom: 30px;
-              }
-              .footer {
-                margin-top: 50px;
-                padding-top: 30px;
-                border-top: 2px solid #333;
-              }
-              .signature-box {
-                border-bottom: 2px solid #999;
-                height: 60px;
-                margin-top: 10px;
+              
+              .report-wrapper {
+                margin: 0;
+                padding: 0;
               }
             }
           </style>
@@ -1006,15 +1325,51 @@ function InspectionView({
         </div>
       </div>
 
-      <div ref={printRef} className="bg-card border border-border rounded-xl p-8 shadow-sm">
+      <div ref={printRef} className="report-container bg-card border border-border rounded-xl p-8 shadow-sm">
         <header className="header text-center border-b-2 border-primary pb-6 mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-card-foreground">
-            Property Inspection Report
-          </h1>
-          <p className="text-lg text-muted-foreground mt-2">Official Document</p>
+          <div className="watermark-logo">
+            <img 
+              src="/logo.jpeg" 
+              alt="Company Logo Watermark" 
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.style.display = 'none';
+              }}
+            />
+          </div>
+          <div className="header-content">
+            <h1 className="text-3xl md:text-4xl font-bold text-card-foreground">
+              Solution Property
+            </h1>
+            <h2 className="text-2xl md:text-3xl font-semibold text-card-foreground mt-2">
+              Property Inspection Report
+            </h2>
+            <p className="text-lg text-muted-foreground mt-2">Official Document</p>
+          </div>
         </header>
 
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-6 text-base mb-8">
+        <section className="introduction-section mb-8 p-6 bg-blue-50 border border-blue-200 rounded-lg">
+          <h3 className="font-bold text-lg mb-4 text-center text-blue-800">INSPECTION INTRODUCTION</h3>
+          <div className="text-sm text-gray-700 space-y-3">
+            <p>
+              <strong>Dear {inspection.clientName || 'Valued Client'},</strong>
+            </p>
+            <p>
+              Solution Property is pleased to present this comprehensive inspection report for the property located at <strong>{inspection.propertyLocation}</strong>. This {inspection.propertyType.toLowerCase()} has been thoroughly examined by our certified inspector, <strong>{inspection.inspectorName}</strong>, on <strong>{new Date(inspection.inspectionDate).toLocaleDateString()}</strong>.
+            </p>
+            <p>
+              Our inspection process follows industry-standard procedures and best practices to provide you with an accurate assessment of the property's current condition. We have evaluated various systems and components including structural elements, electrical systems, plumbing, HVAC, safety features, and overall property condition.
+            </p>
+            <p>
+              This report contains detailed findings, photographic evidence where applicable, and professional recommendations. Each inspection point has been categorized as Pass, Fail, or Snags (minor issues requiring attention). We encourage you to review this report carefully and contact us if you have any questions or require clarification on any findings.
+            </p>
+            <p>
+              <strong>Thank you for choosing Solution Property for your inspection needs.</strong>
+            </p>
+          </div>
+        </section>
+
+        <section className="property-details grid grid-cols-1 md:grid-cols-2 gap-6 text-base mb-8">
           <div><strong>Client:</strong> {inspection.clientName || 'N/A'}</div>
           <div><strong>Property:</strong> {inspection.propertyLocation}</div>
           <div><strong>Inspector:</strong> {inspection.inspectorName}</div>
@@ -1067,13 +1422,13 @@ function InspectionView({
                               <td colSpan={3} className="border border-border p-3">
                                 <div className="space-y-2">
                                   <p className="font-semibold">Photos:</p>
-                                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                  <div className="photo-grid">
                                     {item.photos.map((photo, idx) => (
                                       <img
                                         key={idx}
                                         src={photo}
                                         alt={`${item.point} - Photo ${idx + 1}`}
-                                        className="w-full h-40 object-cover rounded border border-border"
+                                        className="photo-item"
                                       />
                                     ))}
                                   </div>
@@ -1096,18 +1451,41 @@ function InspectionView({
         </main>
 
         <footer className="footer mt-12 pt-8 border-t-2 border-primary">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div>
-              <p className="font-bold mb-4">Inspector Signature:</p>
-              <div className="signature-box border-b-2 border-muted h-16"></div>
+          <div className="disclaimer-section mb-8 p-6 bg-gray-50 border border-gray-200 rounded-lg">
+            <h3 className="font-bold text-lg mb-4 text-center">DISCLAIMER</h3>
+            <div className="text-sm text-gray-700 space-y-2">
+              <p>
+                <strong>Scope of Inspection:</strong> This report is based on a visual inspection of the property conducted on the date specified. The inspection covers readily accessible areas and systems that were visible and available for examination at the time of the inspection.
+              </p>
+              <p>
+                <strong>Limitations:</strong> This inspection does not include areas that were inaccessible, covered, or concealed at the time of inspection. The report does not guarantee against future defects or problems that may arise after the inspection date.
+              </p>
+              <p>
+                <strong>Professional Opinion:</strong> The findings and recommendations in this report represent the professional opinion of the inspector based on industry standards and best practices. This report is intended for the exclusive use of the client named herein.
+              </p>
+              <p>
+                <strong>Liability:</strong> Solution Property and its inspectors shall not be liable for any damages, losses, or costs arising from the use of this report or any actions taken based on its contents beyond the cost of the inspection service.
+              </p>
+              <p>
+                <strong>Validity:</strong> This report is valid for 30 days from the inspection date. Property conditions may change after this period.
+              </p>
             </div>
-            <div>
+          </div>
+          
+          <div className="signature-section">
+            <div className="signature-column">
+              <p className="font-bold mb-4">Inspector Signature:</p>
+              <div className="signature-box"></div>
+              <p className="text-sm text-gray-600 mt-2">Date: {new Date().toLocaleDateString()}</p>
+            </div>
+            <div className="signature-column">
               <p className="font-bold mb-4">Client Signature:</p>
-              <div className="signature-box border-b-2 border-muted h-16"></div>
+              <div className="signature-box"></div>
+              <p className="text-sm text-gray-600 mt-2">Date: _______________</p>
             </div>
           </div>
           <div className="text-center mt-8 text-sm text-muted-foreground">
-            Generated on {new Date().toLocaleDateString()} • Solution Property
+            Generated on {new Date().toLocaleDateString()} • Solution Property - Professional Property Inspection Services
           </div>
         </footer>
       </div>
