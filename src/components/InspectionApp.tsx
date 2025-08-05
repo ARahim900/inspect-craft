@@ -60,6 +60,12 @@ const EditIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const DeleteIcon = ({ className }: { className?: string }) => (
+  <svg className={cn("w-5 h-5", className)} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+  </svg>
+);
+
 const AppIcon = ({ className }: { className?: string }) => (
   <svg className={cn("w-8 h-8", className)} fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -108,6 +114,7 @@ export default function InspectionApp() {
   const [selectedInspectionId, setSelectedInspectionId] = useState<string | null>(null);
   const [inspections, setInspections] = useState<SavedInspection[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [deleteConfirmation, setDeleteConfirmation] = useState<{ show: boolean; inspectionId: string | null; inspectionName: string }>({ show: false, inspectionId: null, inspectionName: '' });
   const { toast } = useToast();
 
   // Load inspections from Supabase
@@ -154,6 +161,34 @@ export default function InspectionApp() {
     }
   };
 
+  const handleDeleteConfirmation = (inspectionId: string, inspectionName: string) => {
+    setDeleteConfirmation({ show: true, inspectionId, inspectionName });
+  };
+
+  const deleteInspection = async () => {
+    if (!deleteConfirmation.inspectionId) return;
+    
+    const success = await SupabaseService.deleteInspection(deleteConfirmation.inspectionId);
+    if (success) {
+      await loadInspections();
+      toast({
+        title: "Success",
+        description: "Inspection deleted successfully!",
+      });
+    } else {
+      toast({
+        title: "Error",
+        description: "Failed to delete inspection",
+        variant: "destructive",
+      });
+    }
+    setDeleteConfirmation({ show: false, inspectionId: null, inspectionName: '' });
+  };
+
+  const cancelDelete = () => {
+    setDeleteConfirmation({ show: false, inspectionId: null, inspectionName: '' });
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -163,6 +198,7 @@ export default function InspectionApp() {
             navigateTo={navigateTo} 
             inspections={inspections} 
             isLoading={isLoading}
+            onDeleteConfirmation={handleDeleteConfirmation}
           />
         )}
         {currentPage === 'newInspection' && (
@@ -185,6 +221,39 @@ export default function InspectionApp() {
           />
         )}
       </main>
+      
+      {/* Delete Confirmation Modal */}
+      {deleteConfirmation.show && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-card border border-border rounded-xl p-6 max-w-md w-full shadow-lg">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-destructive/10 rounded-full">
+                <DeleteIcon className="w-6 h-6 text-destructive" />
+              </div>
+              <h3 className="text-lg font-semibold text-card-foreground">Delete Inspection</h3>
+            </div>
+            
+            <p className="text-muted-foreground mb-6">
+              Are you sure you want to delete the inspection for <strong>"{deleteConfirmation.inspectionName}"</strong>? This action cannot be undone.
+            </p>
+            
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={cancelDelete}
+                className="px-4 py-2 border border-border rounded-md text-foreground hover:bg-accent transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={deleteInspection}
+                className="px-4 py-2 bg-destructive text-destructive-foreground rounded-md hover:bg-destructive/90 transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -214,11 +283,13 @@ function Header() {
 function Dashboard({ 
   navigateTo, 
   inspections,
-  isLoading
+  isLoading,
+  onDeleteConfirmation
 }: { 
   navigateTo: (page: string, id?: string) => void;
   inspections: SavedInspection[];
   isLoading: boolean;
+  onDeleteConfirmation: (id: string, name: string) => void;
 }) {
   return (
     <div className="space-y-6">
@@ -261,19 +332,26 @@ function Dashboard({
                       {inspection.clientName && <p>Client: {inspection.clientName}</p>}
                     </div>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 flex-wrap">
                     <button 
                       onClick={() => navigateTo('editInspection', inspection.id)}
-                      className="bg-accent text-accent-foreground px-4 py-2 rounded-md hover:bg-accent/80 transition-colors font-medium flex items-center gap-2"
+                      className="bg-accent text-accent-foreground px-3 py-2 rounded-md hover:bg-accent/80 transition-colors font-medium flex items-center gap-2 text-sm"
                     >
                       <EditIcon className="w-4 h-4" />
                       Edit
                     </button>
                     <button 
                       onClick={() => navigateTo('viewInspection', inspection.id)}
-                      className="bg-secondary text-secondary-foreground px-4 py-2 rounded-md hover:bg-secondary/80 transition-colors font-medium"
+                      className="bg-secondary text-secondary-foreground px-3 py-2 rounded-md hover:bg-secondary/80 transition-colors font-medium text-sm"
                     >
                       View Report
+                    </button>
+                    <button 
+                      onClick={() => onDeleteConfirmation(inspection.id, inspection.propertyLocation)}
+                      className="bg-destructive text-destructive-foreground px-3 py-2 rounded-md hover:bg-destructive/90 transition-colors font-medium flex items-center gap-2 text-sm"
+                    >
+                      <DeleteIcon className="w-4 h-4" />
+                      Delete
                     </button>
                   </div>
                 </div>
