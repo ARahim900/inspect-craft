@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS inspection_items (
   area_id UUID NOT NULL REFERENCES inspection_areas(id) ON DELETE CASCADE,
   category TEXT NOT NULL,
   point TEXT NOT NULL,
-  status TEXT CHECK (status IN ('N/A', 'Pass', 'Fail')) DEFAULT 'N/A',
+  status TEXT CHECK (status IN ('Snags', 'Pass', 'Fail')) DEFAULT 'Snags',
   comments TEXT,
   location TEXT,
   photos TEXT[], -- Array of photo URLs

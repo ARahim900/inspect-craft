@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
-import { useReactToPrint } from 'react-to-print';
 import { SupabaseService, SavedInspection } from '@/services/supabase-service';
 
 // Types
@@ -9,7 +8,7 @@ interface InspectionItem {
   id: number;
   category: string;
   point: string;
-  status: 'N/A' | 'Pass' | 'Fail';
+  status: 'Snags' | 'Pass' | 'Fail';
   comments: string;
   location: string;
   photos: string[];
@@ -52,6 +51,12 @@ const ChevronDownIcon = ({ isOpen, className }: { isOpen: boolean; className?: s
 const PrintIcon = ({ className }: { className?: string }) => (
   <svg className={cn("w-5 h-5", className)} fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+  </svg>
+);
+
+const EditIcon = ({ className }: { className?: string }) => (
+  <svg className={cn("w-5 h-5", className)} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
   </svg>
 );
 
@@ -166,6 +171,13 @@ export default function InspectionApp() {
             onSave={saveInspection} 
           />
         )}
+        {currentPage === 'editInspection' && selectedInspectionId && (
+          <InspectionForm 
+            navigateTo={navigateTo} 
+            onSave={saveInspection}
+            editInspection={inspections.find(i => i.id === selectedInspectionId)}
+          />
+        )}
         {currentPage === 'viewInspection' && selectedInspectionId && (
           <InspectionView 
             inspection={inspections.find(i => i.id === selectedInspectionId)!}
@@ -249,12 +261,21 @@ function Dashboard({
                       {inspection.clientName && <p>Client: {inspection.clientName}</p>}
                     </div>
                   </div>
-                  <button 
-                    onClick={() => navigateTo('viewInspection', inspection.id)}
-                    className="bg-secondary text-secondary-foreground px-4 py-2 rounded-md hover:bg-secondary/80 transition-colors font-medium"
-                  >
-                    View Report
-                  </button>
+                  <div className="flex gap-2">
+                    <button 
+                      onClick={() => navigateTo('editInspection', inspection.id)}
+                      className="bg-accent text-accent-foreground px-4 py-2 rounded-md hover:bg-accent/80 transition-colors font-medium flex items-center gap-2"
+                    >
+                      <EditIcon className="w-4 h-4" />
+                      Edit
+                    </button>
+                    <button 
+                      onClick={() => navigateTo('viewInspection', inspection.id)}
+                      className="bg-secondary text-secondary-foreground px-4 py-2 rounded-md hover:bg-secondary/80 transition-colors font-medium"
+                    >
+                      View Report
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -274,19 +295,23 @@ function Dashboard({
 // Inspection Form Component
 function InspectionForm({ 
   navigateTo, 
-  onSave 
+  onSave,
+  editInspection
 }: { 
   navigateTo: (page: string) => void;
   onSave: (data: InspectionData) => void;
+  editInspection?: SavedInspection;
 }) {
-  const [inspectionData, setInspectionData] = useState<InspectionData>({
-    clientName: '',
-    propertyLocation: '',
-    propertyType: 'Apartment',
-    inspectorName: '',
-    inspectionDate: new Date().toISOString().split('T')[0],
-    areas: [{ id: Date.now(), name: 'General Area', items: [] }]
-  });
+  const [inspectionData, setInspectionData] = useState<InspectionData>(
+    editInspection || {
+      clientName: '',
+      propertyLocation: '',
+      propertyType: 'Apartment',
+      inspectorName: '',
+      inspectionDate: new Date().toISOString().split('T')[0],
+      areas: [{ id: Date.now(), name: 'General Area', items: [] }]
+    }
+  );
   const [isSaving, setIsSaving] = useState(false);
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
   const { toast } = useToast();
@@ -333,7 +358,7 @@ function InspectionForm({
             id: Date.now(),
             category,
             point,
-            status: 'N/A',
+            status: 'Snags',
             comments: '',
             location: '',
             photos: []
@@ -441,7 +466,7 @@ function InspectionForm({
 
       <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
         <h2 className="text-2xl md:text-3xl font-bold text-card-foreground mb-8">
-          New Property Inspection
+          {editInspection ? 'Edit Property Inspection' : 'New Property Inspection'}
         </h2>
 
         {/* Basic Information */}
@@ -548,7 +573,7 @@ function InspectionForm({
             className="bg-success text-success-foreground px-8 py-3 rounded-lg font-medium hover:bg-success/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md flex items-center gap-2"
           >
             {isSaving && <LoadingSpinner />}
-            {isSaving ? 'Saving...' : 'Save Inspection'}
+            {isSaving ? 'Saving...' : (editInspection ? 'Update Inspection' : 'Save Inspection')}
           </button>
         </div>
       </div>
@@ -708,8 +733,8 @@ function InspectionPoint({
             />
             <StatusButton
               currentStatus={item.status}
-              newStatus="N/A"
-              onClick={() => onChange(areaId, item.id, 'status', 'N/A')}
+              newStatus="Snags"
+              onClick={() => onChange(areaId, item.id, 'status', 'Snags')}
             />
           </div>
         </div>
@@ -780,37 +805,90 @@ function InspectionView({
 }) {
   const printRef = useRef<HTMLDivElement>(null);
 
-  const handlePrint = useReactToPrint({
-    content: () => printRef.current,
-    documentTitle: `Inspection_Report_${inspection.propertyLocation}_${new Date().toISOString().split('T')[0]}`,
-    pageStyle: `
-      @page {
-        size: A4;
-        margin: 20mm;
+  const handlePrint = () => {
+    if (printRef.current) {
+      // Create a new window for printing
+      const printWindow = window.open('', '_blank');
+      if (!printWindow) {
+        alert('Please allow pop-ups to print the report');
+        return;
       }
-      @media print {
-        body {
-          -webkit-print-color-adjust: exact;
-        }
-        .no-print {
-          display: none !important;
-        }
-        .page-break {
-          page-break-before: always;
-        }
-        img {
-          max-width: 100%;
-          page-break-inside: avoid;
-        }
-        table {
-          page-break-inside: avoid;
-        }
-        tr {
-          page-break-inside: avoid;
-        }
-      }
-    `,
-  });
+
+      const printContent = printRef.current.innerHTML;
+      
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Inspection Report - ${inspection.propertyLocation}</title>
+          <style>
+            @media print {
+              @page {
+                size: A4;
+                margin: 20mm;
+              }
+              body {
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                color: #333;
+              }
+              .no-print {
+                display: none !important;
+              }
+              .page-break {
+                page-break-before: always;
+              }
+              table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+              }
+              th, td {
+                border: 1px solid #ddd;
+                padding: 12px;
+                text-align: left;
+              }
+              th {
+                background-color: #f2f2f2;
+                font-weight: bold;
+              }
+              .status-pass { color: #22c55e; font-weight: bold; }
+              .status-fail { color: #ef4444; font-weight: bold; }
+              .status-snags { color: #6b7280; font-weight: bold; }
+              h1, h2, h3 { color: #1a1a1a; }
+              img {
+                max-width: 100%;
+                height: auto;
+                page-break-inside: avoid;
+              }
+              .header {
+                text-align: center;
+                border-bottom: 2px solid #333;
+                padding-bottom: 20px;
+                margin-bottom: 30px;
+              }
+              .footer {
+                margin-top: 50px;
+                padding-top: 30px;
+                border-top: 2px solid #333;
+              }
+              .signature-box {
+                border-bottom: 2px solid #999;
+                height: 60px;
+                margin-top: 10px;
+              }
+            }
+          </style>
+        </head>
+        <body onload="window.print(); window.onafterprint = () => window.close();">
+          ${printContent}
+        </body>
+        </html>
+      `);
+      
+      printWindow.document.close();
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -822,17 +900,26 @@ function InspectionView({
           <BackIcon />
           Back to Dashboard
         </button>
-        <button
-          onClick={handlePrint}
-          className="flex items-center gap-2 bg-secondary text-secondary-foreground px-4 py-2 rounded-lg hover:bg-secondary/80 transition-colors font-medium"
-        >
-          <PrintIcon />
-          Print/Export PDF
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => navigateTo('editInspection', inspection.id)}
+            className="flex items-center gap-2 bg-accent text-accent-foreground px-4 py-2 rounded-lg hover:bg-accent/80 transition-colors font-medium"
+          >
+            <EditIcon className="w-4 h-4" />
+            Edit Report
+          </button>
+          <button
+            onClick={handlePrint}
+            className="flex items-center gap-2 bg-secondary text-secondary-foreground px-4 py-2 rounded-lg hover:bg-secondary/80 transition-colors font-medium"
+          >
+            <PrintIcon />
+            Print/Export PDF
+          </button>
+        </div>
       </div>
 
       <div ref={printRef} className="bg-card border border-border rounded-xl p-8 shadow-sm">
-        <header className="text-center border-b-2 border-primary pb-6 mb-8">
+        <header className="header text-center border-b-2 border-primary pb-6 mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-card-foreground">
             Property Inspection Report
           </h1>
@@ -873,9 +960,9 @@ function InspectionView({
                             </td>
                             <td className={cn(
                               "border border-border p-3 text-center font-bold",
-                              item.status === 'Pass' && "text-success",
-                              item.status === 'Fail' && "text-destructive",
-                              item.status === 'N/A' && "text-muted-foreground"
+                              item.status === 'Pass' && "status-pass text-success",
+                              item.status === 'Fail' && "status-fail text-destructive",
+                              item.status === 'Snags' && "status-snags text-muted-foreground"
                             )}>
                               {item.status}
                             </td>
@@ -920,15 +1007,15 @@ function InspectionView({
           ))}
         </main>
 
-        <footer className="mt-12 pt-8 border-t-2 border-primary">
+        <footer className="footer mt-12 pt-8 border-t-2 border-primary">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div>
               <p className="font-bold mb-4">Inspector Signature:</p>
-              <div className="border-b-2 border-muted h-16"></div>
+              <div className="signature-box border-b-2 border-muted h-16"></div>
             </div>
             <div>
               <p className="font-bold mb-4">Client Signature:</p>
-              <div className="border-b-2 border-muted h-16"></div>
+              <div className="signature-box border-b-2 border-muted h-16"></div>
             </div>
           </div>
           <div className="text-center mt-8 text-sm text-muted-foreground">
@@ -1031,6 +1118,7 @@ function StatusButton({
         ? 'bg-destructive text-destructive-foreground border-destructive' 
         : 'bg-background text-destructive border-destructive hover:bg-destructive/10';
     }
+    // Snags status
     return isSelected 
       ? 'bg-muted text-muted-foreground border-muted' 
       : 'bg-background text-muted-foreground border-muted hover:bg-muted/10';
@@ -1039,7 +1127,7 @@ function StatusButton({
   const getIcon = () => {
     if (newStatus === 'Pass') return '✓';
     if (newStatus === 'Fail') return '✗';
-    return '—';
+    return '⚠';  // Warning icon for Snags
   };
 
   return (

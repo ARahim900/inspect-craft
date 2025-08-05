@@ -4,7 +4,7 @@ interface InspectionItem {
   id: number;
   category: string;
   point: string;
-  status: 'N/A' | 'Pass' | 'Fail';
+  status: 'Snags' | 'Pass' | 'Fail';
   comments: string;
   location: string;
   photos: string[];
