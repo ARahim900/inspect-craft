@@ -313,21 +313,18 @@ function Sidebar({
         isOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         <div className="flex flex-col h-full">
-          {/* Sidebar Header - Hidden on desktop (handled by main header) */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-200/60 lg:hidden">
+          {/* Sidebar Header - with logo */}
+          <div className="flex items-center justify-between p-4 border-b border-gray-200/60">
             <div className="flex items-center gap-2">
               <Logo size="small" />
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors shadow-sm"
+              className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors shadow-sm"
             >
               <CloseIcon className="w-5 h-5 text-gray-600" />
             </button>
           </div>
-          
-          {/* Desktop spacing for header alignment */}
-          <div className="hidden lg:block h-16"></div>
           
           {/* Navigation Menu */}
           <nav className="flex-1 p-4">
@@ -461,13 +458,7 @@ export default function InspectionApp() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Unified Header */}
-      <Header 
-        onMenuClick={() => setSidebarOpen(true)}
-        sidebarOpen={sidebarOpen}
-      />
-      
-      <div className="flex">
+      <div className="flex h-screen">
         {/* Sidebar */}
         <Sidebar
           currentPage={currentPage}
@@ -477,8 +468,13 @@ export default function InspectionApp() {
         />
         
         {/* Main Content Area */}
-        <div className="flex-1 lg:ml-64">
-          <main className="min-h-[calc(100vh-4rem)] bg-white shadow-inner">
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <Header 
+            onMenuClick={() => setSidebarOpen(true)}
+            sidebarOpen={sidebarOpen}
+          />
+          
+          <main className="flex-1 overflow-auto bg-white shadow-inner">
             <div className="container mx-auto px-6 py-8 max-w-7xl">
               {currentPage === 'dashboard' && (
                 <Dashboard 
@@ -564,41 +560,29 @@ function Header({
 }) {
   return (
     <header className="sticky top-0 z-30 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/90 border-b border-gray-200/60 shadow-sm">
-      <div className="flex h-16 items-center">
-        {/* Sidebar Header Section - matches sidebar width */}
-        <div className="hidden lg:flex items-center justify-center w-64 px-4 border-r border-gray-200/60">
-          <Logo size="medium" className="flex-shrink-0" />
-        </div>
-        
-        {/* Main Header Section */}
-        <div className="flex-1 flex items-center justify-between px-6">
-          {/* Mobile Menu Button & Logo */}
-          <div className="flex items-center gap-4 lg:hidden">
-            <button
-              onClick={onMenuClick}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors shadow-sm"
-            >
-              <HamburgerIcon className="w-6 h-6 text-gray-600" />
-            </button>
+      <div className="flex h-16 items-center justify-between px-4">
+        {/* Mobile Menu Button & Logo */}
+        <div className="flex items-center gap-4">
+          <button
+            onClick={onMenuClick}
+            className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <HamburgerIcon className="w-6 h-6 text-gray-600" />
+          </button>
+          <div className="lg:hidden">
             <Logo size="small" />
           </div>
-          
-          {/* Desktop Title */}
-          <div className="hidden lg:block">
-            <h1 className="text-lg font-semibold text-gray-800">
-              Solution Property
-            </h1>
-            <p className="text-sm text-gray-500">
-              Professional Property Inspection Solutions
-            </p>
-          </div>
-          
-          {/* Header Actions */}
-          <div className="flex items-center gap-3">
-            {/* Placeholder for future actions like notifications, user menu */}
-            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center shadow-sm">
-              <span className="text-xs font-medium text-gray-600">SP</span>
-            </div>
+        </div>
+        
+        {/* Desktop Title */}
+        <div className="hidden lg:block text-sm text-gray-500 font-medium">
+          Professional Property Inspection Solutions
+        </div>
+        
+        {/* Header Actions */}
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center shadow-sm">
+            <span className="text-xs font-medium text-gray-600">SP</span>
           </div>
         </div>
       </div>
