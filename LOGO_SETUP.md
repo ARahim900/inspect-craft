@@ -1,6 +1,6 @@
 # 🎨 Logo Setup Instructions
 
-## How to Add Your Logo to InspectCraft
+## How to Add Your Logo to Solution Property
 
 ### Step 1: Prepare Your Logo File
 1. Locate your logo file: `a94b00cf-9ff1-4325-9daa-a5ce2b5b811b.jpeg`
@@ -55,4 +55,4 @@ src/
 - If the logo fails to load, it will show a fallback icon
 
 ### Ready to Use!
-Once you've copied your logo file to `public/logo.jpeg`, refresh your application and you'll see your custom logo throughout the InspectCraft interface! 🚀
+Once you've copied your logo file to `public/logo.jpeg`, refresh your application and you'll see your custom logo throughout the Solution Property interface! 🚀

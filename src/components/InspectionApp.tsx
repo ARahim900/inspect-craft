@@ -278,8 +278,8 @@ function Header() {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <Logo size="medium" />
-          <div className="hidden md:block text-sm text-muted-foreground">
-            Property Inspection Management
+          <div className="hidden lg:block text-sm text-muted-foreground font-medium">
+            Professional Property Inspection Solutions
           </div>
         </div>
       </div>
@@ -908,7 +908,7 @@ function InspectionView({
         <!DOCTYPE html>
         <html>
         <head>
-          <title>Inspection Report - ${inspection.propertyLocation}</title>
+          <title>Solution Property - Inspection Report - ${inspection.propertyLocation}</title>
           <style>
             @media print {
               @page {
@@ -1107,7 +1107,7 @@ function InspectionView({
             </div>
           </div>
           <div className="text-center mt-8 text-sm text-muted-foreground">
-            Generated on {new Date().toLocaleDateString()} • InspectCraft
+            Generated on {new Date().toLocaleDateString()} • Solution Property
           </div>
         </footer>
       </div>

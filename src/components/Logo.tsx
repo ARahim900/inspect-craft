@@ -15,9 +15,9 @@ const Logo: React.FC<LogoProps> = ({ size = 'medium', className, showText = true
   };
 
   const textSizeClasses = {
-    small: 'text-lg',
-    medium: 'text-xl md:text-2xl',
-    large: 'text-3xl md:text-4xl'
+    small: 'text-lg font-semibold',
+    medium: 'text-xl md:text-2xl font-bold',
+    large: 'text-3xl md:text-4xl font-bold'
   };
 
   const FallbackIcon = () => (
@@ -60,9 +60,17 @@ const Logo: React.FC<LogoProps> = ({ size = 'medium', className, showText = true
         />
       </div>
       {showText && (
-        <h1 className={cn(textSizeClasses[size], "font-bold text-foreground tracking-tight")}>
-          InspectCraft
-        </h1>
+        <div className="flex flex-col">
+          <h1 className={cn(textSizeClasses[size], "text-foreground tracking-tight leading-tight")}>
+            <span className="text-primary font-extrabold">Solution</span>
+            <span className="text-foreground font-light ml-2">Property</span>
+          </h1>
+          {size === 'medium' || size === 'large' ? (
+            <p className="text-xs text-muted-foreground font-medium tracking-wide uppercase mt-0.5">
+              Property Inspection Services
+            </p>
+          ) : null}
+        </div>
       )}
     </div>
   );

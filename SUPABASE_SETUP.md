@@ -1,7 +1,7 @@
 # Supabase Setup Instructions
 
 ## Overview
-Your InspectCraft application is now integrated with Supabase for:
+Your Solution Property application is now integrated with Supabase for:
 - Database storage of all inspection data
 - File storage for inspection photos
 - Real-time data synchronization
