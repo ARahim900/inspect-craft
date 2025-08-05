@@ -189,38 +189,38 @@ function ReportScheduled({ navigateTo }: { navigateTo: (page: string) => void })
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <h2 className="text-3xl font-bold text-foreground">Report Scheduled</h2>
+        <h2 className="text-3xl font-bold text-gray-800">Report Scheduled</h2>
       </div>
       
-      <div className="bg-card border border-border rounded-xl p-8 shadow-sm">
+      <div className="bg-white border border-gray-100 rounded-xl p-8 shadow-lg">
         <div className="text-center py-12">
-          <ScheduleIcon className="w-16 h-16 mx-auto mb-4 text-muted-foreground opacity-50" />
-          <h3 className="text-xl font-semibold text-card-foreground mb-2">Schedule Management</h3>
-          <p className="text-muted-foreground mb-6">
+          <ScheduleIcon className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+          <h3 className="text-xl font-semibold text-gray-800 mb-2">Schedule Management</h3>
+          <p className="text-gray-600 mb-6">
             Plan and schedule future inspections, manage appointments, and track upcoming work.
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
-            <div className="border border-border rounded-lg p-4 hover:bg-accent/50 transition-colors">
+            <div className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-all duration-200 hover:shadow-md bg-white shadow-sm">
               <CalendarIcon className="w-8 h-8 mb-2 text-primary" />
-              <h4 className="font-semibold mb-1">Calendar View</h4>
-              <p className="text-sm text-muted-foreground">View scheduled inspections in calendar format</p>
+              <h4 className="font-semibold mb-1 text-gray-800">Calendar View</h4>
+              <p className="text-sm text-gray-500">View scheduled inspections in calendar format</p>
             </div>
             
-            <div className="border border-border rounded-lg p-4 hover:bg-accent/50 transition-colors">
+            <div className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-all duration-200 hover:shadow-md bg-white shadow-sm">
               <ScheduleIcon className="w-8 h-8 mb-2 text-primary" />
-              <h4 className="font-semibold mb-1">Schedule Planning</h4>
-              <p className="text-sm text-muted-foreground">Plan and organize upcoming inspection visits</p>
+              <h4 className="font-semibold mb-1 text-gray-800">Schedule Planning</h4>
+              <p className="text-sm text-gray-500">Plan and organize upcoming inspection visits</p>
             </div>
             
-            <div className="border border-border rounded-lg p-4 hover:bg-accent/50 transition-colors">
+            <div className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-all duration-200 hover:shadow-md bg-white shadow-sm">
               <InspectionsIcon className="w-8 h-8 mb-2 text-primary" />
-              <h4 className="font-semibold mb-1">Appointment Management</h4>
-              <p className="text-sm text-muted-foreground">Manage client appointments and availability</p>
+              <h4 className="font-semibold mb-1 text-gray-800">Appointment Management</h4>
+              <p className="text-sm text-gray-500">Manage client appointments and availability</p>
             </div>
           </div>
           
-          <p className="text-sm text-muted-foreground mt-8">
+          <p className="text-sm text-gray-500 mt-8">
             🚧 This feature is under development and will be available soon.
           </p>
         </div>
@@ -234,38 +234,38 @@ function Billing({ navigateTo }: { navigateTo: (page: string) => void }) {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <h2 className="text-3xl font-bold text-foreground">Billing & Invoices</h2>
+        <h2 className="text-3xl font-bold text-gray-800">Billing & Invoices</h2>
       </div>
       
-      <div className="bg-card border border-border rounded-xl p-8 shadow-sm">
+      <div className="bg-white border border-gray-100 rounded-xl p-8 shadow-lg">
         <div className="text-center py-12">
-          <BillingIcon className="w-16 h-16 mx-auto mb-4 text-muted-foreground opacity-50" />
-          <h3 className="text-xl font-semibold text-card-foreground mb-2">Financial Management</h3>
-          <p className="text-muted-foreground mb-6">
+          <BillingIcon className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+          <h3 className="text-xl font-semibold text-gray-800 mb-2">Financial Management</h3>
+          <p className="text-gray-600 mb-6">
             Generate invoices, track payments, and manage your inspection business finances.
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
-            <div className="border border-border rounded-lg p-4 hover:bg-accent/50 transition-colors">
+            <div className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-all duration-200 hover:shadow-md bg-white shadow-sm">
               <BillingIcon className="w-8 h-8 mb-2 text-primary" />
-              <h4 className="font-semibold mb-1">Invoice Generation</h4>
-              <p className="text-sm text-muted-foreground">Create professional invoices from inspection reports</p>
+              <h4 className="font-semibold mb-1 text-gray-800">Invoice Generation</h4>
+              <p className="text-sm text-gray-500">Create professional invoices from inspection reports</p>
             </div>
             
-            <div className="border border-border rounded-lg p-4 hover:bg-accent/50 transition-colors">
+            <div className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-all duration-200 hover:shadow-md bg-white shadow-sm">
               <CalendarIcon className="w-8 h-8 mb-2 text-primary" />
-              <h4 className="font-semibold mb-1">Payment Tracking</h4>
-              <p className="text-sm text-muted-foreground">Monitor payment status and outstanding balances</p>
+              <h4 className="font-semibold mb-1 text-gray-800">Payment Tracking</h4>
+              <p className="text-sm text-gray-500">Monitor payment status and outstanding balances</p>
             </div>
             
-            <div className="border border-border rounded-lg p-4 hover:bg-accent/50 transition-colors">
+            <div className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-all duration-200 hover:shadow-md bg-white shadow-sm">
               <DashboardIcon className="w-8 h-8 mb-2 text-primary" />
-              <h4 className="font-semibold mb-1">Financial Reports</h4>
-              <p className="text-sm text-muted-foreground">View revenue reports and business analytics</p>
+              <h4 className="font-semibold mb-1 text-gray-800">Financial Reports</h4>
+              <p className="text-sm text-gray-500">View revenue reports and business analytics</p>
             </div>
           </div>
           
-          <p className="text-sm text-muted-foreground mt-8">
+          <p className="text-sm text-gray-500 mt-8">
             🚧 This feature is under development and will be available soon.
           </p>
         </div>
@@ -309,43 +309,56 @@ function Sidebar({
       
       {/* Sidebar */}
       <div className={cn(
-        "fixed top-0 left-0 h-full w-64 bg-card border-r border-border z-50 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:z-auto",
+        "fixed top-0 left-0 h-full w-64 bg-gray-50/95 backdrop-blur border-r border-gray-200/60 z-50 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:z-auto shadow-lg lg:shadow-none",
         isOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         <div className="flex flex-col h-full">
-          {/* Sidebar Header */}
-          <div className="flex items-center justify-between p-4 border-b border-border">
+          {/* Sidebar Header - Hidden on desktop (handled by main header) */}
+          <div className="flex items-center justify-between p-4 border-b border-gray-200/60 lg:hidden">
             <div className="flex items-center gap-2">
               <Logo size="small" />
             </div>
             <button
               onClick={onClose}
-              className="lg:hidden p-2 hover:bg-accent rounded-md transition-colors"
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors shadow-sm"
             >
-              <CloseIcon className="w-5 h-5" />
+              <CloseIcon className="w-5 h-5 text-gray-600" />
             </button>
           </div>
           
+          {/* Desktop spacing for header alignment */}
+          <div className="hidden lg:block h-16"></div>
+          
           {/* Navigation Menu */}
           <nav className="flex-1 p-4">
-            <div className="space-y-2">
+            <div className="space-y-3">
               {menuItems.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => handleNavigation(item.id)}
                   className={cn(
-                    "w-full flex items-center gap-3 px-3 py-3 rounded-lg text-left transition-all duration-200",
+                    "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-200 group",
                     currentPage === item.id
-                      ? "bg-primary text-primary-foreground shadow-md"
-                      : "hover:bg-accent text-muted-foreground hover:text-foreground"
+                      ? "bg-primary text-white shadow-lg shadow-primary/25"
+                      : "hover:bg-white hover:shadow-sm text-gray-600 hover:text-gray-800"
                   )}
                 >
                   <div className="flex-shrink-0">
-                    {item.icon}
+                    {React.cloneElement(item.icon as React.ReactElement, {
+                      className: cn(
+                        "w-5 h-5 transition-colors",
+                        currentPage === item.id ? "text-white" : "text-gray-500 group-hover:text-primary"
+                      )
+                    })}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="font-medium text-sm">{item.label}</div>
-                    <div className="text-xs opacity-75 truncate">{item.description}</div>
+                    <div className={cn(
+                      "text-xs truncate transition-colors",
+                      currentPage === item.id ? "text-white/80" : "text-gray-400 group-hover:text-gray-500"
+                    )}>
+                      {item.description}
+                    </div>
                   </div>
                 </button>
               ))}
@@ -353,8 +366,8 @@ function Sidebar({
           </nav>
           
           {/* Sidebar Footer */}
-          <div className="p-4 border-t border-border">
-            <div className="text-xs text-muted-foreground text-center">
+          <div className="p-4 border-t border-gray-200/60">
+            <div className="text-xs text-gray-400 text-center bg-white/50 py-2 px-3 rounded-lg">
               Solution Property v1.0
             </div>
           </div>
@@ -447,8 +460,14 @@ export default function InspectionApp() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="flex h-screen">
+    <div className="min-h-screen bg-gray-50">
+      {/* Unified Header */}
+      <Header 
+        onMenuClick={() => setSidebarOpen(true)}
+        sidebarOpen={sidebarOpen}
+      />
+      
+      <div className="flex">
         {/* Sidebar */}
         <Sidebar
           currentPage={currentPage}
@@ -458,14 +477,9 @@ export default function InspectionApp() {
         />
         
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
-          <Header 
-            onMenuClick={() => setSidebarOpen(true)}
-            sidebarOpen={sidebarOpen}
-          />
-          
-          <main className="flex-1 overflow-auto">
-            <div className="container mx-auto px-4 py-6 max-w-7xl">
+        <div className="flex-1 lg:ml-64">
+          <main className="min-h-[calc(100vh-4rem)] bg-white shadow-inner">
+            <div className="container mx-auto px-6 py-8 max-w-7xl">
               {currentPage === 'dashboard' && (
                 <Dashboard 
                   navigateTo={navigateTo} 
@@ -549,28 +563,44 @@ function Header({
   sidebarOpen: boolean; 
 }) {
   return (
-    <header className="sticky top-0 z-30 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
-      <div className="flex h-16 items-center justify-between px-4">
-        {/* Mobile Menu Button & Logo */}
-        <div className="flex items-center gap-4">
-          <button
-            onClick={onMenuClick}
-            className="lg:hidden p-2 hover:bg-accent rounded-md transition-colors"
-          >
-            <HamburgerIcon className="w-6 h-6" />
-          </button>
-          <div className="lg:hidden">
+    <header className="sticky top-0 z-30 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/90 border-b border-gray-200/60 shadow-sm">
+      <div className="flex h-16 items-center">
+        {/* Sidebar Header Section - matches sidebar width */}
+        <div className="hidden lg:flex items-center justify-center w-64 px-4 border-r border-gray-200/60">
+          <Logo size="medium" className="flex-shrink-0" />
+        </div>
+        
+        {/* Main Header Section */}
+        <div className="flex-1 flex items-center justify-between px-6">
+          {/* Mobile Menu Button & Logo */}
+          <div className="flex items-center gap-4 lg:hidden">
+            <button
+              onClick={onMenuClick}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors shadow-sm"
+            >
+              <HamburgerIcon className="w-6 h-6 text-gray-600" />
+            </button>
             <Logo size="small" />
           </div>
+          
+          {/* Desktop Title */}
+          <div className="hidden lg:block">
+            <h1 className="text-lg font-semibold text-gray-800">
+              Solution Property
+            </h1>
+            <p className="text-sm text-gray-500">
+              Professional Property Inspection Solutions
+            </p>
+          </div>
+          
+          {/* Header Actions */}
+          <div className="flex items-center gap-3">
+            {/* Placeholder for future actions like notifications, user menu */}
+            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center shadow-sm">
+              <span className="text-xs font-medium text-gray-600">SP</span>
+            </div>
+          </div>
         </div>
-        
-        {/* Desktop Title */}
-        <div className="hidden lg:block text-sm text-muted-foreground font-medium">
-          Professional Property Inspection Solutions
-        </div>
-        
-        {/* Optional: User Menu or Settings */}
-        <div className="w-8"></div> {/* Spacer for balance */}
       </div>
     </header>
   );
@@ -591,14 +621,14 @@ function KPICard({
   description: string; 
 }) {
   return (
-    <div className="bg-card border border-border rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-200">
+    <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <p className="text-sm font-medium text-muted-foreground mb-1">{title}</p>
-          <p className="text-3xl font-bold text-card-foreground mb-2">{value}</p>
-          <p className="text-xs text-muted-foreground">{description}</p>
+          <p className="text-sm font-medium text-gray-500 mb-1">{title}</p>
+          <p className="text-3xl font-bold text-gray-800 mb-2">{value}</p>
+          <p className="text-xs text-gray-400">{description}</p>
         </div>
-        <div className={cn("p-3 rounded-lg", color)}>
+        <div className={cn("p-4 rounded-xl shadow-lg", color)}>
           {icon}
         </div>
       </div>
@@ -721,8 +751,8 @@ function Dashboard({
         </div>
       )}
 
-      <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
-        <h3 className="text-xl font-semibold text-card-foreground mb-6">Recent Inspections</h3>
+      <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-lg">
+        <h3 className="text-xl font-semibold text-gray-800 mb-6">Recent Inspections</h3>
         
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
@@ -733,7 +763,7 @@ function Dashboard({
             {inspections.map((inspection) => (
               <div 
                 key={inspection.id} 
-                className="border border-border rounded-lg p-4 hover:bg-accent/50 transition-colors"
+                className="border border-gray-100 rounded-lg p-4 hover:bg-gray-50 transition-all duration-200 hover:shadow-md"
               >
                 <div className="flex flex-col sm:flex-row justify-between gap-4">
                   <div className="flex-1">
