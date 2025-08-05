@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { SupabaseService, SavedInspection } from '@/services/supabase-service';
+import Logo from './Logo';
 
 // Types
 interface InspectionItem {
@@ -67,9 +68,21 @@ const DeleteIcon = ({ className }: { className?: string }) => (
 );
 
 const AppIcon = ({ className }: { className?: string }) => (
-  <svg className={cn("w-8 h-8", className)} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-  </svg>
+  <img 
+    src="/logo.jpeg" 
+    alt="InspectCraft Logo" 
+    className={cn("w-8 h-8 object-contain rounded", className)}
+    onError={(e) => {
+      // Fallback to SVG icon if image fails to load
+      const target = e.target as HTMLImageElement;
+      target.style.display = 'none';
+      target.parentElement!.innerHTML = `
+        <svg class="${cn("w-8 h-8", className)}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+        </svg>
+      `;
+    }}
+  />
 );
 
 const CameraIcon = ({ className }: { className?: string }) => (
@@ -264,12 +277,7 @@ function Header() {
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <AppIcon className="text-primary" />
-            <h1 className="text-xl md:text-2xl font-bold text-foreground tracking-tight">
-              InspectCraft
-            </h1>
-          </div>
+          <Logo size="medium" />
           <div className="hidden md:block text-sm text-muted-foreground">
             Property Inspection Management
           </div>
@@ -360,7 +368,9 @@ function Dashboard({
           </div>
         ) : (
           <div className="text-center py-12 border-2 border-dashed border-border rounded-lg">
-            <AppIcon className="mx-auto text-muted-foreground mb-4" />
+            <div className="mx-auto mb-4 flex justify-center">
+              <Logo size="large" showText={false} className="opacity-50" />
+            </div>
             <p className="text-muted-foreground mb-2">No inspections found</p>
             <p className="text-sm text-muted-foreground">Click "New Inspection" to get started</p>
           </div>
