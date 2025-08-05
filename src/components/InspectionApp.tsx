@@ -135,6 +135,39 @@ const CalendarIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const HamburgerIcon = ({ className }: { className?: string }) => (
+  <svg className={cn("w-6 h-6", className)} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+  </svg>
+);
+
+const CloseIcon = ({ className }: { className?: string }) => (
+  <svg className={cn("w-6 h-6", className)} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+  </svg>
+);
+
+const DashboardIcon = ({ className }: { className?: string }) => (
+  <svg className={cn("w-6 h-6", className)} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 15v4" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 11v8" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7v12" />
+  </svg>
+);
+
+const ScheduleIcon = ({ className }: { className?: string }) => (
+  <svg className={cn("w-6 h-6", className)} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+);
+
+const BillingIcon = ({ className }: { className?: string }) => (
+  <svg className={cn("w-6 h-6", className)} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+  </svg>
+);
+
 // Inspection Categories
 const inspectionCategories = {
   "Structural & Interior": ["Hairline Cracks", "Ceilings", "Walls", "Floors", "Doors & Locks", "Wardrobes & Cabinets Functionality", "Switch Logic & Placement", "Stoppers & Door Closers", "Window Lock & Roller Mechanism", "Curtain Box Provision"],
@@ -151,6 +184,186 @@ const inspectionCategories = {
   "Bathroom Inspection": ["Tiling & Grouting", "Waterproofing Issues", "Toilet Flushing", "Water Pressure", "Toilets/Wet Areas Floor Slope", "Exhaust Fan Working", "Glass Shower Partition Sealing"]
 };
 
+// Report Scheduled Page Component  
+function ReportScheduled({ navigateTo }: { navigateTo: (page: string) => void }) {
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center gap-4">
+        <h2 className="text-3xl font-bold text-foreground">Report Scheduled</h2>
+      </div>
+      
+      <div className="bg-card border border-border rounded-xl p-8 shadow-sm">
+        <div className="text-center py-12">
+          <ScheduleIcon className="w-16 h-16 mx-auto mb-4 text-muted-foreground opacity-50" />
+          <h3 className="text-xl font-semibold text-card-foreground mb-2">Schedule Management</h3>
+          <p className="text-muted-foreground mb-6">
+            Plan and schedule future inspections, manage appointments, and track upcoming work.
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
+            <div className="border border-border rounded-lg p-4 hover:bg-accent/50 transition-colors">
+              <CalendarIcon className="w-8 h-8 mb-2 text-primary" />
+              <h4 className="font-semibold mb-1">Calendar View</h4>
+              <p className="text-sm text-muted-foreground">View scheduled inspections in calendar format</p>
+            </div>
+            
+            <div className="border border-border rounded-lg p-4 hover:bg-accent/50 transition-colors">
+              <ScheduleIcon className="w-8 h-8 mb-2 text-primary" />
+              <h4 className="font-semibold mb-1">Schedule Planning</h4>
+              <p className="text-sm text-muted-foreground">Plan and organize upcoming inspection visits</p>
+            </div>
+            
+            <div className="border border-border rounded-lg p-4 hover:bg-accent/50 transition-colors">
+              <InspectionsIcon className="w-8 h-8 mb-2 text-primary" />
+              <h4 className="font-semibold mb-1">Appointment Management</h4>
+              <p className="text-sm text-muted-foreground">Manage client appointments and availability</p>
+            </div>
+          </div>
+          
+          <p className="text-sm text-muted-foreground mt-8">
+            🚧 This feature is under development and will be available soon.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Billing Page Component
+function Billing({ navigateTo }: { navigateTo: (page: string) => void }) {
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center gap-4">
+        <h2 className="text-3xl font-bold text-foreground">Billing & Invoices</h2>
+      </div>
+      
+      <div className="bg-card border border-border rounded-xl p-8 shadow-sm">
+        <div className="text-center py-12">
+          <BillingIcon className="w-16 h-16 mx-auto mb-4 text-muted-foreground opacity-50" />
+          <h3 className="text-xl font-semibold text-card-foreground mb-2">Financial Management</h3>
+          <p className="text-muted-foreground mb-6">
+            Generate invoices, track payments, and manage your inspection business finances.
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
+            <div className="border border-border rounded-lg p-4 hover:bg-accent/50 transition-colors">
+              <BillingIcon className="w-8 h-8 mb-2 text-primary" />
+              <h4 className="font-semibold mb-1">Invoice Generation</h4>
+              <p className="text-sm text-muted-foreground">Create professional invoices from inspection reports</p>
+            </div>
+            
+            <div className="border border-border rounded-lg p-4 hover:bg-accent/50 transition-colors">
+              <CalendarIcon className="w-8 h-8 mb-2 text-primary" />
+              <h4 className="font-semibold mb-1">Payment Tracking</h4>
+              <p className="text-sm text-muted-foreground">Monitor payment status and outstanding balances</p>
+            </div>
+            
+            <div className="border border-border rounded-lg p-4 hover:bg-accent/50 transition-colors">
+              <DashboardIcon className="w-8 h-8 mb-2 text-primary" />
+              <h4 className="font-semibold mb-1">Financial Reports</h4>
+              <p className="text-sm text-muted-foreground">View revenue reports and business analytics</p>
+            </div>
+          </div>
+          
+          <p className="text-sm text-muted-foreground mt-8">
+            🚧 This feature is under development and will be available soon.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Sidebar Component
+function Sidebar({ 
+  currentPage, 
+  navigateTo, 
+  isOpen, 
+  onClose 
+}: { 
+  currentPage: string; 
+  navigateTo: (page: string) => void; 
+  isOpen: boolean; 
+  onClose: () => void; 
+}) {
+  const menuItems = [
+    { id: 'dashboard', label: 'Dashboard', icon: <DashboardIcon />, description: 'Overview & KPIs' },
+    { id: 'reportScheduled', label: 'Report Scheduled', icon: <ScheduleIcon />, description: 'Planning & Scheduling' },
+    { id: 'billing', label: 'Billing', icon: <BillingIcon />, description: 'Invoices & Payments' },
+  ];
+
+  const handleNavigation = (pageId: string) => {
+    navigateTo(pageId);
+    onClose(); // Close mobile sidebar after navigation
+  };
+
+  return (
+    <>
+      {/* Mobile Overlay */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden" 
+          onClick={onClose}
+        />
+      )}
+      
+      {/* Sidebar */}
+      <div className={cn(
+        "fixed top-0 left-0 h-full w-64 bg-card border-r border-border z-50 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:z-auto",
+        isOpen ? "translate-x-0" : "-translate-x-full"
+      )}>
+        <div className="flex flex-col h-full">
+          {/* Sidebar Header */}
+          <div className="flex items-center justify-between p-4 border-b border-border">
+            <div className="flex items-center gap-2">
+              <Logo size="small" />
+            </div>
+            <button
+              onClick={onClose}
+              className="lg:hidden p-2 hover:bg-accent rounded-md transition-colors"
+            >
+              <CloseIcon className="w-5 h-5" />
+            </button>
+          </div>
+          
+          {/* Navigation Menu */}
+          <nav className="flex-1 p-4">
+            <div className="space-y-2">
+              {menuItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavigation(item.id)}
+                  className={cn(
+                    "w-full flex items-center gap-3 px-3 py-3 rounded-lg text-left transition-all duration-200",
+                    currentPage === item.id
+                      ? "bg-primary text-primary-foreground shadow-md"
+                      : "hover:bg-accent text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  <div className="flex-shrink-0">
+                    {item.icon}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-sm">{item.label}</div>
+                    <div className="text-xs opacity-75 truncate">{item.description}</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </nav>
+          
+          {/* Sidebar Footer */}
+          <div className="p-4 border-t border-border">
+            <div className="text-xs text-muted-foreground text-center">
+              Solution Property v1.0
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
 // Main App Component
 export default function InspectionApp() {
   const [currentPage, setCurrentPage] = useState('dashboard');
@@ -158,6 +371,7 @@ export default function InspectionApp() {
   const [inspections, setInspections] = useState<SavedInspection[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [deleteConfirmation, setDeleteConfirmation] = useState<{ show: boolean; inspectionId: string | null; inspectionName: string }>({ show: false, inspectionId: null, inspectionName: '' });
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { toast } = useToast();
 
   // Load inspections from Supabase
@@ -234,36 +448,61 @@ export default function InspectionApp() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
-      <main className="container mx-auto px-4 py-6 max-w-7xl">
-        {currentPage === 'dashboard' && (
-          <Dashboard 
-            navigateTo={navigateTo} 
-            inspections={inspections} 
-            isLoading={isLoading}
-            onDeleteConfirmation={handleDeleteConfirmation}
+      <div className="flex h-screen">
+        {/* Sidebar */}
+        <Sidebar
+          currentPage={currentPage}
+          navigateTo={navigateTo}
+          isOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+        />
+        
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
+          <Header 
+            onMenuClick={() => setSidebarOpen(true)}
+            sidebarOpen={sidebarOpen}
           />
-        )}
-        {currentPage === 'newInspection' && (
-          <InspectionForm 
-            navigateTo={navigateTo} 
-            onSave={saveInspection} 
-          />
-        )}
-        {currentPage === 'editInspection' && selectedInspectionId && (
-          <InspectionForm 
-            navigateTo={navigateTo} 
-            onSave={saveInspection}
-            editInspection={inspections.find(i => i.id === selectedInspectionId)}
-          />
-        )}
-        {currentPage === 'viewInspection' && selectedInspectionId && (
-          <InspectionView 
-            inspection={inspections.find(i => i.id === selectedInspectionId)!}
-            navigateTo={navigateTo} 
-          />
-        )}
-      </main>
+          
+          <main className="flex-1 overflow-auto">
+            <div className="container mx-auto px-4 py-6 max-w-7xl">
+              {currentPage === 'dashboard' && (
+                <Dashboard 
+                  navigateTo={navigateTo} 
+                  inspections={inspections} 
+                  isLoading={isLoading}
+                  onDeleteConfirmation={handleDeleteConfirmation}
+                />
+              )}
+              {currentPage === 'reportScheduled' && (
+                <ReportScheduled navigateTo={navigateTo} />
+              )}
+              {currentPage === 'billing' && (
+                <Billing navigateTo={navigateTo} />
+              )}
+              {currentPage === 'newInspection' && (
+                <InspectionForm 
+                  navigateTo={navigateTo} 
+                  onSave={saveInspection} 
+                />
+              )}
+              {currentPage === 'editInspection' && selectedInspectionId && (
+                <InspectionForm 
+                  navigateTo={navigateTo} 
+                  onSave={saveInspection}
+                  editInspection={inspections.find(i => i.id === selectedInspectionId)}
+                />
+              )}
+              {currentPage === 'viewInspection' && selectedInspectionId && (
+                <InspectionView 
+                  inspection={inspections.find(i => i.id === selectedInspectionId)!}
+                  navigateTo={navigateTo} 
+                />
+              )}
+            </div>
+          </main>
+        </div>
+      </div>
       
       {/* Delete Confirmation Modal */}
       {deleteConfirmation.show && (
@@ -302,16 +541,36 @@ export default function InspectionApp() {
 }
 
 // Header Component
-function Header() {
+function Header({ 
+  onMenuClick, 
+  sidebarOpen 
+}: { 
+  onMenuClick: () => void; 
+  sidebarOpen: boolean; 
+}) {
   return (
-    <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
-      <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
-          <Logo size="medium" />
-          <div className="hidden lg:block text-sm text-muted-foreground font-medium">
-            Professional Property Inspection Solutions
+    <header className="sticky top-0 z-30 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
+      <div className="flex h-16 items-center justify-between px-4">
+        {/* Mobile Menu Button & Logo */}
+        <div className="flex items-center gap-4">
+          <button
+            onClick={onMenuClick}
+            className="lg:hidden p-2 hover:bg-accent rounded-md transition-colors"
+          >
+            <HamburgerIcon className="w-6 h-6" />
+          </button>
+          <div className="lg:hidden">
+            <Logo size="small" />
           </div>
         </div>
+        
+        {/* Desktop Title */}
+        <div className="hidden lg:block text-sm text-muted-foreground font-medium">
+          Professional Property Inspection Solutions
+        </div>
+        
+        {/* Optional: User Menu or Settings */}
+        <div className="w-8"></div> {/* Spacer for balance */}
       </div>
     </header>
   );
