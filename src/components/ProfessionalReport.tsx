@@ -109,12 +109,12 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
             @media print {
               @page {
                 size: A4;
-                margin: 15mm 12mm 15mm 12mm !important;
+                margin: 10mm !important;
               }
               
               body { 
                 margin: 0 !important; 
-                padding: 10mm !important; 
+                padding: 0 !important; 
                 font-family: 'Arial', 'Helvetica', sans-serif;
                 font-size: 10pt;
                 line-height: 1.4;
@@ -125,10 +125,11 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
               }
               
               .report-container {
-                margin: 0 auto !important;
-                padding: 0 !important;
+                margin: 0 !important;
+                padding: 5mm !important;
                 box-sizing: border-box;
                 background: white;
+                width: 100% !important;
                 max-width: 100% !important;
               }
               
@@ -487,15 +488,15 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
               }
               
               body {
-                margin: 12mm !important;
-                padding: 0 !important;
-                width: calc(210mm - 24mm) !important;
-                min-height: calc(297mm - 30mm) !important;
+                margin: 0 !important;
+                padding: 10mm !important;
+                width: auto !important;
+                min-height: auto !important;
                 box-sizing: border-box !important;
               }
               
               .print-wrapper {
-                margin: 0 auto !important;
+                margin: 0 !important;
                 padding: 0 !important;
                 width: 100% !important;
                 max-width: 100% !important;
@@ -505,19 +506,33 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
               /* Override browser default margins */
               @page {
                 size: A4 !important;
-                margin: 15mm 12mm !important;
+                margin: 10mm !important;
               }
               
               /* Ensure content fits within printable area */
               * {
                 max-width: 100% !important;
                 box-sizing: border-box !important;
+                overflow: visible !important;
               }
               
               /* Center content */
               .report-container {
-                margin: 0 auto !important;
+                margin: 0 !important;
+                padding: 0 !important;
                 width: 100% !important;
+              }
+              
+              /* Prevent content cutoff */
+              table {
+                width: 100% !important;
+                table-layout: auto !important;
+              }
+              
+              td, th {
+                word-wrap: break-word !important;
+                word-break: normal !important;
+                overflow: visible !important;
               }
             }
           </style>

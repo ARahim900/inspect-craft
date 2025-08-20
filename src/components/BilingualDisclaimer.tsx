@@ -231,12 +231,12 @@ export function BilingualDisclaimer({
         @media print {
           @page {
             size: A4;
-            margin: 15mm 12mm 15mm 12mm !important;
+            margin: 10mm !important;
           }
           
           body {
             margin: 0 !important;
-            padding: 10mm !important;
+            padding: 0 !important;
             font-family: 'Arial', 'Helvetica', sans-serif;
             font-size: 10pt;
             line-height: 1.4;
@@ -247,22 +247,32 @@ export function BilingualDisclaimer({
           }
           
           .report-container {
-            margin: 0 auto !important;
-            padding: 0 !important;
+            margin: 0 !important;
+            padding: 5mm !important;
             box-sizing: border-box;
             background: white;
-            max-width: 100%;
+            width: 100% !important;
+            max-width: 100% !important;
           }
           
           .bilingual-disclaimer-section {
             font-size: 10pt;
             line-height: 1.4;
-            margin: 0;
-            padding: 0;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
           }
           
           .bilingual-disclaimer-section > * + * {
-            margin-top: 15mm !important;
+            margin-top: 8mm !important;
+          }
+          
+          /* Prevent content cutoff */
+          .bilingual-disclaimer-section * {
+            overflow: visible !important;
+            word-wrap: break-word !important;
+            word-break: normal !important;
           }
           
           .bilingual-disclaimer-section table,
@@ -340,7 +350,25 @@ export function BilingualDisclaimer({
           /* Table cell padding for better readability */
           .bilingual-disclaimer-section th,
           .bilingual-disclaimer-section td {
-            padding: 3mm !important;
+            padding: 2mm 3mm !important;
+            font-size: 9pt !important;
+          }
+          
+          /* Ensure tables fit within printable area */
+          .bilingual-disclaimer-section table {
+            width: 100% !important;
+            table-layout: fixed !important;
+          }
+          
+          /* Adjust column widths for bilingual content */
+          .bilingual-disclaimer-section td:first-child,
+          .bilingual-disclaimer-section th:first-child {
+            width: 50% !important;
+          }
+          
+          .bilingual-disclaimer-section td:last-child,
+          .bilingual-disclaimer-section th:last-child {
+            width: 50% !important;
           }
           
           /* Signature section spacing */

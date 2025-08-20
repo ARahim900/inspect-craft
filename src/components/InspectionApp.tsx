@@ -1420,7 +1420,7 @@ function InspectionView({
           <style>
             @page {
               size: A4;
-              margin: 15mm 12mm 15mm 12mm;
+              margin: 10mm;
             }
             
             body {
@@ -1429,7 +1429,7 @@ function InspectionView({
               color: #333;
               font-size: 10pt;
               margin: 0 !important;
-              padding: 8mm !important;
+              padding: 0 !important;
               position: relative;
               -webkit-print-color-adjust: exact;
               print-color-adjust: exact;
@@ -1438,11 +1438,12 @@ function InspectionView({
             }
             
             .report-container {
-              margin: 0 auto !important;
-              padding: 0 !important;
+              margin: 0 !important;
+              padding: 5mm !important;
               box-sizing: border-box;
               background: white;
-              max-width: 100%;
+              width: 100% !important;
+              max-width: 100% !important;
             }
             
             /* Watermark that appears on every page */
@@ -1647,22 +1648,33 @@ function InspectionView({
             @media print {
               body {
                 margin: 0 !important;
-                padding: 10mm !important;
+                padding: 5mm !important;
                 box-sizing: border-box;
               }
               
               .report-wrapper {
-                margin: 0 auto;
-                padding: 0;
-                width: 100%;
-                max-width: 100%;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
               }
               
               .report-container {
-                margin: 0 auto !important;
+                margin: 0 !important;
                 padding: 0 !important;
                 box-sizing: border-box;
-                width: 100%;
+                width: 100% !important;
+              }
+              
+              /* Prevent content cutoff */
+              * {
+                overflow: visible !important;
+                word-wrap: break-word !important;
+              }
+              
+              table {
+                width: 100% !important;
+                table-layout: auto !important;
               }
               
               /* Professional section spacing */
@@ -1732,15 +1744,15 @@ function InspectionView({
               }
               
               body {
-                margin: 12mm !important;
-                padding: 0 !important;
-                width: calc(210mm - 24mm) !important;
-                min-height: calc(297mm - 30mm) !important;
+                margin: 0 !important;
+                padding: 10mm !important;
+                width: auto !important;
+                min-height: auto !important;
                 box-sizing: border-box !important;
               }
               
               .print-wrapper {
-                margin: 0 auto !important;
+                margin: 0 !important;
                 padding: 0 !important;
                 width: 100% !important;
                 max-width: 100% !important;
@@ -1749,18 +1761,30 @@ function InspectionView({
               
               @page {
                 size: A4 !important;
-                margin: 15mm 12mm !important;
+                margin: 10mm !important;
               }
               
               * {
                 max-width: 100% !important;
                 box-sizing: border-box !important;
+                overflow: visible !important;
               }
               
-              /* Center all content */
+              /* Ensure all content is visible */
               .report-container {
-                margin: 0 auto !important;
+                margin: 0 !important;
+                padding: 0 !important;
                 width: 100% !important;
+              }
+              
+              table {
+                width: 100% !important;
+                table-layout: auto !important;
+              }
+              
+              td, th {
+                word-wrap: break-word !important;
+                overflow: visible !important;
               }
             }
           </style>
