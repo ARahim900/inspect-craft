@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Inspection Report - تقرير فحص العقار</title>
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: white;
+            font-size: 12pt;
+            padding: 20px;
+        }
+
+        /* Arabic Font Support */
+        .arabic {
+            font-family: 'Arial Unicode MS', 'Tahoma', 'Arial', sans-serif;
+            direction: rtl;
+            text-align: right;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                margin: 0;
+                padding: 15mm;
+                font-size: 11pt;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+            
+            .page-break {
+                page-break-before: always;
+            }
+            
+            @page {
+                size: A4;
+                margin: 20mm;
+            }
+            
+            table {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Screen-only styles */
+        @media screen {
+            .container {
+                max-width: 210mm;
+                margin: 0 auto;
+                background: white;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                padding: 20px;
+            }
+        }
+
+        /* Header Styles */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #2c3e50;
+        }
+
+        .company-logo {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 15px;
+            display: block;
+        }
+
+        .report-title {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .report-title h1 {
+            font-size: 18pt;
+            font-weight: bold;
+        }
+
+        /* Bilingual Table Styles */
+        .bilingual-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            border: 2px solid #2c3e50;
+        }
+
+        .bilingual-table th {
+            background: #2c3e50;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14pt;
+        }
+
+        .bilingual-table td {
+            padding: 15px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+
+        .english-col {
+            width: 50%;
+            text-align: left;
+        }
+
+        .arabic-col {
+            width: 50%;
+            text-align: right;
+            direction: rtl;
+        }
+
+        /* Section Headers */
+        .section-header {
+            background: #34495e;
+            color: white;
+            font-weight: bold;
+            font-size: 13pt;
+        }
+
+        /* Contact Info Styling */
+        .contact-info {
+            background: #ecf0f1;
+            padding: 10px;
+            border-left: 4px solid #3498db;
+            margin: 10px 0;
+        }
+
+        .contact-info.arabic {
+            border-right: 4px solid #3498db;
+            border-left: none;
+        }
+
+        /* Grade Table Styles */
+        .grade-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border: 2px solid #2c3e50;
+        }
+
+        .grade-table th {
+            background: #2c3e50;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .grade-table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .grade-table .grade-cell {
+            font-weight: bold;
+            font-size: 14pt;
+        }
+
+        .grade-highlighted {
+            background: #f39c12 !important;
+            color: white !important;
+            font-weight: bold;
+        }
+
+        /* Signature Section */
+        .signature-section {
+            margin: 30px 0;
+            border: 2px solid #2c3e50;
+        }
+
+        .signature-row td {
+            padding: 20px;
+            border-right: 1px solid #ddd;
+        }
+
+        .signature-row td:last-child {
+            border-right: none;
+        }
+
+        .signature-line {
+            border-bottom: 2px solid #333;
+            height: 40px;
+            margin-bottom: 10px;
+            width: 200px;
+        }
+
+        /* Print Button */
+        .print-button {
+            background: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14pt;
+            margin: 20px 0;
+            display: inline-block;
+        }
+
+        .print-button:hover {
+            background: #2980b9;
+        }
+
+        /* Company Stamp Placeholder */
+        .stamp-placeholder {
+            width: 80px;
+            height: 80px;
+            border: 2px dashed #666;
+            display: inline-block;
+            text-align: center;
+            line-height: 76px;
+            font-size: 10pt;
+            color: #666;
+        }
+
+        /* Variable Placeholder Styling */
+        .variable {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                font-size: 10pt;
+            }
+            
+            .bilingual-table td {
+                padding: 10px;
+            }
+            
+            .signature-line {
+                width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Print Button (Screen Only) -->
+        <div class="no-print" style="text-align: center; margin-bottom: 20px;">
+            <button class="print-button" onclick="printReport()">
+                🖨️ Print Report - طباعة التقرير
+            </button>
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+            <img src="/logo.jpeg" alt="Company Logo" class="company-logo" 
+                 onerror="this.style.display='none'">
+            
+            <div class="report-title">
+                <table class="bilingual-table" style="margin: 0;">
+                    <tr>
+                        <th class="english-col">Property Inspection Report</th>
+                        <th class="arabic-col arabic">تقرير فحص العقار</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <table class="bilingual-table">
+            <!-- Overview Section -->
+            <tr class="section-header">
+                <td class="english-col">OVERVIEW</td>
+                <td class="arabic-col arabic">نظرة عامة</td>
+            </tr>
+            <tr>
+                <td class="english-col">
+                    <p><strong>Dear Mr. <span class="variable">{{CLIENT_NAME}}</span></strong></p>
+                    <br>
+                    <p>Thank you for choosing Wasla Real Estate Solutions as your home inspector.</p>
+                    <p>Your prospective home is basically in grade (<span class="variable">{{PROPERTY_GRADE}}</span>) as per our inspection and classifications. However, a number of rather typical inspection issues were identified.</p>
+                    <p>Please review the annexed report carefully before making your decision. If you need further explanation regarding this property conditions, please don't hesitate to call or email us from 9:00 am to 5:00 PM at:</p>
+                    
+                    <div class="contact-info">
+                        <strong>Email:</strong> wasla.solution@gmail.com<br>
+                        <strong>Mobile:</strong> +968 90699799
+                    </div>
+                </td>
+                <td class="arabic-col arabic">
+                    <p><strong>الأفاضل/ <span class="variable">{{CLIENT_NAME}}</span> المحترمون</strong></p>
+                    <br>
+                    <p>شكراً لاختياركم شركة وصلة للحلول العقارية كمفتش منازلكم.</p>
+                    <p>منزلكم المستقبلي في الأساس بدرجة (<span class="variable">{{PROPERTY_GRADE}}</span>) حسب فحصنا وتصنيفاتنا. ومع ذلك، تم تحديد عدد من قضايا التفتيش النموذجية إلى حد ما.</p>
+                    <p>يرجى مراجعة التقرير المرفق بعناية قبل اتخاذ قرارك. إذا كنت بحاجة إلى مزيد من التوضيح بخصوص حالة هذه الخاصية، فلا تتردد في الاتصال بنا أو مراسلتنا عبر البريد الإلكتروني من الساعة 9:00 صباحاً إلى 5:00 مساءً على:</p>
+                    
+                    <div class="contact-info arabic">
+                        <strong>البريد الإلكتروني:</strong> wasla.solution@gmail.com<br>
+                        <strong>الهاتف المحمول:</strong> +968 90699799
+                    </div>
+                </td>
+            </tr>
+
+            <!-- No Property is Perfect -->
+            <tr class="section-header">
+                <td class="english-col">No property is perfect.</td>
+                <td class="arabic-col arabic">لا يوجد عقار مثالي</td>
+            </tr>
+            <tr>
+                <td class="english-col">
+                    <p>Every property has some issues, regardless of age, price, or location. The key is to understand what you're buying and to be prepared for normal maintenance costs.</p>
+                    <p>This report identifies areas that need attention, but remember that even newly constructed homes have defects and maintenance requirements.</p>
+                    <p>Focus on safety issues and major structural concerns first, then prioritize other items based on cost and urgency.</p>
+                </td>
+                <td class="arabic-col arabic">
+                    <p>كل عقار له بعض المشاكل، بغض النظر عن العمر أو السعر أو الموقع. المفتاح هو فهم ما تشتريه والاستعداد لتكاليف الصيانة العادية.</p>
+                    <p>يحدد هذا التقرير المناطق التي تحتاج إلى اهتمام، ولكن تذكر أن حتى المنازل المبنية حديثاً لديها عيوب ومتطلبات صيانة.</p>
+                    <p>ركز على قضايا السلامة والمخاوف الهيكلية الرئيسية أولاً، ثم قم بترتيب أولويات العناصر الأخرى بناءً على التكلفة والإلحاح.</p>
+                </td>
+            </tr>
+
+            <!-- This report is not an appraisal -->
+            <tr class="section-header">
+                <td class="english-col">This report is not an appraisal.</td>
+                <td class="arabic-col arabic">هذا التقرير ليس تقييماً سعرياً</td>
+            </tr>
+            <tr>
+                <td class="english-col">
+                    <p>This inspection report is intended to provide information about the condition of the property's systems and components. It is not a property valuation or appraisal.</p>
+                    <p>The inspection identifies defects and safety issues, but does not determine the market value of the property.</p>
+                    <p>For property valuation, please consult with a qualified real estate appraiser.</p>
+                </td>
+                <td class="arabic-col arabic">
+                    <p>الغرض من تقرير التفتيش هذا هو تقديم معلومات حول حالة أنظمة ومكونات العقار. وهو ليس تقييماً أو تقديراً للعقار.</p>
+                    <p>يحدد التفتيش العيوب ومسائل السلامة، لكنه لا يحدد القيمة السوقية للعقار.</p>
+                    <p>لتقييم العقار، يرجى استشارة مقيم عقاري مؤهل.</p>
+                </td>
+            </tr>
+
+            <!-- Maintenance costs are normal -->
+            <tr class="section-header">
+                <td class="english-col">Maintenance costs are normal.</td>
+                <td class="arabic-col arabic">تكاليف الصيانة أمر طبيعي</td>
+            </tr>
+            <tr>
+                <td class="english-col">
+                    <p>All properties require ongoing maintenance and periodic replacement of components. This is a normal part of property ownership.</p>
+                    <p>Budget for regular maintenance costs including HVAC servicing, plumbing maintenance, electrical updates, and exterior maintenance.</p>
+                    <p>Proper maintenance extends the life of property components and helps maintain property value.</p>
+                </td>
+                <td class="arabic-col arabic">
+                    <p>جميع العقارات تتطلب صيانة مستمرة واستبدال دوري للمكونات. هذا جزء طبيعي من ملكية العقار.</p>
+                    <p>ضع ميزانية لتكاليف الصيانة المنتظمة بما في ذلك صيانة التدفئة والتهوية وتكييف الهواء، وصيانة السباكة، والتحديثات الكهربائية، والصيانة الخارجية.</p>
+                    <p>الصيانة المناسبة تمدد عمر مكونات العقار وتساعد في الحفاظ على قيمة العقار.</p>
+                </td>
+            </tr>
+
+            <!-- Scope of Inspection -->
+            <tr class="section-header">
+                <td class="english-col">SCOPE OF THE INSPECTION:</td>
+                <td class="arabic-col arabic">نطاق الفحص:</td>
+            </tr>
+            <tr>
+                <td class="english-col">
+                    <p>This inspection is a visual examination of the readily accessible areas and systems of the property. It includes:</p>
+                    <ul>
+                        <li>Structural components</li>
+                        <li>Electrical systems</li>
+                        <li>Plumbing systems</li>
+                        <li>HVAC systems</li>
+                        <li>Interior and exterior surfaces</li>
+                        <li>Doors and windows</li>
+                        <li>Safety features</li>
+                    </ul>
+                    <p>The inspection does not include destructive testing, concealed areas, or areas not readily accessible.</p>
+                </td>
+                <td class="arabic-col arabic">
+                    <p>هذا الفحص هو فحص بصري للمناطق والأنظمة التي يسهل الوصول إليها في العقار. يشمل:</p>
+                    <ul>
+                        <li>المكونات الهيكلية</li>
+                        <li>الأنظمة الكهربائية</li>
+                        <li>أنظمة السباكة</li>
+                        <li>أنظمة التدفئة والتهوية وتكييف الهواء</li>
+                        <li>الأسطح الداخلية والخارجية</li>
+                        <li>الأبواب والنوافذ</li>
+                        <li>ميزات السلامة</li>
+                    </ul>
+                    <p>لا يشمل الفحص الاختبارات المدمرة أو المناطق المخفية أو المناطق التي لا يمكن الوصول إليها بسهولة.</p>
+                </td>
+            </tr>
+
+            <!-- Confidentiality -->
+            <tr class="section-header">
+                <td class="english-col">CONFIDENTIALITY OF THE REPORT:</td>
+                <td class="arabic-col arabic">سرية التقرير:</td>
+            </tr>
+            <tr>
+                <td class="english-col">
+                    <p>This report is confidential and is prepared exclusively for <span class="variable">{{CLIENT_NAME}}</span>.</p>
+                    <p>The report may not be reproduced, distributed, or used by any other party without the written consent of the client and Wasla Real Estate Solutions.</p>
+                    <p>The information contained in this report is based on the conditions observed at the time of inspection on <span class="variable">{{INSPECTION_DATE}}</span>.</p>
+                </td>
+                <td class="arabic-col arabic">
+                    <p>هذا التقرير سري ومُعد حصرياً لـ <span class="variable">{{CLIENT_NAME}}</span>.</p>
+                    <p>لا يجوز استنساخ التقرير أو توزيعه أو استخدامه من قبل أي طرف آخر دون موافقة خطية من العميل وشركة وصلة للحلول العقارية.</p>
+                    <p>المعلومات الواردة في هذا التقرير تعتمد على الظروف المرصودة وقت التفتيش في <span class="variable">{{INSPECTION_DATE}}</span>.</p>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Signature Section -->
+        <table class="signature-section bilingual-table">
+            <tr class="section-header">
+                <td colspan="2" style="text-align: center;">SIGNATURES - التواقيع</td>
+            </tr>
+            <tr class="signature-row">
+                <td class="english-col">
+                    <strong>Client Name:</strong> <span class="variable">{{CLIENT_NAME}}</span><br><br>
+                    <strong>Signature:</strong><br>
+                    <div class="signature-line"></div>
+                </td>
+                <td class="arabic-col arabic">
+                    <strong>اسم العميل:</strong> <span class="variable">{{CLIENT_NAME}}</span><br><br>
+                    <strong>التوقيع:</strong><br>
+                    <div class="signature-line"></div>
+                </td>
+            </tr>
+            <tr class="signature-row">
+                <td class="english-col">
+                    <strong>Prepared by:</strong> <span class="variable">{{INSPECTOR_NAME}}</span><br><br>
+                    <strong>Stamp:</strong><br>
+                    <div class="stamp-placeholder">COMPANY STAMP</div>
+                </td>
+                <td class="arabic-col arabic">
+                    <strong>أعد التقرير بواسطة:</strong> <span class="variable">{{INSPECTOR_NAME}}</span><br><br>
+                    <strong>الختم:</strong><br>
+                    <div class="stamp-placeholder">ختم الشركة</div>
+                </td>
+            </tr>
+            <tr class="signature-row">
+                <td class="english-col">
+                    <strong>Date:</strong> <span class="variable">{{INSPECTION_DATE}}</span>
+                </td>
+                <td class="arabic-col arabic">
+                    <strong>التاريخ:</strong> <span class="variable">{{INSPECTION_DATE}}</span>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Annexed Report Notice -->
+        <table class="bilingual-table">
+            <tr>
+                <td class="english-col" style="text-align: center; font-weight: bold; font-size: 14pt;">
+                    Property Inspection report is annexed
+                </td>
+                <td class="arabic-col arabic" style="text-align: center; font-weight: bold; font-size: 14pt;">
+                    مرفق تقرير الفحص
+                </td>
+            </tr>
+        </table>
+
+        <!-- Grade Table -->
+        <table class="grade-table">
+            <tr>
+                <th>Grade</th>
+                <th id="grade-aaa" class="grade-cell">AAA</th>
+                <th id="grade-aa" class="grade-cell">AA</th>
+                <th id="grade-a" class="grade-cell">A</th>
+                <th id="grade-b" class="grade-cell">B</th>
+                <th id="grade-c" class="grade-cell">C</th>
+                <th id="grade-d" class="grade-cell">D</th>
+            </tr>
+            <tr>
+                <td><strong>Description</strong></td>
+                <td>Excellent</td>
+                <td>Very Good</td>
+                <td>Good</td>
+                <td>Meeting the standards</td>
+                <td>Acceptable</td>
+                <td>Require maintenance</td>
+            </tr>
+            <tr>
+                <td><strong>الوصف</strong></td>
+                <td class="arabic">ممتاز</td>
+                <td class="arabic">جيد جداً</td>
+                <td class="arabic">جيد</td>
+                <td class="arabic">يستوفي المعايير</td>
+                <td class="arabic">مقبول</td>
+                <td class="arabic">يحتاج صيانة</td>
+            </tr>
+        </table>
+
+        <!-- Report Info -->
+        <div style="text-align: center; margin-top: 30px; padding: 15px; background: #ecf0f1; border-radius: 5px;">
+            <p><strong>Report Number:</strong> <span class="variable">{{REPORT_NUMBER}}</span></p>
+            <p><strong>Property Address:</strong> <span class="variable">{{PROPERTY_ADDRESS}}</span></p>
+            <p><strong>رقم التقرير:</strong> <span class="variable">{{REPORT_NUMBER}}</span></p>
+            <p><strong>عنوان العقار:</strong> <span class="variable">{{PROPERTY_ADDRESS}}</span></p>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; margin-top: 30px; padding: 15px; border-top: 2px solid #2c3e50; font-size: 10pt; color: #666;">
+            <p><strong>Wasla Real Estate Solutions</strong></p>
+            <p>Professional Property Inspection Services - خدمات فحص العقارات المهنية</p>
+            <p>Email: wasla.solution@gmail.com | Mobile: +968 90699799</p>
+        </div>
+    </div>
+
+    <script>
+        // Function to populate template with inspection data
+        function populateReport(inspectionData) {
+            const template = document.body.innerHTML;
+            
+            // Replace all template variables
+            let populatedContent = template
+                .replace(/\{\{CLIENT_NAME\}\}/g, inspectionData.clientName || '[CLIENT NAME]')
+                .replace(/\{\{PROPERTY_GRADE\}\}/g, inspectionData.propertyGrade || '[GRADE]')
+                .replace(/\{\{INSPECTION_DATE\}\}/g, formatDate(inspectionData.inspectionDate) || '[DATE]')
+                .replace(/\{\{INSPECTOR_NAME\}\}/g, inspectionData.inspectorName || '[INSPECTOR NAME]')
+                .replace(/\{\{PROPERTY_ADDRESS\}\}/g, inspectionData.propertyAddress || '[PROPERTY ADDRESS]')
+                .replace(/\{\{REPORT_NUMBER\}\}/g, inspectionData.reportNumber || '[REPORT NUMBER]');
+            
+            document.body.innerHTML = populatedContent;
+            
+            // Highlight the correct grade
+            highlightGrade(inspectionData.propertyGrade);
+            
+            return document.documentElement.outerHTML;
+        }
+
+        // Function to highlight the selected grade
+        function highlightGrade(grade) {
+            // Remove any existing highlights
+            const gradeCells = document.querySelectorAll('[id^="grade-"]');
+            gradeCells.forEach(cell => {
+                cell.classList.remove('grade-highlighted');
+            });
+            
+            // Highlight the selected grade
+            if (grade) {
+                const gradeElement = document.getElementById(`grade-${grade.toLowerCase()}`);
+                if (gradeElement) {
+                    gradeElement.classList.add('grade-highlighted');
+                    // Also highlight the entire column
+                    const gradeIndex = Array.from(gradeElement.parentElement.children).indexOf(gradeElement);
+                    const table = gradeElement.closest('table');
+                    const rows = table.querySelectorAll('tr');
+                    rows.forEach(row => {
+                        if (row.children[gradeIndex]) {
+                            row.children[gradeIndex].classList.add('grade-highlighted');
+                        }
+                    });
+                }
+            }
+        }
+
+        // Function to format date
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) return dateString;
+            
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        // Print function
+        function printReport() {
+            window.print();
+        }
+
+        // Example usage function (for testing)
+        function loadSampleData() {
+            const sampleData = {
+                clientName: "Ahmed Al Balushi",
+                propertyGrade: "AA",
+                inspectionDate: "2024-12-15",
+                inspectorName: "AR - Certified Inspector",
+                propertyAddress: "Al Khawair, Muscat, Oman",
+                reportNumber: "WRS-2024-001"
+            };
+            
+            populateReport(sampleData);
+        }
+
+        // Auto-load sample data for demonstration (remove in production)
+        // loadSampleData();
+    </script>
+</body>
+</html>

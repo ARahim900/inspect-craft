@@ -1,7 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
-import { SupabaseService, SavedInspection } from '@/services/supabase-service';
+import { StorageService } from '@/services/storage-service';
+import type { SavedInspection } from '@/services/storage-service';
+import { PhotoDisplay } from './PhotoDisplay';
+import { StorageStatus } from './StorageStatus';
+import { ProfessionalReport } from './ProfessionalReport';
+import { BilingualDisclaimer } from './BilingualDisclaimer';
 import Logo from './Logo';
 
 // Types
@@ -392,7 +397,7 @@ export default function InspectionApp() {
   const loadInspections = async () => {
     setIsLoading(true);
     try {
-      const data = await SupabaseService.getInspections();
+      const data = await StorageService.getInspections();
       setInspections(data);
     } catch (error) {
       toast({
@@ -410,19 +415,39 @@ export default function InspectionApp() {
     setSelectedInspectionId(inspectionId);
   };
 
-  const saveInspection = async (inspection: InspectionData) => {
-    const savedInspection = await SupabaseService.saveInspection(inspection);
-    if (savedInspection) {
-      await loadInspections();
-      toast({
-        title: "Success",
-        description: "Inspection saved successfully!",
-      });
-      navigateTo('dashboard');
-    } else {
+  const saveInspection = async (inspection: InspectionData, isEditing: boolean = false, editId?: string) => {
+    try {
+      console.log('Attempting to save inspection:', inspection);
+      let savedInspection;
+      
+      if (isEditing && editId) {
+        console.log('Updating existing inspection:', editId);
+        savedInspection = await StorageService.updateInspection(editId, inspection);
+      } else {
+        console.log('Creating new inspection');
+        savedInspection = await StorageService.saveInspection(inspection);
+      }
+      
+      if (savedInspection) {
+        await loadInspections();
+        toast({
+          title: "Success",
+          description: isEditing ? "Inspection updated successfully!" : "Inspection saved successfully!",
+        });
+        navigateTo('dashboard');
+      } else {
+        console.error('Failed to save inspection - no data returned');
+        toast({
+          title: "Error",
+          description: "Failed to save inspection. Check console for details.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Error in saveInspection:', error);
       toast({
         title: "Error",
-        description: "Failed to save inspection",
+        description: `Failed to save: ${error instanceof Error ? error.message : 'Unknown error'}`,
         variant: "destructive",
       });
     }
@@ -435,7 +460,7 @@ export default function InspectionApp() {
   const deleteInspection = async () => {
     if (!deleteConfirmation.inspectionId) return;
     
-    const success = await SupabaseService.deleteInspection(deleteConfirmation.inspectionId);
+    const success = await StorageService.deleteInspection(deleteConfirmation.inspectionId);
     if (success) {
       await loadInspections();
       toast({
@@ -499,7 +524,7 @@ export default function InspectionApp() {
               {currentPage === 'editInspection' && selectedInspectionId && (
                 <InspectionForm 
                   navigateTo={navigateTo} 
-                  onSave={saveInspection}
+                  onSave={(data) => saveInspection(data, true, selectedInspectionId)}
                   editInspection={inspections.find(i => i.id === selectedInspectionId)}
                 />
               )}
@@ -507,6 +532,12 @@ export default function InspectionApp() {
                 <InspectionView 
                   inspection={inspections.find(i => i.id === selectedInspectionId)!}
                   navigateTo={navigateTo} 
+                />
+              )}
+              {currentPage === 'professionalReport' && selectedInspectionId && (
+                <ProfessionalReport 
+                  inspection={inspections.find(i => i.id === selectedInspectionId)!}
+                  onBack={() => navigateTo('dashboard')} 
                 />
               )}
             </div>
@@ -775,6 +806,13 @@ function Dashboard({
                       View Report
                     </button>
                     <button 
+                      onClick={() => navigateTo('professionalReport', inspection.id)}
+                      className="bg-primary text-primary-foreground px-3 py-2 rounded-md hover:bg-primary/90 transition-colors font-medium flex items-center gap-2 text-sm"
+                    >
+                      <PrintIcon className="w-4 h-4" />
+                      Print Report
+                    </button>
+                    <button 
                       onClick={() => onDeleteConfirmation(inspection.id, inspection.propertyLocation)}
                       className="bg-destructive text-destructive-foreground px-3 py-2 rounded-md hover:bg-destructive/90 transition-colors font-medium flex items-center gap-2 text-sm"
                     >
@@ -897,37 +935,50 @@ function InspectionForm({
 
   const handlePhotoUpload = async (areaId: number, itemId: number, file: File) => {
     setIsUploadingPhoto(true);
-    const photoURL = await SupabaseService.uploadPhoto(file);
-    
-    if (photoURL) {
-      setInspectionData(prev => ({
-        ...prev,
-        areas: prev.areas.map(area => {
-          if (area.id === areaId) {
-            return {
-              ...area,
-              items: area.items.map(item => 
-                item.id === itemId 
-                  ? { ...item, photos: [...item.photos, photoURL] } 
-                  : item
-              )
-            };
-          }
-          return area;
-        })
-      }));
+    try {
+      console.log('Uploading photo:', { areaId, itemId, fileName: file.name, fileSize: file.size, fileType: file.type });
+      const photoURL = await StorageService.uploadPhoto(file);
+      
+      if (photoURL) {
+        console.log('Photo uploaded successfully:', photoURL);
+        setInspectionData(prev => ({
+          ...prev,
+          areas: prev.areas.map(area => {
+            if (area.id === areaId) {
+              return {
+                ...area,
+                items: area.items.map(item => 
+                  item.id === itemId 
+                    ? { ...item, photos: [...item.photos, photoURL] } 
+                    : item
+                )
+              };
+            }
+            return area;
+          })
+        }));
+        toast({
+          title: "Photo uploaded",
+          description: "Photo has been added to the inspection point",
+        });
+      } else {
+        console.error('Photo upload failed - no URL returned');
+        toast({
+          title: "Upload failed",
+          description: "Failed to upload photo. Check console for details.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Error in handlePhotoUpload:', error);
       toast({
-        title: "Photo uploaded",
-        description: "Photo has been added to the inspection point",
-      });
-    } else {
-      toast({
-        title: "Upload failed",
-        description: "Failed to upload photo. Please try again.",
+        title: "Error",
+        description: `Upload failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
         variant: "destructive",
       });
+    } finally {
+      setIsUploadingPhoto(false);
     }
-    setIsUploadingPhoto(false);
   };
 
   const removeItem = (areaId: number, itemId: number) => {
@@ -1285,13 +1336,12 @@ function InspectionPoint({
             
             {item.photos.length > 0 && (
               <div className="mt-3 flex flex-wrap gap-2">
-                {item.photos.map((url, index) => (
-                  <img
+                {item.photos.map((photoId, index) => (
+                  <PhotoDisplay
                     key={index}
-                    src={url}
+                    photoId={photoId}
                     alt={`Photo ${index + 1}`}
                     className="w-16 h-16 object-cover rounded-lg border-2 border-border shadow-sm cursor-pointer hover:opacity-80"
-                    onClick={() => window.open(url, '_blank')}
                   />
                 ))}
               </div>
@@ -1313,6 +1363,44 @@ function InspectionView({
 }) {
   const printRef = useRef<HTMLDivElement>(null);
 
+  // Function to calculate property grade based on inspection results
+  const calculatePropertyGrade = (inspection: SavedInspection): string => {
+    let totalItems = 0;
+    let passCount = 0;
+    let failCount = 0;
+    let snagsCount = 0;
+
+    inspection.areas.forEach(area => {
+      area.items.forEach(item => {
+        totalItems++;
+        switch (item.status) {
+          case 'Pass':
+            passCount++;
+            break;
+          case 'Fail':
+            failCount++;
+            break;
+          case 'Snags':
+            snagsCount++;
+            break;
+        }
+      });
+    });
+
+    if (totalItems === 0) return 'C';
+
+    const passPercentage = (passCount / totalItems) * 100;
+    const failPercentage = (failCount / totalItems) * 100;
+
+    // Grading logic
+    if (passPercentage >= 95 && failPercentage === 0) return 'AAA';
+    if (passPercentage >= 90 && failPercentage <= 2) return 'AA';
+    if (passPercentage >= 80 && failPercentage <= 5) return 'A';
+    if (passPercentage >= 70 && failPercentage <= 10) return 'B';
+    if (passPercentage >= 60 && failPercentage <= 15) return 'C';
+    return 'D';
+  };
+
   const handlePrint = () => {
     if (printRef.current) {
       // Create a new window for printing
@@ -1332,20 +1420,29 @@ function InspectionView({
           <style>
             @page {
               size: A4;
-              margin: 15mm 15mm 20mm 15mm;
+              margin: 15mm 12mm 15mm 12mm;
             }
             
             body {
-              font-family: Arial, sans-serif;
-              line-height: 1.5;
+              font-family: 'Arial', 'Helvetica', sans-serif;
+              line-height: 1.4;
               color: #333;
-              font-size: 11pt;
-              margin: 0;
-              padding: 20px;
+              font-size: 10pt;
+              margin: 0 !important;
+              padding: 8mm !important;
               position: relative;
               -webkit-print-color-adjust: exact;
               print-color-adjust: exact;
               color-adjust: exact;
+              box-sizing: border-box;
+            }
+            
+            .report-container {
+              margin: 0 auto !important;
+              padding: 0 !important;
+              box-sizing: border-box;
+              background: white;
+              max-width: 100%;
             }
             
             /* Watermark that appears on every page */
@@ -1549,19 +1646,124 @@ function InspectionView({
             
             @media print {
               body {
-                margin: 0;
-                padding: 0;
+                margin: 0 !important;
+                padding: 10mm !important;
+                box-sizing: border-box;
               }
               
               .report-wrapper {
-                margin: 0;
+                margin: 0 auto;
                 padding: 0;
+                width: 100%;
+                max-width: 100%;
+              }
+              
+              .report-container {
+                margin: 0 auto !important;
+                padding: 0 !important;
+                box-sizing: border-box;
+                width: 100%;
+              }
+              
+              /* Professional section spacing */
+              .header {
+                margin-bottom: 10mm !important;
+                page-break-after: avoid;
+              }
+              
+              .bilingual-disclaimer-section {
+                margin-bottom: 10mm !important;
+              }
+              
+              .property-details {
+                margin-bottom: 8mm !important;
+                page-break-inside: avoid;
+              }
+              
+              .area-section {
+                margin-bottom: 8mm !important;
+              }
+              
+              .footer {
+                margin-top: 10mm !important;
+                page-break-inside: avoid;
+              }
+              
+              /* Text spacing improvements */
+              p {
+                margin-bottom: 3mm;
+                text-align: justify;
+              }
+              
+              /* Table improvements */
+              table {
+                margin: 6mm 0 !important;
+              }
+              
+              th, td {
+                padding: 3mm !important;
+              }
+              
+              /* Prevent orphaned content */
+              h1, h2, h3, h4 {
+                page-break-after: avoid;
+                margin-bottom: 4mm;
+                margin-top: 6mm;
+              }
+              
+              /* Arabic text improvements */
+              [dir="rtl"] {
+                text-align: right;
+                font-family: 'Arial Unicode MS', 'Tahoma', 'Arial', sans-serif;
               }
             }
           </style>
         </head>
         <body onload="window.print(); window.onafterprint = () => window.close();">
-          ${printContent}
+          <div class="print-wrapper" style="margin: 0; padding: 0;">
+            ${printContent}
+          </div>
+          <style>
+            /* Additional print margin enforcement */
+            @media print {
+              html {
+                margin: 0 !important;
+                padding: 0 !important;
+              }
+              
+              body {
+                margin: 12mm !important;
+                padding: 0 !important;
+                width: calc(210mm - 24mm) !important;
+                min-height: calc(297mm - 30mm) !important;
+                box-sizing: border-box !important;
+              }
+              
+              .print-wrapper {
+                margin: 0 auto !important;
+                padding: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+              }
+              
+              @page {
+                size: A4 !important;
+                margin: 15mm 12mm !important;
+              }
+              
+              * {
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+              }
+              
+              /* Center all content */
+              .report-container {
+                margin: 0 auto !important;
+                width: 100% !important;
+              }
+            }
+          </style>
         </body>
         </html>
       `);
@@ -1621,26 +1823,13 @@ function InspectionView({
           </div>
         </header>
 
-        <section className="introduction-section mb-8 p-6 bg-blue-50 border border-blue-200 rounded-lg">
-          <h3 className="font-bold text-lg mb-4 text-center text-blue-800">INSPECTION INTRODUCTION</h3>
-          <div className="text-sm text-gray-700 space-y-3">
-            <p>
-              <strong>Dear {inspection.clientName || 'Valued Client'},</strong>
-            </p>
-            <p>
-              Solution Property is pleased to present this comprehensive inspection report for the property located at <strong>{inspection.propertyLocation}</strong>. This {inspection.propertyType.toLowerCase()} has been thoroughly examined by our certified inspector, <strong>{inspection.inspectorName}</strong>, on <strong>{new Date(inspection.inspectionDate).toLocaleDateString()}</strong>.
-            </p>
-            <p>
-              Our inspection process follows industry-standard procedures and best practices to provide you with an accurate assessment of the property's current condition. We have evaluated various systems and components including structural elements, electrical systems, plumbing, HVAC, safety features, and overall property condition.
-            </p>
-            <p>
-              This report contains detailed findings, photographic evidence where applicable, and professional recommendations. Each inspection point has been categorized as Pass, Fail, or Snags (minor issues requiring attention). We encourage you to review this report carefully and contact us if you have any questions or require clarification on any findings.
-            </p>
-            <p>
-              <strong>Thank you for choosing Solution Property for your inspection needs.</strong>
-            </p>
-          </div>
-        </section>
+        <BilingualDisclaimer
+          clientName={inspection.clientName || 'Valued Client'}
+          propertyLocation={inspection.propertyLocation}
+          inspectionDate={inspection.inspectionDate}
+          inspectorName={inspection.inspectorName}
+          propertyGrade={calculatePropertyGrade(inspection)}
+        />
 
         <section className="property-details grid grid-cols-1 md:grid-cols-2 gap-6 text-base mb-8">
           <div><strong>Client:</strong> {inspection.clientName || 'N/A'}</div>
@@ -1696,10 +1885,10 @@ function InspectionView({
                                 <div className="space-y-2">
                                   <p className="font-semibold">Photos:</p>
                                   <div className="photo-grid">
-                                    {item.photos.map((photo, idx) => (
-                                      <img
+                                    {item.photos.map((photoId, idx) => (
+                                      <PhotoDisplay
                                         key={idx}
-                                        src={photo}
+                                        photoId={photoId}
                                         alt={`${item.point} - Photo ${idx + 1}`}
                                         className="photo-item"
                                       />
