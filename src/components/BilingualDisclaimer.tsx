@@ -231,48 +231,60 @@ export function BilingualDisclaimer({
         @media print {
           @page {
             size: A4;
-            margin: 10mm !important;
+            margin: 20mm 18mm 20mm 18mm !important;
           }
           
           body {
             margin: 0 !important;
-            padding: 0 !important;
+            padding: 15mm !important;
             font-family: 'Arial', 'Helvetica', sans-serif;
-            font-size: 10pt;
-            line-height: 1.4;
+            font-size: 9pt;
+            line-height: 1.3;
             color: #333;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
             box-sizing: border-box;
+            background: white;
           }
           
           .report-container {
-            margin: 0 !important;
-            padding: 5mm !important;
+            margin: 0 auto !important;
+            padding: 0 !important;
             box-sizing: border-box;
             background: white;
             width: 100% !important;
-            max-width: 100% !important;
+            max-width: 180mm !important;
           }
           
           .bilingual-disclaimer-section {
-            font-size: 10pt;
-            line-height: 1.4;
+            font-size: 9pt;
+            line-height: 1.3;
             margin: 0 !important;
             padding: 0 !important;
             width: 100% !important;
+            max-width: 100% !important;
             box-sizing: border-box !important;
           }
           
           .bilingual-disclaimer-section > * + * {
-            margin-top: 8mm !important;
+            margin-top: 6mm !important;
           }
           
-          /* Prevent content cutoff */
+          /* Prevent content cutoff - CRITICAL */
           .bilingual-disclaimer-section * {
             overflow: visible !important;
             word-wrap: break-word !important;
             word-break: normal !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+          }
+          
+          /* Safe content area */
+          .bilingual-disclaimer-section {
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
           }
           
           .bilingual-disclaimer-section table,
@@ -350,25 +362,46 @@ export function BilingualDisclaimer({
           /* Table cell padding for better readability */
           .bilingual-disclaimer-section th,
           .bilingual-disclaimer-section td {
-            padding: 2mm 3mm !important;
-            font-size: 9pt !important;
+            padding: 3mm 2mm !important;
+            font-size: 8pt !important;
+            vertical-align: top !important;
+            margin: 0 !important;
           }
           
-          /* Ensure tables fit within printable area */
+          /* Ensure tables fit within printable area - CRITICAL */
           .bilingual-disclaimer-section table {
             width: 100% !important;
             table-layout: fixed !important;
+            margin: 0 !important;
+            border-collapse: collapse !important;
           }
           
           /* Adjust column widths for bilingual content */
           .bilingual-disclaimer-section td:first-child,
           .bilingual-disclaimer-section th:first-child {
-            width: 50% !important;
+            width: 48% !important;
+            text-align: left !important;
+            padding-right: 2mm !important;
           }
           
           .bilingual-disclaimer-section td:last-child,
           .bilingual-disclaimer-section th:last-child {
-            width: 50% !important;
+            width: 48% !important;
+            text-align: right !important;
+            direction: rtl !important;
+            padding-left: 2mm !important;
+          }
+          
+          /* Grade table specific fixes */
+          .grade-table-section table {
+            font-size: 7pt !important;
+          }
+          
+          .grade-table-section th,
+          .grade-table-section td {
+            padding: 1mm !important;
+            font-size: 7pt !important;
+            text-align: center !important;
           }
           
           /* Signature section spacing */

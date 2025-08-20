@@ -109,28 +109,29 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
             @media print {
               @page {
                 size: A4;
-                margin: 10mm !important;
+                margin: 20mm 18mm 20mm 18mm !important;
               }
               
               body { 
                 margin: 0 !important; 
-                padding: 0 !important; 
+                padding: 15mm !important; 
                 font-family: 'Arial', 'Helvetica', sans-serif;
-                font-size: 10pt;
-                line-height: 1.4;
+                font-size: 9pt;
+                line-height: 1.3;
                 color: #333;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
                 box-sizing: border-box;
+                background: white;
               }
               
               .report-container {
-                margin: 0 !important;
-                padding: 5mm !important;
+                margin: 0 auto !important;
+                padding: 0 !important;
                 box-sizing: border-box;
                 background: white;
                 width: 100% !important;
-                max-width: 100% !important;
+                max-width: 180mm !important;
               }
               
               .no-print { display: none !important; }
@@ -489,50 +490,72 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
               
               body {
                 margin: 0 !important;
-                padding: 10mm !important;
+                padding: 15mm !important;
                 width: auto !important;
                 min-height: auto !important;
                 box-sizing: border-box !important;
+                background: white !important;
               }
               
               .print-wrapper {
-                margin: 0 !important;
+                margin: 0 auto !important;
                 padding: 0 !important;
                 width: 100% !important;
-                max-width: 100% !important;
+                max-width: 180mm !important;
                 box-sizing: border-box !important;
               }
               
               /* Override browser default margins */
               @page {
                 size: A4 !important;
-                margin: 10mm !important;
+                margin: 20mm 18mm !important;
               }
               
-              /* Ensure content fits within printable area */
+              /* CRITICAL: Ensure content fits within printable area */
               * {
                 max-width: 100% !important;
                 box-sizing: border-box !important;
                 overflow: visible !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
               }
               
-              /* Center content */
+              /* Safe content positioning */
               .report-container {
-                margin: 0 !important;
+                margin: 0 auto !important;
                 padding: 0 !important;
                 width: 100% !important;
+                max-width: 180mm !important;
               }
               
-              /* Prevent content cutoff */
+              /* Fix table layouts */
               table {
                 width: 100% !important;
-                table-layout: auto !important;
+                table-layout: fixed !important;
+                border-collapse: collapse !important;
+                margin: 0 !important;
               }
               
               td, th {
                 word-wrap: break-word !important;
                 word-break: normal !important;
                 overflow: visible !important;
+                font-size: 8pt !important;
+                padding: 2mm !important;
+              }
+              
+              /* Bilingual table fixes */
+              .bilingual-disclaimer-section td:first-child,
+              .bilingual-disclaimer-section th:first-child {
+                width: 48% !important;
+                text-align: left !important;
+              }
+              
+              .bilingual-disclaimer-section td:last-child,
+              .bilingual-disclaimer-section th:last-child {
+                width: 48% !important;
+                text-align: right !important;
+                direction: rtl !important;
               }
             }
           </style>

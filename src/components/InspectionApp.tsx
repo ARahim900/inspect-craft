@@ -1420,30 +1420,31 @@ function InspectionView({
           <style>
             @page {
               size: A4;
-              margin: 10mm;
+              margin: 20mm 18mm 20mm 18mm;
             }
             
             body {
               font-family: 'Arial', 'Helvetica', sans-serif;
-              line-height: 1.4;
+              line-height: 1.3;
               color: #333;
-              font-size: 10pt;
+              font-size: 9pt;
               margin: 0 !important;
-              padding: 0 !important;
+              padding: 15mm !important;
               position: relative;
               -webkit-print-color-adjust: exact;
               print-color-adjust: exact;
               color-adjust: exact;
               box-sizing: border-box;
+              background: white;
             }
             
             .report-container {
-              margin: 0 !important;
-              padding: 5mm !important;
+              margin: 0 auto !important;
+              padding: 0 !important;
               box-sizing: border-box;
               background: white;
               width: 100% !important;
-              max-width: 100% !important;
+              max-width: 180mm !important;
             }
             
             /* Watermark that appears on every page */
@@ -1736,7 +1737,7 @@ function InspectionView({
             ${printContent}
           </div>
           <style>
-            /* Additional print margin enforcement */
+            /* CRITICAL: Additional print margin enforcement */
             @media print {
               html {
                 margin: 0 !important;
@@ -1745,46 +1746,70 @@ function InspectionView({
               
               body {
                 margin: 0 !important;
-                padding: 10mm !important;
+                padding: 15mm !important;
                 width: auto !important;
                 min-height: auto !important;
                 box-sizing: border-box !important;
+                background: white !important;
               }
               
               .print-wrapper {
-                margin: 0 !important;
+                margin: 0 auto !important;
                 padding: 0 !important;
                 width: 100% !important;
-                max-width: 100% !important;
+                max-width: 180mm !important;
                 box-sizing: border-box !important;
               }
               
               @page {
                 size: A4 !important;
-                margin: 10mm !important;
+                margin: 20mm 18mm !important;
               }
               
+              /* CRITICAL: Force safe positioning */
               * {
                 max-width: 100% !important;
                 box-sizing: border-box !important;
                 overflow: visible !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
               }
               
-              /* Ensure all content is visible */
+              /* Ensure all content is within safe area */
               .report-container {
-                margin: 0 !important;
+                margin: 0 auto !important;
                 padding: 0 !important;
                 width: 100% !important;
+                max-width: 180mm !important;
               }
               
               table {
                 width: 100% !important;
-                table-layout: auto !important;
+                table-layout: fixed !important;
+                border-collapse: collapse !important;
+                margin: 0 !important;
               }
               
               td, th {
                 word-wrap: break-word !important;
                 overflow: visible !important;
+                font-size: 8pt !important;
+                padding: 2mm !important;
+                margin: 0 !important;
+              }
+              
+              /* Fix bilingual content */
+              .bilingual-disclaimer-section td:first-child,
+              .bilingual-disclaimer-section th:first-child {
+                width: 48% !important;
+                text-align: left !important;
+              }
+              
+              .bilingual-disclaimer-section td:last-child,
+              .bilingual-disclaimer-section th:last-child {
+                width: 48% !important;
+                text-align: right !important;
+                direction: rtl !important;
               }
             }
           </style>
