@@ -7,6 +7,7 @@ import { PhotoDisplay } from './PhotoDisplay';
 import { StorageStatus } from './StorageStatus';
 import { ProfessionalReport } from './ProfessionalReport';
 import { BilingualDisclaimer } from './BilingualDisclaimer';
+import { ThemeToggle } from './ThemeToggle';
 import Logo from './Logo';
 
 // Types
@@ -698,13 +699,16 @@ function Dashboard({
           <h2 className="text-3xl font-bold text-foreground">Dashboard</h2>
           <p className="text-muted-foreground mt-1">Manage your property inspections</p>
         </div>
-        <button 
-          onClick={() => navigateTo('newInspection')}
-          className="flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors shadow-md w-full sm:w-auto justify-center"
-        >
-          <PlusIcon />
-          New Inspection
-        </button>
+        <div className="flex items-center gap-4">
+          <ThemeToggle />
+          <button 
+            onClick={() => navigateTo('newInspection')}
+            className="flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors shadow-md w-full sm:w-auto justify-center"
+          >
+            <PlusIcon />
+            New Inspection
+          </button>
+        </div>
       </div>
 
       {/* KPI Cards Section */}
@@ -1013,7 +1017,7 @@ function InspectionForm({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4">
+      <div className="flex items-center justify-between gap-4">
         <button 
           onClick={() => navigateTo('dashboard')}
           className="flex items-center gap-2 text-primary hover:text-primary/80 font-medium"
@@ -1021,6 +1025,7 @@ function InspectionForm({
           <BackIcon />
           Back to Dashboard
         </button>
+        <ThemeToggle />
       </div>
 
       <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
@@ -1824,13 +1829,16 @@ function InspectionView({
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 no-print">
-        <button 
-          onClick={() => navigateTo('dashboard')}
-          className="flex items-center gap-2 text-primary hover:text-primary/80 font-medium"
-        >
-          <BackIcon />
-          Back to Dashboard
-        </button>
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={() => navigateTo('dashboard')}
+            className="flex items-center gap-2 text-primary hover:text-primary/80 font-medium"
+          >
+            <BackIcon />
+            Back to Dashboard
+          </button>
+          <ThemeToggle />
+        </div>
         <div className="flex gap-2">
           <button
             onClick={() => navigateTo('editInspection', inspection.id)}

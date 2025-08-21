@@ -128,6 +128,192 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground transition-colors duration-300;
+  }
+}
+
+/* Dark Mode Theme Toggle Animation */
+@layer components {
+  .swap {
+    position: relative;
+    display: inline-grid;
+    user-select: none;
+    place-content: center;
+    cursor: pointer;
+  }
+  
+  .swap > * {
+    grid-column-start: 1;
+    grid-row-start: 1;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .swap input {
+    appearance: none;
+  }
+  
+  .swap .swap-on,
+  .swap .swap-indeterminate,
+  .swap input:indeterminate ~ .swap-on {
+    opacity: 0;
+  }
+  
+  .swap input:checked ~ .swap-off,
+  .swap.swap-active .swap-off,
+  .swap input:indeterminate ~ .swap-off {
+    opacity: 0;
+  }
+  
+  .swap input:checked ~ .swap-on,
+  .swap.swap-active .swap-on,
+  .swap input:indeterminate ~ .swap-indeterminate {
+    opacity: 1;
+  }
+  
+  .swap.swap-rotate .swap-on,
+  .swap.swap-rotate .swap-off,
+  .swap.swap-rotate .swap-indeterminate {
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  
+  .swap.swap-rotate input:checked ~ .swap-off,
+  .swap.swap-rotate.swap-active .swap-off {
+    transform: rotate(180deg);
+  }
+  
+  .swap.swap-rotate input:checked ~ .swap-on,
+  .swap.swap-rotate.swap-active .swap-on {
+    transform: rotate(0deg);
+  }
+}
+
+/* Dark Mode Specific Styles */
+@layer components {
+  /* Application Layout Dark Mode */
+  .dark .bg-gradient-to-br {
+    @apply from-gray-900 to-slate-900;
+  }
+  
+  /* Card Components Dark Mode */
+  .dark .bg-card {
+    @apply bg-gray-800 border-gray-700;
+  }
+  
+  /* Button Dark Mode */
+  .dark .btn-primary {
+    @apply bg-blue-600 hover:bg-blue-700 text-white;
+  }
+  
+  .dark .btn-secondary {
+    @apply bg-gray-700 hover:bg-gray-600 text-gray-100 border-gray-600;
+  }
+  
+  /* Input Fields Dark Mode */
+  .dark input,
+  .dark textarea,
+  .dark select {
+    @apply bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-400;
+  }
+  
+  .dark input:focus,
+  .dark textarea:focus,
+  .dark select:focus {
+    @apply border-blue-500 ring-blue-500;
+  }
+  
+  /* Tables Dark Mode */
+  .dark table {
+    @apply bg-gray-800;
+  }
+  
+  .dark th {
+    @apply bg-gray-700 text-gray-100;
+  }
+  
+  .dark td {
+    @apply text-gray-100 border-gray-600;
+  }
+  
+  .dark tr:nth-child(even) {
+    @apply bg-gray-800;
+  }
+  
+  .dark tr:hover {
+    @apply bg-gray-700;
+  }
+  
+  /* Status Colors Dark Mode */
+  .dark .text-success {
+    @apply text-green-400;
+  }
+  
+  .dark .text-warning {
+    @apply text-yellow-400;
+  }
+  
+  .dark .text-danger {
+    @apply text-red-400;
+  }
+  
+  .dark .bg-success {
+    @apply bg-green-600;
+  }
+  
+  .dark .bg-warning {
+    @apply bg-yellow-600;
+  }
+  
+  .dark .bg-danger {
+    @apply bg-red-600;
+  }
+  
+  /* Sidebar Dark Mode */
+  .dark .sidebar {
+    @apply bg-gray-900 border-gray-700;
+  }
+  
+  .dark .sidebar-item {
+    @apply text-gray-300 hover:text-white hover:bg-gray-800;
+  }
+  
+  .dark .sidebar-item.active {
+    @apply text-white bg-blue-600;
+  }
+  
+  /* Modal Dark Mode */
+  .dark .modal-content {
+    @apply bg-gray-800 text-gray-100;
+  }
+  
+  .dark .modal-overlay {
+    @apply bg-black bg-opacity-50;
+  }
+  
+  /* Print Report Dark Mode (should remain light for printing) */
+  @media print {
+    .dark * {
+      background: white !important;
+      color: black !important;
+    }
+  }
+}
+
+/* Custom Scrollbar Dark Mode */
+@layer utilities {
+  .dark ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .dark ::-webkit-scrollbar-track {
+    @apply bg-gray-800;
+  }
+  
+  .dark ::-webkit-scrollbar-thumb {
+    @apply bg-gray-600 rounded-md;
+  }
+  
+  .dark ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-500;
   }
 }
