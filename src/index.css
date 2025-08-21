@@ -267,7 +267,7 @@
     @apply bg-red-600;
   }
   
-  /* Sidebar Dark Mode */
+  /* Sidebar Dark Mode - Enhanced */
   .dark .sidebar {
     @apply bg-gray-900 border-gray-700;
   }
@@ -278,6 +278,35 @@
   
   .dark .sidebar-item.active {
     @apply text-white bg-blue-600;
+  }
+  
+  /* Card Icon Backgrounds Dark Mode */
+  .dark .bg-blue-100 {
+    @apply bg-blue-900/30;
+  }
+  
+  .dark .bg-green-100 {
+    @apply bg-green-900/30;
+  }
+  
+  .dark .bg-red-100 {
+    @apply bg-red-900/30;
+  }
+  
+  .dark .bg-orange-100 {
+    @apply bg-orange-900/30;
+  }
+  
+  .dark .bg-yellow-100 {
+    @apply bg-yellow-900/30;
+  }
+  
+  .dark .bg-purple-100 {
+    @apply bg-purple-900/30;
+  }
+  
+  .dark .bg-gray-100 {
+    @apply bg-gray-800;
   }
   
   /* Modal Dark Mode */

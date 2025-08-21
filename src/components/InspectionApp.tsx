@@ -315,20 +315,20 @@ function Sidebar({
       
       {/* Sidebar */}
       <div className={cn(
-        "fixed top-0 left-0 h-full w-64 bg-gray-50/95 backdrop-blur border-r border-gray-200/60 z-50 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:z-auto shadow-lg lg:shadow-none",
+        "fixed top-0 left-0 h-full w-64 bg-sidebar-background backdrop-blur border-r border-sidebar-border z-50 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:z-auto shadow-lg lg:shadow-none",
         isOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         <div className="flex flex-col h-full">
           {/* Sidebar Header - with logo */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-200/60">
+          <div className="flex items-center justify-between p-4 border-b border-sidebar-border">
             <div className="flex items-center gap-2">
               <Logo size="small" />
             </div>
             <button
               onClick={onClose}
-              className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors shadow-sm"
+              className="lg:hidden p-2 hover:bg-sidebar-accent rounded-lg transition-colors shadow-sm"
             >
-              <CloseIcon className="w-5 h-5 text-gray-600" />
+              <CloseIcon className="w-5 h-5 text-sidebar-foreground" />
             </button>
           </div>
           
@@ -343,14 +343,14 @@ function Sidebar({
                     "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-200 group",
                     currentPage === item.id
                       ? "bg-primary text-white shadow-lg shadow-primary/25"
-                      : "hover:bg-white hover:shadow-sm text-gray-600 hover:text-gray-800"
+                      : "hover:bg-sidebar-accent hover:shadow-sm text-sidebar-foreground hover:text-sidebar-primary"
                   )}
                 >
                   <div className="flex-shrink-0">
                     {React.cloneElement(item.icon as React.ReactElement, {
                       className: cn(
                         "w-5 h-5 transition-colors",
-                        currentPage === item.id ? "text-white" : "text-gray-500 group-hover:text-primary"
+                        currentPage === item.id ? "text-white" : "text-sidebar-foreground group-hover:text-sidebar-primary"
                       )
                     })}
                   </div>
@@ -358,7 +358,7 @@ function Sidebar({
                     <div className="font-medium text-sm">{item.label}</div>
                     <div className={cn(
                       "text-xs truncate transition-colors",
-                      currentPage === item.id ? "text-white/80" : "text-gray-400 group-hover:text-gray-500"
+                      currentPage === item.id ? "text-white/80" : "text-muted-foreground group-hover:text-sidebar-foreground"
                     )}>
                       {item.description}
                     </div>
@@ -369,8 +369,8 @@ function Sidebar({
           </nav>
           
           {/* Sidebar Footer */}
-          <div className="p-4 border-t border-gray-200/60">
-            <div className="text-xs text-gray-400 text-center bg-white/50 py-2 px-3 rounded-lg">
+          <div className="p-4 border-t border-sidebar-border">
+            <div className="text-xs text-muted-foreground text-center bg-sidebar-accent py-2 px-3 rounded-lg">
               Solution Property v1.0
             </div>
           </div>
