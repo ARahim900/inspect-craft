@@ -45,6 +45,15 @@ export class SupabaseService {
 
       if (error) {
         console.error('Error uploading photo:', error);
+        console.error('Upload error details:', {
+          message: error.message,
+          status: error.status,
+          statusCode: error.statusCode,
+          fileName: fileName,
+          filePath: filePath,
+          fileSize: file.size,
+          fileType: file.type
+        });
         return null;
       }
 
@@ -55,7 +64,11 @@ export class SupabaseService {
 
       return publicUrl;
     } catch (error) {
-      console.error('Error uploading photo:', error);
+      console.error('Error uploading photo - Exception:', error);
+      console.error('Exception details:', {
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined
+      });
       return null;
     }
   }
@@ -78,6 +91,14 @@ export class SupabaseService {
 
       if (inspectionError || !inspection) {
         console.error('Error saving inspection:', inspectionError);
+        console.error('Save inspection error details:', {
+          error: inspectionError,
+          data: inspectionData,
+          message: inspectionError?.message,
+          details: inspectionError?.details,
+          hint: inspectionError?.hint,
+          code: inspectionError?.code
+        });
         return null;
       }
 
@@ -94,6 +115,13 @@ export class SupabaseService {
 
         if (areaError || !savedArea) {
           console.error('Error saving area:', areaError);
+          console.error('Save area error details:', {
+            error: areaError,
+            areaName: area.name,
+            inspectionId: inspection.id,
+            message: areaError?.message,
+            details: areaError?.details
+          });
           continue;
         }
 
@@ -115,6 +143,14 @@ export class SupabaseService {
 
           if (itemsError) {
             console.error('Error saving items:', itemsError);
+            console.error('Save items error details:', {
+              error: itemsError,
+              areaId: savedArea.id,
+              itemsCount: items.length,
+              message: itemsError?.message,
+              details: itemsError?.details,
+              hint: itemsError?.hint
+            });
           }
         }
       }
@@ -126,7 +162,12 @@ export class SupabaseService {
         updated_at: inspection.updated_at,
       };
     } catch (error) {
-      console.error('Error saving inspection:', error);
+      console.error('Error saving inspection - Exception:', error);
+      console.error('Save inspection exception details:', {
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+        data: inspectionData
+      });
       return null;
     }
   }

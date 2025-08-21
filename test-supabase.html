@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Supabase Connection</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover { background-color: #0056b3; }
+        #results {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Supabase Connection Test</h1>
+    
+    <div class="test-section info">
+        <h2>Connection Details</h2>
+        <p><strong>URL:</strong> https://epirocvvdzxiypdvdlwf.supabase.co</p>
+        <p><strong>Status:</strong> <span id="connection-status">Not tested</span></p>
+    </div>
+
+    <div class="test-section">
+        <h2>Tests</h2>
+        <button onclick="testConnection()">Test Basic Connection</button>
+        <button onclick="testTables()">Check Tables</button>
+        <button onclick="testStorage()">Check Storage Bucket</button>
+        <button onclick="testInsert()">Test Insert (Dummy Data)</button>
+        <button onclick="testUpload()">Test File Upload</button>
+    </div>
+
+    <div id="results"></div>
+
+    <script>
+        const SUPABASE_URL = "https://epirocvvdzxiypdvdlwf.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwaXJvY3Z2ZHp4aXlwZHZkbHdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQzNjI1MzgsImV4cCI6MjA2OTkzODUzOH0.Y0VlkV8XqO55En1zTLZ7iinorMHt72O37oFDbhywdTE";
+        
+        const { createClient } = supabase;
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        function logResult(message, isError = false) {
+            const results = document.getElementById('results');
+            const timestamp = new Date().toLocaleTimeString();
+            const prefix = isError ? '❌' : '✅';
+            results.innerHTML += `${prefix} [${timestamp}] ${message}\n`;
+        }
+        
+        async function testConnection() {
+            try {
+                logResult('Testing connection...');
+                const { data, error } = await supabaseClient.from('inspections').select('count');
+                
+                if (error && error.code !== 'PGRST116') { // PGRST116 = table doesn't exist
+                    logResult(`Connection error: ${error.message}`, true);
+                    document.getElementById('connection-status').textContent = 'Failed';
+                } else {
+                    logResult('Connection successful!');
+                    document.getElementById('connection-status').textContent = 'Connected';
+                }
+            } catch (error) {
+                logResult(`Exception: ${error.message}`, true);
+            }
+        }
+        
+        async function testTables() {
+            try {
+                logResult('Checking tables...');
+                
+                // Test inspections table
+                const { data: inspections, error: inspError } = await supabaseClient
+                    .from('inspections')
+                    .select('*')
+                    .limit(1);
+                    
+                if (inspError) {
+                    logResult(`❌ Inspections table: ${inspError.message}`, true);
+                } else {
+                    logResult(`✅ Inspections table exists`);
+                }
+                
+                // Test inspection_areas table
+                const { data: areas, error: areasError } = await supabaseClient
+                    .from('inspection_areas')
+                    .select('*')
+                    .limit(1);
+                    
+                if (areasError) {
+                    logResult(`❌ Inspection_areas table: ${areasError.message}`, true);
+                } else {
+                    logResult(`✅ Inspection_areas table exists`);
+                }
+                
+                // Test inspection_items table
+                const { data: items, error: itemsError } = await supabaseClient
+                    .from('inspection_items')
+                    .select('*')
+                    .limit(1);
+                    
+                if (itemsError) {
+                    logResult(`❌ Inspection_items table: ${itemsError.message}`, true);
+                } else {
+                    logResult(`✅ Inspection_items table exists`);
+                }
+                
+            } catch (error) {
+                logResult(`Exception: ${error.message}`, true);
+            }
+        }
+        
+        async function testStorage() {
+            try {
+                logResult('Checking storage bucket...');
+                
+                const { data, error } = await supabaseClient.storage.listBuckets();
+                
+                if (error) {
+                    logResult(`Storage error: ${error.message}`, true);
+                } else {
+                    const hasBucket = data.some(bucket => bucket.name === 'inspection-photos');
+                    if (hasBucket) {
+                        logResult('✅ inspection-photos bucket exists');
+                    } else {
+                        logResult('❌ inspection-photos bucket not found', true);
+                        logResult('Available buckets: ' + data.map(b => b.name).join(', '));
+                    }
+                }
+            } catch (error) {
+                logResult(`Exception: ${error.message}`, true);
+            }
+        }
+        
+        async function testInsert() {
+            try {
+                logResult('Testing data insert...');
+                
+                const testData = {
+                    property_location: 'Test Location ' + Date.now(),
+                    property_type: 'Test Type',
+                    inspector_name: 'Test Inspector',
+                    inspection_date: new Date().toISOString().split('T')[0],
+                    client_name: 'Test Client'
+                };
+                
+                const { data, error } = await supabaseClient
+                    .from('inspections')
+                    .insert(testData)
+                    .select()
+                    .single();
+                
+                if (error) {
+                    logResult(`Insert error: ${error.message}`, true);
+                    logResult(`Error details: ${JSON.stringify(error)}`, true);
+                } else {
+                    logResult(`✅ Insert successful! ID: ${data.id}`);
+                    
+                    // Try to delete the test record
+                    const { error: deleteError } = await supabaseClient
+                        .from('inspections')
+                        .delete()
+                        .eq('id', data.id);
+                        
+                    if (!deleteError) {
+                        logResult('✅ Test record cleaned up');
+                    }
+                }
+            } catch (error) {
+                logResult(`Exception: ${error.message}`, true);
+            }
+        }
+        
+        async function testUpload() {
+            try {
+                logResult('Testing file upload...');
+                
+                // Create a test file
+                const testContent = 'Test file content ' + Date.now();
+                const blob = new Blob([testContent], { type: 'text/plain' });
+                const fileName = `test-${Date.now()}.txt`;
+                
+                const { data, error } = await supabaseClient.storage
+                    .from('inspection-photos')
+                    .upload(`test/${fileName}`, blob);
+                
+                if (error) {
+                    logResult(`Upload error: ${error.message}`, true);
+                    logResult(`Error details: ${JSON.stringify(error)}`, true);
+                } else {
+                    logResult(`✅ Upload successful! Path: ${data.path}`);
+                    
+                    // Get public URL
+                    const { data: urlData } = supabaseClient.storage
+                        .from('inspection-photos')
+                        .getPublicUrl(`test/${fileName}`);
+                        
+                    logResult(`Public URL: ${urlData.publicUrl}`);
+                    
+                    // Try to delete the test file
+                    const { error: deleteError } = await supabaseClient.storage
+                        .from('inspection-photos')
+                        .remove([`test/${fileName}`]);
+                        
+                    if (!deleteError) {
+                        logResult('✅ Test file cleaned up');
+                    }
+                }
+            } catch (error) {
+                logResult(`Exception: ${error.message}`, true);
+            }
+        }
+    </script>
+</body>
+</html>
