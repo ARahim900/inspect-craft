@@ -282,27 +282,27 @@
   
   /* Card Icon Backgrounds Dark Mode */
   .dark .bg-blue-100 {
-    @apply bg-blue-900/30;
+    @apply bg-blue-600;
   }
   
   .dark .bg-green-100 {
-    @apply bg-green-900/30;
+    @apply bg-green-600;
   }
   
   .dark .bg-red-100 {
-    @apply bg-red-900/30;
+    @apply bg-red-600;
   }
   
   .dark .bg-orange-100 {
-    @apply bg-orange-900/30;
+    @apply bg-orange-600;
   }
   
   .dark .bg-yellow-100 {
-    @apply bg-yellow-900/30;
+    @apply bg-yellow-600;
   }
   
   .dark .bg-purple-100 {
-    @apply bg-purple-900/30;
+    @apply bg-purple-600;
   }
   
   .dark .bg-gray-100 {
