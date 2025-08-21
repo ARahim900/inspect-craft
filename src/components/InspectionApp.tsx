@@ -483,7 +483,7 @@ export default function InspectionApp() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="flex h-screen">
         {/* Sidebar */}
         <Sidebar
@@ -500,7 +500,7 @@ export default function InspectionApp() {
             sidebarOpen={sidebarOpen}
           />
           
-          <main className="flex-1 overflow-auto bg-white shadow-inner">
+          <main className="flex-1 overflow-auto bg-background shadow-inner">
             <div className="container mx-auto px-6 py-8 max-w-7xl">
               {currentPage === 'dashboard' && (
                 <Dashboard 
@@ -591,15 +591,15 @@ function Header({
   sidebarOpen: boolean; 
 }) {
   return (
-    <header className="sticky top-0 z-30 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/90 border-b border-gray-200/60 shadow-sm">
+    <header className="sticky top-0 z-30 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90 border-b border-border shadow-sm">
       <div className="flex h-16 items-center justify-between px-4">
         {/* Mobile Menu Button & Logo */}
         <div className="flex items-center gap-4">
           <button
             onClick={onMenuClick}
-            className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="lg:hidden p-2 hover:bg-accent rounded-lg transition-colors"
           >
-            <HamburgerIcon className="w-6 h-6 text-gray-600" />
+            <HamburgerIcon className="w-6 h-6 text-foreground" />
           </button>
           <div className="lg:hidden">
             <Logo size="small" />
@@ -613,8 +613,8 @@ function Header({
         
         {/* Header Actions */}
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center shadow-sm">
-            <span className="text-xs font-medium text-gray-600">SP</span>
+          <div className="w-8 h-8 bg-secondary rounded-full flex items-center justify-center shadow-sm">
+            <span className="text-xs font-medium text-secondary-foreground">SP</span>
           </div>
         </div>
       </div>
@@ -637,12 +637,12 @@ function KPICard({
   description: string; 
 }) {
   return (
-    <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+    <div className="bg-card border border-border rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <p className="text-sm font-medium text-gray-500 mb-1">{title}</p>
-          <p className="text-3xl font-bold text-gray-800 mb-2">{value}</p>
-          <p className="text-xs text-gray-400">{description}</p>
+          <p className="text-sm font-medium text-muted-foreground mb-1">{title}</p>
+          <p className="text-3xl font-bold text-foreground mb-2">{value}</p>
+          <p className="text-xs text-muted-foreground">{description}</p>
         </div>
         <div className={cn("p-4 rounded-xl shadow-lg", color)}>
           {icon}
@@ -770,8 +770,8 @@ function Dashboard({
         </div>
       )}
 
-      <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-lg">
-        <h3 className="text-xl font-semibold text-gray-800 mb-6">Recent Inspections</h3>
+      <div className="bg-card border border-border rounded-xl p-6 shadow-lg">
+        <h3 className="text-xl font-semibold text-foreground mb-6">Recent Inspections</h3>
         
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
@@ -782,11 +782,11 @@ function Dashboard({
             {inspections.map((inspection) => (
               <div 
                 key={inspection.id} 
-                className="border border-gray-100 rounded-lg p-4 hover:bg-gray-50 transition-all duration-200 hover:shadow-md"
+                className="border border-border rounded-lg p-4 hover:bg-accent transition-all duration-200 hover:shadow-md"
               >
                 <div className="flex flex-col sm:flex-row justify-between gap-4">
                   <div className="flex-1">
-                    <h4 className="font-semibold text-card-foreground text-lg">
+                    <h4 className="font-semibold text-foreground text-lg">
                       {inspection.propertyLocation}
                     </h4>
                     <div className="text-sm text-muted-foreground mt-1 space-y-1">
