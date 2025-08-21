@@ -285,6 +285,22 @@
     @apply bg-blue-600;
   }
   
+  .dark .bg-blue-500 {
+    @apply bg-blue-600;
+  }
+  
+  .dark .bg-green-500 {
+    @apply bg-green-600;
+  }
+  
+  .dark .bg-red-500 {
+    @apply bg-red-600;
+  }
+  
+  .dark .bg-orange-500 {
+    @apply bg-orange-600;
+  }
+  
   .dark .bg-green-100 {
     @apply bg-green-600;
   }
