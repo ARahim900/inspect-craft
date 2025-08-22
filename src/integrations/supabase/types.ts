@@ -7,23 +7,158 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.12 (cd3cf9e)"
   }
   public: {
     Tables: {
-      [_ in never]: never
+      inspection_areas: {
+        Row: {
+          created_at: string | null
+          id: string
+          inspection_id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          inspection_id: string
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          inspection_id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inspection_areas_inspection_id_fkey"
+            columns: ["inspection_id"]
+            isOneToOne: false
+            referencedRelation: "inspections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inspection_items: {
+        Row: {
+          area_id: string
+          category: string
+          comments: string | null
+          created_at: string | null
+          id: string
+          location: string | null
+          photos: string[] | null
+          point: string
+          status: string | null
+        }
+        Insert: {
+          area_id: string
+          category: string
+          comments?: string | null
+          created_at?: string | null
+          id?: string
+          location?: string | null
+          photos?: string[] | null
+          point: string
+          status?: string | null
+        }
+        Update: {
+          area_id?: string
+          category?: string
+          comments?: string | null
+          created_at?: string | null
+          id?: string
+          location?: string | null
+          photos?: string[] | null
+          point?: string
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inspection_items_area_id_fkey"
+            columns: ["area_id"]
+            isOneToOne: false
+            referencedRelation: "inspection_areas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inspections: {
+        Row: {
+          client_name: string | null
+          created_at: string | null
+          id: string
+          inspection_date: string
+          inspector_name: string
+          property_location: string
+          property_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          client_name?: string | null
+          created_at?: string | null
+          id?: string
+          inspection_date: string
+          inspector_name: string
+          property_location: string
+          property_type: string
+          updated_at?: string | null
+        }
+        Update: {
+          client_name?: string | null
+          created_at?: string | null
+          id?: string
+          inspection_date?: string
+          inspector_name?: string
+          property_location?: string
+          property_type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_current_user_role: {
+        Args: Record<PropertyKey, never>
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "staff"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +285,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "staff"],
+    },
   },
 } as const
