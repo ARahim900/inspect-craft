@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { 
   Receipt, 
-  DollarSign, 
+  Coins, 
   FileText, 
   Download, 
   Eye, 
@@ -34,6 +34,8 @@ interface BillingItem {
   clientEmail: string;
   clientPhone: string;
   propertyLocation: string;
+  propertyType: 'residential' | 'commercial';
+  propertyArea: number;
   inspectionDate: string;
   issueDate: string;
   dueDate: string;
@@ -78,6 +80,8 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
     clientEmail: '',
     clientPhone: '',
     propertyLocation: '',
+    propertyType: 'residential',
+    propertyArea: 0,
     inspectionDate: new Date().toISOString().split('T')[0],
     issueDate: new Date().toISOString().split('T')[0],
     dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -147,13 +151,43 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
   };
 
   const handleCreateInvoice = () => {
-    if (!formData.clientName || !formData.propertyLocation || !formData.services?.length) {
+    if (!formData.clientName || !formData.propertyLocation || !formData.propertyArea || !formData.propertyType) {
       toast({
         title: "Missing Information",
-        description: "Please fill in all required fields and add at least one service.",
+        description: "Please fill in all required fields including property type and area.",
         variant: "destructive"
       });
       return;
+    }
+
+    // Auto-generate inspection service if no services added
+    if (!formData.services?.length) {
+      const rate = formData.propertyType === 'commercial' ? 1 : 0.7;
+      const autoService: ServiceItem = {
+        id: Date.now().toString(),
+        description: `Property Inspection - ${formData.propertyType} (${formData.propertyArea} sqm)`,
+        quantity: formData.propertyArea || 0,
+        rate: rate,
+        amount: (formData.propertyArea || 0) * rate
+      };
+      
+      setFormData(prev => ({
+        ...prev,
+        services: [autoService]
+      }));
+      
+      // Calculate totals with new service
+      const subtotal = autoService.amount;
+      const taxAmount = subtotal * 0.05;
+      const total = subtotal + taxAmount;
+      
+      setFormData(prev => ({
+        ...prev,
+        amount: subtotal,
+        tax: taxAmount,
+        totalAmount: total,
+        services: [autoService]
+      }));
     }
 
     const newItem: BillingItem = {
@@ -232,6 +266,8 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
       clientEmail: '',
       clientPhone: '',
       propertyLocation: '',
+      propertyType: 'residential',
+      propertyArea: 0,
       inspectionDate: new Date().toISOString().split('T')[0],
       issueDate: new Date().toISOString().split('T')[0],
       dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -392,6 +428,7 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
           <p>${invoice.clientEmail}</p>
           <p>${invoice.clientPhone}</p>
           <p><strong>Property:</strong> ${invoice.propertyLocation}</p>
+          <p><strong>Property Type:</strong> ${invoice.propertyType} (${invoice.propertyArea} sqm)</p>
           <p><strong>Inspection Date:</strong> ${new Date(invoice.inspectionDate).toLocaleDateString()}</p>
         </div>
 
@@ -400,8 +437,8 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
             <tr>
               <th>Description</th>
               <th>Quantity</th>
-              <th>Rate</th>
-              <th>Amount</th>
+              <th>Rate (OMR)</th>
+              <th>Amount (OMR)</th>
             </tr>
           </thead>
           <tbody>
@@ -409,8 +446,8 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
               <tr>
                 <td>${service.description}</td>
                 <td>${service.quantity}</td>
-                <td>$${service.rate.toFixed(2)}</td>
-                <td>$${service.amount.toFixed(2)}</td>
+                <td>${service.rate.toFixed(2)} OMR</td>
+                <td>${service.amount.toFixed(2)} OMR</td>
               </tr>
             `).join('')}
           </tbody>
@@ -419,15 +456,15 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
         <div class="totals">
           <div class="total-row">
             <span>Subtotal:</span>
-            <span>$${invoice.amount.toFixed(2)}</span>
+            <span>${invoice.amount.toFixed(2)} OMR</span>
           </div>
           <div class="total-row">
             <span>Tax (5%):</span>
-            <span>$${invoice.tax.toFixed(2)}</span>
+            <span>${invoice.tax.toFixed(2)} OMR</span>
           </div>
           <div class="total-row final-total">
             <span>Total Amount:</span>
-            <span>$${invoice.totalAmount.toFixed(2)}</span>
+            <span>${invoice.totalAmount.toFixed(2)} OMR</span>
           </div>
         </div>
 
@@ -479,7 +516,7 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Total Revenue</p>
-                <p className="text-2xl font-bold text-success">${getTotalRevenue().toLocaleString()}</p>
+                <p className="text-2xl font-bold text-success">{getTotalRevenue().toLocaleString()} OMR</p>
               </div>
               <TrendingUp className="w-8 h-8 text-success" />
             </div>
@@ -491,7 +528,7 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Outstanding</p>
-                <p className="text-2xl font-bold text-warning">${getOutstandingAmount().toLocaleString()}</p>
+                <p className="text-2xl font-bold text-warning">{getOutstandingAmount().toLocaleString()} OMR</p>
               </div>
               <Clock className="w-8 h-8 text-warning" />
             </div>
@@ -517,7 +554,7 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
                 <p className="text-sm text-muted-foreground">Total Invoices</p>
                 <p className="text-2xl font-bold text-foreground">{billingItems.length}</p>
               </div>
-              <Receipt className="w-8 h-8 text-primary" />
+              <Coins className="w-8 h-8 text-primary" />
             </div>
           </CardContent>
         </Card>
@@ -623,14 +660,44 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="propertyLocation">Property Location *</Label>
-              <Input
-                id="propertyLocation"
-                value={formData.propertyLocation}
-                onChange={(e) => setFormData({...formData, propertyLocation: e.target.value})}
-                placeholder="Downtown Dubai, Villa 123"
-              />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="propertyLocation">Property Location *</Label>
+                <Input
+                  id="propertyLocation"
+                  value={formData.propertyLocation}
+                  onChange={(e) => setFormData({...formData, propertyLocation: e.target.value})}
+                  placeholder="Downtown Dubai, Villa 123"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="propertyType">Property Type *</Label>
+                <Select 
+                  value={formData.propertyType} 
+                  onValueChange={(value: 'residential' | 'commercial') => setFormData({...formData, propertyType: value})}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select property type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="residential">Residential (0.7 OMR/sqm)</SelectItem>
+                    <SelectItem value="commercial">Commercial (1.0 OMR/sqm)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="propertyArea">Property Area (sqm) *</Label>
+                <Input
+                  id="propertyArea"
+                  type="number"
+                  min="1"
+                  value={formData.propertyArea}
+                  onChange={(e) => setFormData({...formData, propertyArea: parseFloat(e.target.value) || 0})}
+                  placeholder="150"
+                />
+              </div>
             </div>
 
             <div className="space-y-2">
@@ -681,8 +748,8 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
                       <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-2 text-sm">
                         <span className="font-medium">{service.description}</span>
                         <span>Qty: {service.quantity}</span>
-                        <span>Rate: ${service.rate.toFixed(2)}</span>
-                        <span className="font-medium">Amount: ${service.amount.toFixed(2)}</span>
+                        <span>Rate: {service.rate.toFixed(2)} OMR</span>
+                        <span className="font-medium">Amount: {service.amount.toFixed(2)} OMR</span>
                       </div>
                       <Button
                         variant="outline"
@@ -701,15 +768,15 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
               <div className="space-y-2 p-4 bg-accent/30 rounded-lg">
                 <div className="flex justify-between text-sm">
                   <span>Subtotal:</span>
-                  <span>${(formData.amount || 0).toFixed(2)}</span>
+                  <span>{(formData.amount || 0).toFixed(2)} OMR</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span>Tax (5%):</span>
-                  <span>${(formData.tax || 0).toFixed(2)}</span>
+                  <span>{(formData.tax || 0).toFixed(2)} OMR</span>
                 </div>
                 <div className="flex justify-between text-lg font-semibold border-t pt-2">
                   <span>Total:</span>
-                  <span>${(formData.totalAmount || 0).toFixed(2)}</span>
+                  <span>{(formData.totalAmount || 0).toFixed(2)} OMR</span>
                 </div>
               </div>
             </div>
@@ -820,7 +887,7 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
                           {getStatusIcon(item.status)}
                           <span className="ml-1">{item.status}</span>
                         </Badge>
-                        <span className="text-lg font-bold text-foreground">${item.totalAmount.toLocaleString()}</span>
+                        <span className="text-lg font-bold text-foreground">{item.totalAmount.toLocaleString()} OMR</span>
                       </div>
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-muted-foreground">
@@ -830,7 +897,7 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
                         </div>
                         <div className="flex items-center gap-2">
                           <span className="font-medium">Property:</span>
-                          <span>{item.propertyLocation}</span>
+                          <span>{item.propertyLocation} ({item.propertyType}, {item.propertyArea}sqm)</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <span className="font-medium">Issue Date:</span>
