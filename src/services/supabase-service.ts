@@ -74,6 +74,13 @@ export class SupabaseService {
   // Save inspection to database
   static async saveInspection(inspectionData: InspectionData): Promise<SavedInspection | null> {
     try {
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        console.error('No authenticated user found');
+        return null;
+      }
+      
       // Start a transaction by saving the main inspection first
       const { data: inspection, error: inspectionError } = await supabase
         .from('inspections')
@@ -83,6 +90,7 @@ export class SupabaseService {
           property_type: inspectionData.propertyType,
           inspector_name: inspectionData.inspectorName,
           inspection_date: inspectionData.inspectionDate,
+          user_id: user.id,
         })
         .select()
         .single();

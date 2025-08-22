@@ -97,6 +97,7 @@ export type Database = {
           property_location: string
           property_type: string
           updated_at: string | null
+          user_id: string
         }
         Insert: {
           client_name?: string | null
@@ -107,6 +108,7 @@ export type Database = {
           property_location: string
           property_type: string
           updated_at?: string | null
+          user_id: string
         }
         Update: {
           client_name?: string | null
@@ -117,6 +119,7 @@ export type Database = {
           property_location?: string
           property_type?: string
           updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
