@@ -293,9 +293,27 @@ function Sidebar({
   onClose: () => void; 
 }) {
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: <DashboardIcon />, description: 'Overview & KPIs' },
-    { id: 'reportScheduled', label: 'Report Scheduled', icon: <ScheduleIcon />, description: 'Planning & Scheduling' },
-    { id: 'billing', label: 'Billing', icon: <BillingIcon />, description: 'Invoices & Payments' },
+    { 
+      id: 'dashboard', 
+      label: 'Dashboard', 
+      icon: <DashboardIcon />, 
+      description: 'Overview & KPIs',
+      badge: null
+    },
+    { 
+      id: 'reportScheduled', 
+      label: 'Report Scheduled', 
+      icon: <ScheduleIcon />, 
+      description: 'Planning & Scheduling',
+      badge: 'Coming Soon'
+    },
+    { 
+      id: 'billing', 
+      label: 'Billing', 
+      icon: <BillingIcon />, 
+      description: 'Invoices & Payments',
+      badge: 'Coming Soon'
+    },
   ];
 
   const handleNavigation = (pageId: string) => {
@@ -305,60 +323,93 @@ function Sidebar({
 
   return (
     <>
-      {/* Mobile Overlay */}
+      {/* Mobile Overlay - Enhanced with better backdrop */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden" 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300" 
           onClick={onClose}
+          aria-hidden="true"
         />
       )}
       
-      {/* Sidebar */}
+      {/* Sidebar - Enhanced with solid background and better contrast */}
       <div className={cn(
-        "fixed top-0 left-0 h-full w-64 bg-sidebar-background backdrop-blur border-r border-sidebar-border z-50 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:z-auto shadow-lg lg:shadow-none",
+        "fixed top-0 left-0 h-full w-72 bg-sidebar z-50 transform transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:z-auto",
+        "border-r border-sidebar-border shadow-2xl lg:shadow-lg",
+        "supports-[backdrop-filter]:bg-sidebar/95 supports-[backdrop-filter]:backdrop-blur-xl",
         isOpen ? "translate-x-0" : "-translate-x-full"
       )}>
-        <div className="flex flex-col h-full">
-          {/* Sidebar Header - with logo */}
-          <div className="flex items-center justify-between p-4 border-b border-sidebar-border">
-            <div className="flex items-center gap-2">
+        <div className="flex flex-col h-full bg-sidebar">
+          {/* Sidebar Header - Enhanced with better spacing and contrast */}
+          <div className="flex items-center justify-between p-6 border-b border-sidebar-border bg-sidebar-accent/30">
+            <div className="flex items-center gap-3">
               <Logo size="small" />
+              <div className="hidden sm:block">
+                <h2 className="text-sm font-semibold text-sidebar-foreground">InspectCraft</h2>
+                <p className="text-xs text-sidebar-foreground/70">Property Solutions</p>
+              </div>
             </div>
             <button
               onClick={onClose}
-              className="lg:hidden p-2 hover:bg-sidebar-accent rounded-lg transition-colors shadow-sm"
+              className="lg:hidden p-2 hover:bg-sidebar-accent rounded-lg transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-sidebar-ring"
+              aria-label="Close navigation menu"
             >
               <CloseIcon className="w-5 h-5 text-sidebar-foreground" />
             </button>
           </div>
           
-          {/* Navigation Menu */}
-          <nav className="flex-1 p-4">
-            <div className="space-y-3">
+          {/* Navigation Menu - Enhanced with better spacing and accessibility */}
+          <nav className="flex-1 p-4 overflow-y-auto" role="navigation" aria-label="Main navigation">
+            <div className="space-y-2">
               {menuItems.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => handleNavigation(item.id)}
                   className={cn(
-                    "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-200 group",
+                    "w-full flex items-center gap-4 px-4 py-4 rounded-xl text-left transition-all duration-200 group relative",
+                    "focus:outline-none focus:ring-2 focus:ring-sidebar-ring focus:ring-offset-2 focus:ring-offset-sidebar",
+                    "hover:transform hover:scale-[1.02] active:scale-[0.98]",
                     currentPage === item.id
-                      ? "bg-primary text-white shadow-lg shadow-primary/25"
-                      : "hover:bg-sidebar-accent hover:shadow-sm text-sidebar-foreground hover:text-sidebar-primary"
+                      ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-lg shadow-sidebar-primary/25 border border-sidebar-primary/20"
+                      : "hover:bg-sidebar-accent hover:shadow-md text-sidebar-foreground hover:text-sidebar-accent-foreground border border-transparent hover:border-sidebar-border"
                   )}
+                  aria-current={currentPage === item.id ? 'page' : undefined}
                 >
+                  {/* Active indicator */}
+                  {currentPage === item.id && (
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-sidebar-primary-foreground rounded-r-full" />
+                  )}
+                  
                   <div className="flex-shrink-0">
                     {React.cloneElement(item.icon as React.ReactElement, {
                       className: cn(
-                        "w-5 h-5 transition-colors",
-                        currentPage === item.id ? "text-white" : "text-sidebar-foreground group-hover:text-sidebar-primary"
+                        "w-6 h-6 transition-colors",
+                        currentPage === item.id 
+                          ? "text-sidebar-primary-foreground" 
+                          : "text-sidebar-foreground group-hover:text-sidebar-accent-foreground"
                       )
                     })}
                   </div>
+                  
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium text-sm">{item.label}</div>
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium text-sm truncate">{item.label}</span>
+                      {item.badge && (
+                        <span className={cn(
+                          "text-xs px-2 py-1 rounded-full font-medium",
+                          currentPage === item.id
+                            ? "bg-sidebar-primary-foreground/20 text-sidebar-primary-foreground"
+                            : "bg-sidebar-accent text-sidebar-foreground"
+                        )}>
+                          {item.badge}
+                        </span>
+                      )}
+                    </div>
                     <div className={cn(
-                      "text-xs truncate transition-colors",
-                      currentPage === item.id ? "text-white/80" : "text-muted-foreground group-hover:text-sidebar-foreground"
+                      "text-xs truncate transition-colors mt-0.5",
+                      currentPage === item.id 
+                        ? "text-sidebar-primary-foreground/80" 
+                        : "text-sidebar-foreground/60 group-hover:text-sidebar-accent-foreground/80"
                     )}>
                       {item.description}
                     </div>
@@ -366,12 +417,31 @@ function Sidebar({
                 </button>
               ))}
             </div>
+            
+            {/* Quick Actions Section */}
+            <div className="mt-8 pt-6 border-t border-sidebar-border">
+              <h3 className="text-xs font-semibold text-sidebar-foreground/70 uppercase tracking-wider mb-3 px-2">
+                Quick Actions
+              </h3>
+              <div className="space-y-2">
+                <button
+                  onClick={() => handleNavigation('newInspection')}
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 group hover:bg-sidebar-accent hover:shadow-sm text-sidebar-foreground hover:text-sidebar-accent-foreground border border-dashed border-sidebar-border hover:border-sidebar-primary"
+                >
+                  <PlusIcon className="w-5 h-5 text-sidebar-foreground group-hover:text-sidebar-primary" />
+                  <span className="text-sm font-medium">New Inspection</span>
+                </button>
+              </div>
+            </div>
           </nav>
           
-          {/* Sidebar Footer */}
-          <div className="p-4 border-t border-sidebar-border">
-            <div className="text-xs text-muted-foreground text-center bg-sidebar-accent py-2 px-3 rounded-lg">
-              Solution Property v1.0
+          {/* Sidebar Footer - Enhanced with better styling */}
+          <div className="p-4 border-t border-sidebar-border bg-sidebar-accent/20">
+            <div className="text-center">
+              <div className="text-xs text-sidebar-foreground/60 bg-sidebar-accent py-3 px-4 rounded-lg border border-sidebar-border">
+                <div className="font-medium text-sidebar-foreground">Solution Property</div>
+                <div className="text-sidebar-foreground/50">v1.0.0</div>
+              </div>
             </div>
           </div>
         </div>
@@ -582,7 +652,7 @@ export default function InspectionApp() {
   );
 }
 
-// Header Component
+// Header Component - Enhanced with better integration and theme support
 function Header({ 
   onMenuClick, 
   sidebarOpen 
@@ -591,13 +661,19 @@ function Header({
   sidebarOpen: boolean; 
 }) {
   return (
-    <header className="sticky top-0 z-30 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90 border-b border-border shadow-sm">
-      <div className="flex h-16 items-center justify-between px-4">
+    <header className="sticky top-0 z-30 bg-background/95 backdrop-blur-xl supports-[backdrop-filter]:bg-background/90 border-b border-border shadow-sm">
+      <div className="flex h-16 items-center justify-between px-4 lg:px-6">
         {/* Mobile Menu Button & Logo */}
         <div className="flex items-center gap-4">
           <button
             onClick={onMenuClick}
-            className="lg:hidden p-2 hover:bg-accent rounded-lg transition-colors"
+            className={cn(
+              "lg:hidden p-2 hover:bg-accent rounded-lg transition-all duration-200 hover:scale-105",
+              "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+              sidebarOpen && "bg-accent"
+            )}
+            aria-label="Toggle navigation menu"
+            aria-expanded={sidebarOpen}
           >
             <HamburgerIcon className="w-6 h-6 text-foreground" />
           </button>
@@ -606,15 +682,19 @@ function Header({
           </div>
         </div>
         
-        {/* Desktop Title */}
-        <div className="hidden lg:block text-sm text-gray-500 font-medium">
-          Professional Property Inspection Solutions
+        {/* Desktop Title & Breadcrumb */}
+        <div className="hidden lg:flex items-center gap-4 flex-1 justify-center">
+          <div className="text-center">
+            <h1 className="text-sm font-semibold text-foreground">Professional Property Inspection Solutions</h1>
+            <p className="text-xs text-muted-foreground">Comprehensive inspection management platform</p>
+          </div>
         </div>
         
-        {/* Header Actions */}
+        {/* Header Actions - Enhanced with theme toggle and better styling */}
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-secondary rounded-full flex items-center justify-center shadow-sm">
-            <span className="text-xs font-medium text-secondary-foreground">SP</span>
+          <ThemeToggle />
+          <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-dark rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 border-2 border-primary/20">
+            <span className="text-sm font-bold text-primary-foreground">SP</span>
           </div>
         </div>
       </div>
