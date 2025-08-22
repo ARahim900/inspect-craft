@@ -306,6 +306,11 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
   };
 
   const handleInspectionSelect = (inspectionId: string) => {
+    if (inspectionId === 'none') {
+      setSelectedInspection(null);
+      return;
+    }
+
     const inspection = availableInspections.find(insp => insp.id === inspectionId);
     if (!inspection) return;
 
@@ -620,7 +625,7 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
                 <div className="space-y-2">
                   <Label htmlFor="inspectionSelect">Select Inspection Report (Optional)</Label>
                   <Select 
-                    value={selectedInspection?.id || ''} 
+                    value={selectedInspection?.id || 'none'} 
                     onValueChange={handleInspectionSelect}
                   >
                     <SelectTrigger>
@@ -628,10 +633,10 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
                     </SelectTrigger>
                     <SelectContent>
                       {availableInspections.length === 0 ? (
-                        <SelectItem value="" disabled>No inspection reports available</SelectItem>
+                        <SelectItem value="none" disabled>No inspection reports available</SelectItem>
                       ) : (
                         <>
-                          <SelectItem value="">Manual Entry (No Inspection Link)</SelectItem>
+                          <SelectItem value="none">Manual Entry (No Inspection Link)</SelectItem>
                           {availableInspections.map((inspection) => (
                             <SelectItem key={inspection.id} value={inspection.id}>
                               {inspection.clientName} - {inspection.propertyLocation} ({new Date(inspection.inspectionDate).toLocaleDateString()})
