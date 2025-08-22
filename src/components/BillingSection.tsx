@@ -99,13 +99,6 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
     notes: ''
   });
 
-  const [newService, setNewService] = useState<Partial<ServiceItem>>({
-    description: '',
-    quantity: 1,
-    rate: 0,
-    amount: 0
-  });
-
   // Load billing items from localStorage and inspections
   useEffect(() => {
     const saved = localStorage.getItem('billing-items');
@@ -147,20 +140,22 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
     setFilteredItems(filtered);
   }, [billingItems, filterStatus, searchTerm]);
 
-  // Calculate totals whenever services change
+  // Calculate totals whenever property details change
   useEffect(() => {
-    const services = formData.services || [];
-    const subtotal = services.reduce((sum, service) => sum + service.amount, 0);
-    const taxAmount = subtotal * 0.05; // 5% tax
-    const total = subtotal + taxAmount;
+    if (formData.propertyType && formData.propertyArea > 0) {
+      const rate = formData.propertyType === 'commercial' ? 1 : 0.7;
+      const subtotal = (formData.propertyArea || 0) * rate;
+      const taxAmount = subtotal * 0.05; // 5% tax
+      const total = subtotal + taxAmount;
 
-    setFormData(prev => ({
-      ...prev,
-      amount: subtotal,
-      tax: taxAmount,
-      totalAmount: total
-    }));
-  }, [formData.services]);
+      setFormData(prev => ({
+        ...prev,
+        amount: subtotal,
+        tax: taxAmount,
+        totalAmount: total
+      }));
+    }
+  }, [formData.propertyType, formData.propertyArea]);
 
   const saveBillingItems = (items: BillingItem[]) => {
     setBillingItems(items);
@@ -177,70 +172,57 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
       return;
     }
 
-    // Auto-generate inspection service if no services added
-    if (!formData.services?.length) {
-      const rate = formData.propertyType === 'commercial' ? 1 : 0.7;
-      const autoService: ServiceItem = {
-        id: Date.now().toString(),
-        description: `Property Inspection - ${formData.propertyType} (${formData.propertyArea} sqm)`,
-        quantity: formData.propertyArea || 0,
-        rate: rate,
-        amount: (formData.propertyArea || 0) * rate
-      };
-      
-      setFormData(prev => ({
-        ...prev,
-        services: [autoService]
-      }));
-      
-      // Calculate totals with new service
-      const subtotal = autoService.amount;
-      const taxAmount = subtotal * 0.05;
-      const total = subtotal + taxAmount;
-      
-      setFormData(prev => ({
-        ...prev,
-        amount: subtotal,
-        tax: taxAmount,
-        totalAmount: total,
-        services: [autoService]
-      }));
-    }
+    // Auto-generate inspection service based on property info
+    const rate = formData.propertyType === 'commercial' ? 1 : 0.7;
+    const autoService: ServiceItem = {
+      id: Date.now().toString(),
+      description: `Property Inspection - ${formData.propertyType} (${formData.propertyArea} sqm)`,
+      quantity: formData.propertyArea || 0,
+      rate: rate,
+      amount: (formData.propertyArea || 0) * rate
+    };
+    
+    const updatedFormData = {
+      ...formData,
+      services: [autoService]
+    };
+    
+    // Calculate totals with the service
+    const subtotal = autoService.amount;
+    const tax = subtotal * 0.05; // 5% tax
+    const totalAmount = subtotal + tax;
 
     const newItem: BillingItem = {
-      ...formData as BillingItem,
-      id: Date.now().toString()
-    };
+      ...updatedFormData,
+      id: editingItem?.id || Date.now().toString(),
+      amount: subtotal,
+      tax: tax,
+      totalAmount: totalAmount,
+      inspectionId: selectedInspection?.id
+    } as BillingItem;
 
-    const updatedItems = [...billingItems, newItem];
-    saveBillingItems(updatedItems);
-
-    toast({
-      title: "Invoice Created",
-      description: `Invoice ${formData.invoiceNumber} has been created successfully.`,
-      variant: "default"
-    });
+    if (editingItem) {
+      const updatedItems = billingItems.map(item =>
+        item.id === editingItem.id ? newItem : item
+      );
+      saveBillingItems(updatedItems);
+      toast({
+        title: "Invoice Updated",
+        description: "Invoice has been updated successfully.",
+        variant: "default"
+      });
+      setEditingItem(null);
+    } else {
+      const updatedItems = [...billingItems, newItem];
+      saveBillingItems(updatedItems);
+      toast({
+        title: "Invoice Created",
+        description: `Invoice ${formData.invoiceNumber} has been created successfully.`,
+        variant: "default"
+      });
+    }
 
     setShowCreateForm(false);
-    resetForm();
-  };
-
-  const handleUpdateInvoice = () => {
-    if (!editingItem) return;
-
-    const updatedItems = billingItems.map(item =>
-      item.id === editingItem.id ? { ...formData as BillingItem, id: editingItem.id } : item
-    );
-
-    saveBillingItems(updatedItems);
-
-    toast({
-      title: "Invoice Updated",
-      description: "Invoice has been updated successfully.",
-      variant: "default"
-    });
-
-    setEditingItem(null);
     resetForm();
   };
 
@@ -296,12 +278,6 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
       services: [],
       notes: ''
     });
-    setNewService({
-      description: '',
-      quantity: 1,
-      rate: 0,
-      amount: 0
-    });
     setSelectedInspection(null);
   };
 
@@ -339,44 +315,6 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
     setEditingItem(item);
     setFormData(item);
     setShowCreateForm(true);
-  };
-
-  const addService = () => {
-    if (!newService.description || !newService.rate) {
-      toast({
-        title: "Missing Service Information",
-        description: "Please fill in service description and rate.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    const service: ServiceItem = {
-      id: Date.now().toString(),
-      description: newService.description!,
-      quantity: newService.quantity || 1,
-      rate: newService.rate || 0,
-      amount: (newService.quantity || 1) * (newService.rate || 0)
-    };
-
-    setFormData(prev => ({
-      ...prev,
-      services: [...(prev.services || []), service]
-    }));
-
-    setNewService({
-      description: '',
-      quantity: 1,
-      rate: 0,
-      amount: 0
-    });
-  };
-
-  const removeService = (serviceId: string) => {
-    setFormData(prev => ({
-      ...prev,
-      services: (prev.services || []).filter(s => s.id !== serviceId)
-    }));
   };
 
   const getStatusColor = (status: string) => {
@@ -743,7 +681,7 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="draft">Draft</SelectItem>
+                    <SelectItem value="draft">Draft</SelectItem>    
                     <SelectItem value="sent">Sent</SelectItem>
                     <SelectItem value="paid">Paid</SelectItem>
                     <SelectItem value="overdue">Overdue</SelectItem>
@@ -812,74 +750,58 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
               />
             </div>
 
-            {/* Services Section */}
+            {/* Auto-Generated Service Display */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-foreground">Services</h3>
+              <h3 className="text-lg font-semibold text-foreground">Service Details</h3>
               
-              {/* Add Service Form */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-3 p-4 bg-accent/30 rounded-lg">
-                <Input
-                  placeholder="Service description"
-                  value={newService.description}
-                  onChange={(e) => setNewService({...newService, description: e.target.value})}
-                />
-                <Input
-                  type="number"
-                  placeholder="Quantity"
-                  value={newService.quantity}
-                  onChange={(e) => setNewService({...newService, quantity: parseInt(e.target.value) || 1})}
-                />
-                <Input
-                  type="number"
-                  placeholder="Rate"
-                  value={newService.rate}
-                  onChange={(e) => setNewService({...newService, rate: parseFloat(e.target.value) || 0})}
-                />
-                <Button onClick={addService} className="bg-primary hover:bg-primary-dark text-primary-foreground">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add
-                </Button>
-              </div>
-
-              {/* Services List */}
-              {formData.services && formData.services.length > 0 && (
-                <div className="space-y-2">
-                  {formData.services.map((service) => (
-                    <div key={service.id} className="flex items-center justify-between p-3 bg-card border rounded-lg">
-                      <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-2 text-sm">
-                        <span className="font-medium">{service.description}</span>
-                        <span>Qty: {service.quantity}</span>
-                        <span>Rate: {service.rate.toFixed(2)} OMR</span>
-                        <span className="font-medium">Amount: {service.amount.toFixed(2)} OMR</span>
-                      </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => removeService(service.id)}
-                        className="text-destructive hover:text-destructive-foreground hover:bg-destructive ml-2"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
+              {formData.propertyType && formData.propertyArea > 0 && (
+                <div className="p-4 bg-accent/30 rounded-lg">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Service</Label>
+                      <p className="font-medium">Property Inspection - {formData.propertyType}</p>
                     </div>
-                  ))}
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Area</Label>
+                      <p>{formData.propertyArea} sqm</p>
+                    </div>
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Rate</Label>
+                      <p>{formData.propertyType === 'commercial' ? '1.0' : '0.7'} OMR/sqm</p>
+                    </div>
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Total</Label>
+                      <p className="font-bold text-primary">
+                        {((formData.propertyArea || 0) * (formData.propertyType === 'commercial' ? 1 : 0.7)).toFixed(2)} OMR
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {(!formData.propertyType || !formData.propertyArea) && (
+                <div className="p-4 bg-muted/50 rounded-lg text-center text-muted-foreground">
+                  Please select property type and enter area to see service calculation
                 </div>
               )}
 
               {/* Totals */}
-              <div className="space-y-2 p-4 bg-accent/30 rounded-lg">
-                <div className="flex justify-between text-sm">
-                  <span>Subtotal:</span>
-                  <span>{(formData.amount || 0).toFixed(2)} OMR</span>
+              {formData.propertyType && formData.propertyArea > 0 && (
+                <div className="space-y-2 p-4 bg-accent/30 rounded-lg">
+                  <div className="flex justify-between text-sm">
+                    <span>Subtotal:</span>
+                    <span>{(formData.amount || 0).toFixed(2)} OMR</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Tax (5%):</span>
+                    <span>{(formData.tax || 0).toFixed(2)} OMR</span>
+                  </div>
+                  <div className="flex justify-between text-lg font-semibold border-t pt-2">
+                    <span>Total:</span>
+                    <span>{(formData.totalAmount || 0).toFixed(2)} OMR</span>
+                  </div>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span>Tax (5%):</span>
-                  <span>{(formData.tax || 0).toFixed(2)} OMR</span>
-                </div>
-                <div className="flex justify-between text-lg font-semibold border-t pt-2">
-                  <span>Total:</span>
-                  <span>{(formData.totalAmount || 0).toFixed(2)} OMR</span>
-                </div>
-              </div>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -895,7 +817,7 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
 
             <div className="flex gap-3 pt-4">
               <Button 
-                onClick={editingItem ? handleUpdateInvoice : handleCreateInvoice}
+                onClick={handleCreateInvoice}
                 className="bg-primary hover:bg-primary-dark text-primary-foreground"
               >
                 {editingItem ? 'Update Invoice' : 'Create Invoice'}
