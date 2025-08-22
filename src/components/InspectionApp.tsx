@@ -776,13 +776,13 @@ function Dashboard({
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
         <div>
-          <h2 className="text-3xl font-bold text-foreground">Dashboard</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-foreground">Dashboard</h2>
           <p className="text-muted-foreground mt-1">Manage your property inspections</p>
         </div>
         <div className="flex items-center gap-4">
           <button 
             onClick={() => navigateTo('newInspection')}
-            className="flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors shadow-md w-full sm:w-auto justify-center"
+            className="flex items-center gap-2 bg-primary text-primary-foreground px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors shadow-md w-full sm:w-auto justify-center text-sm sm:text-base"
           >
             <PlusIcon />
             New Inspection
@@ -874,30 +874,30 @@ function Dashboard({
                       {inspection.clientName && <p>Client: {inspection.clientName}</p>}
                     </div>
                   </div>
-                  <div className="flex gap-2 flex-wrap">
+                  <div className="flex flex-col sm:flex-row gap-2">
                     <button 
                       onClick={() => navigateTo('editInspection', inspection.id)}
-                      className="bg-accent text-accent-foreground px-3 py-2 rounded-md hover:bg-accent/80 transition-colors font-medium flex items-center gap-2 text-sm"
+                      className="bg-accent text-accent-foreground px-3 py-2 rounded-md hover:bg-accent/80 transition-colors font-medium flex items-center gap-2 text-sm justify-center sm:justify-start"
                     >
                       <EditIcon className="w-4 h-4" />
                       Edit
                     </button>
                     <button 
                       onClick={() => navigateTo('viewInspection', inspection.id)}
-                      className="bg-secondary text-secondary-foreground px-3 py-2 rounded-md hover:bg-secondary/80 transition-colors font-medium text-sm"
+                      className="bg-secondary text-secondary-foreground px-3 py-2 rounded-md hover:bg-secondary/80 transition-colors font-medium text-sm justify-center sm:justify-start"
                     >
                       View Report
                     </button>
                     <button 
                       onClick={() => navigateTo('professionalReport', inspection.id)}
-                      className="bg-primary text-primary-foreground px-3 py-2 rounded-md hover:bg-primary/90 transition-colors font-medium flex items-center gap-2 text-sm"
+                      className="bg-primary text-primary-foreground px-3 py-2 rounded-md hover:bg-primary/90 transition-colors font-medium flex items-center gap-2 text-sm justify-center sm:justify-start"
                     >
                       <PrintIcon className="w-4 h-4" />
                       Print Report
                     </button>
                     <button 
                       onClick={() => onDeleteConfirmation(inspection.id, inspection.propertyLocation)}
-                      className="bg-destructive text-destructive-foreground px-3 py-2 rounded-md hover:bg-destructive/90 transition-colors font-medium flex items-center gap-2 text-sm"
+                      className="bg-destructive text-destructive-foreground px-3 py-2 rounded-md hover:bg-destructive/90 transition-colors font-medium flex items-center gap-2 text-sm justify-center sm:justify-start"
                     >
                       <DeleteIcon className="w-4 h-4" />
                       Delete
@@ -1112,11 +1112,11 @@ function InspectionForm({
         </h2>
 
         {/* Basic Information */}
-        <div className="space-y-6 mb-8">
-          <h3 className="text-lg font-semibold text-card-foreground border-b border-border pb-2">
+        <div className="space-y-4 sm:space-y-6 mb-6 sm:mb-8">
+          <h3 className="text-base sm:text-lg font-semibold text-card-foreground border-b border-border pb-2">
             Basic Information
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             <InputField
               label="Client Name"
               name="clientName"
@@ -1906,27 +1906,27 @@ function InspectionView({
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 no-print">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 no-print">
         <div className="flex items-center gap-4">
           <button 
             onClick={() => navigateTo('dashboard')}
-            className="flex items-center gap-2 text-primary hover:text-primary/80 font-medium"
+            className="flex items-center gap-2 text-primary hover:text-primary/80 font-medium text-sm sm:text-base"
           >
             <BackIcon />
             Back to Dashboard
           </button>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
           <button
             onClick={() => navigateTo('editInspection')}
-            className="flex items-center gap-2 bg-accent text-accent-foreground px-4 py-2 rounded-lg hover:bg-accent/80 transition-colors font-medium"
+            className="flex items-center gap-2 bg-accent text-accent-foreground px-3 sm:px-4 py-2 rounded-lg hover:bg-accent/80 transition-colors font-medium text-sm sm:text-base justify-center"
           >
             <EditIcon className="w-4 h-4" />
             Edit Report
           </button>
           <button
             onClick={handlePrint}
-            className="flex items-center gap-2 bg-secondary text-secondary-foreground px-4 py-2 rounded-lg hover:bg-secondary/80 transition-colors font-medium"
+            className="flex items-center gap-2 bg-secondary text-secondary-foreground px-3 sm:px-4 py-2 rounded-lg hover:bg-secondary/80 transition-colors font-medium text-sm sm:text-base justify-center"
           >
             <PrintIcon />
             Print/Export PDF
@@ -1934,7 +1934,7 @@ function InspectionView({
         </div>
       </div>
 
-      <div ref={printRef} className="report-container bg-card border border-border rounded-xl p-8 shadow-sm">
+      <div ref={printRef} className="report-container bg-card border border-border rounded-xl p-4 sm:p-6 md:p-8 shadow-sm">
         <header className="header text-center border-b-2 border-primary pb-6 mb-8">
           <div className="watermark-logo">
             <img 
