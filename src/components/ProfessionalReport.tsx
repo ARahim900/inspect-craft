@@ -109,107 +109,267 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
             @media print {
               @page {
                 size: A4;
-                margin: 20mm 18mm 20mm 18mm !important;
+                margin: 15mm 12mm;
               }
               
               body { 
                 margin: 0 !important; 
-                padding: 15mm !important; 
+                padding: 0 !important; 
                 font-family: 'Arial', 'Helvetica', sans-serif;
-                font-size: 9pt;
-                line-height: 1.3;
-                color: #333;
+                font-size: 10pt !important;
+                line-height: 1.4 !important;
+                color: #000 !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
                 box-sizing: border-box;
-                background: white;
+                background: white !important;
               }
               
               .report-container {
-                margin: 0 auto !important;
+                margin: 0 !important;
                 padding: 0 !important;
                 box-sizing: border-box;
-                background: white;
+                background: white !important;
                 width: 100% !important;
-                max-width: 180mm !important;
+                max-width: none !important;
               }
               
               .no-print { display: none !important; }
-              .page-break { page-break-before: always; margin-top: 0; padding-top: 10mm; }
-              .avoid-break { page-break-inside: avoid; }
+              .page-break { 
+                page-break-before: always; 
+                margin-top: 0 !important; 
+                padding-top: 8mm !important; 
+              }
+              .avoid-break { 
+                page-break-inside: avoid !important; 
+                break-inside: avoid !important;
+              }
               
               /* Professional section spacing */
               .report-header {
-                margin-bottom: 10mm !important;
+                margin-bottom: 8mm !important;
+                padding-bottom: 4mm !important;
                 page-break-after: avoid;
               }
               
+              .company-logo {
+                width: 50px !important;
+                height: 50px !important;
+                margin-bottom: 6px !important;
+              }
+              
+              .company-name {
+                font-size: 16pt !important;
+                margin-bottom: 3px !important;
+              }
+              
+              .report-title {
+                font-size: 14pt !important;
+                margin-bottom: 3px !important;
+              }
+              
+              .report-subtitle {
+                font-size: 10pt !important;
+              }
+              
               .property-info {
+                margin-bottom: 6mm !important;
+                padding: 4mm !important;
+                page-break-inside: avoid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px !important;
+              }
+              
+              .property-info .info-item {
+                margin-bottom: 4px !important;
+                font-size: 9pt !important;
+              }
+              
+              .property-info .info-label {
+                min-width: 80px !important;
+                font-size: 9pt !important;
+              }
+              
+              .bilingual-disclaimer-section {
                 margin-bottom: 8mm !important;
                 page-break-inside: avoid;
               }
               
-              .bilingual-disclaimer-section {
-                margin-bottom: 10mm !important;
+              .area-section {
+                margin-bottom: 6mm !important;
+                page-break-inside: avoid;
               }
               
-              .area-section {
-                margin-bottom: 8mm !important;
+              .area-header {
+                font-size: 12pt !important;
+                padding: 8px !important;
+                margin-bottom: 0 !important;
               }
               
               .signatures {
-                margin-top: 10mm !important;
-                margin-bottom: 8mm !important;
+                margin: 8mm 0 !important;
+                padding: 4mm !important;
                 page-break-inside: avoid;
               }
               
               .disclaimer {
-                margin-top: 8mm !important;
-                margin-bottom: 8mm !important;
+                margin: 6mm 0 !important;
+                padding: 4mm !important;
                 page-break-inside: avoid;
+                font-size: 8pt !important;
+              }
+              
+              .disclaimer h3 {
+                font-size: 10pt !important;
+                margin-bottom: 8px !important;
               }
               
               .report-footer {
-                margin-top: 10mm !important;
+                margin-top: 8mm !important;
+                padding-top: 4mm !important;
+                page-break-inside: avoid;
+                font-size: 8pt !important;
+              }
+              
+              .footer-logo {
+                width: 40px !important;
+                height: 40px !important;
+                margin-bottom: 6px !important;
+              }
+              
+              /* Enhanced Table improvements */
+              .inspection-table {
+                margin-bottom: 4mm !important;
+                width: 100% !important;
+                table-layout: fixed !important;
+                page-break-inside: auto !important;
+              }
+              
+              .inspection-table th {
+                padding: 2mm !important;
+                font-size: 9pt !important;
+                background-color: #f5f5f5 !important;
+                -webkit-print-color-adjust: exact;
+              }
+              
+              .inspection-table td {
+                padding: 2mm !important;
+                font-size: 8pt !important;
+                line-height: 1.3 !important;
+                word-wrap: break-word !important;
+              }
+              
+              .inspection-table tr {
+                page-break-inside: avoid !important;
+              }
+              
+              /* Enhanced Photo Grid */
+              .photo-section {
+                margin-top: 2mm !important;
                 page-break-inside: avoid;
               }
               
-              /* Table improvements */
-              .inspection-table {
-                margin-bottom: 6mm !important;
-              }
-              
-              .inspection-table th,
-              .inspection-table td {
-                padding: 3mm !important;
-              }
-              
-              /* Text spacing */
-              p {
-                margin-bottom: 3mm;
-                text-align: justify;
-              }
-              
-              /* Prevent orphaned content */
-              h1, h2, h3, h4 {
-                page-break-after: avoid;
-                margin-bottom: 4mm;
-                margin-top: 6mm;
-              }
-              
-              /* Photo spacing */
-              .photo-section {
-                margin-top: 4mm !important;
-              }
-              
               .photo-grid {
-                gap: 3mm !important;
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 2mm !important;
+                margin-top: 2mm !important;
               }
               
-              /* Arabic text improvements */
-              [dir="rtl"] {
-                text-align: right;
-                font-family: 'Arial Unicode MS', 'Tahoma', 'Arial', sans-serif;
+              .photo-item {
+                width: 100% !important;
+                max-width: 70mm !important;
+                height: 52mm !important;
+                object-fit: cover !important;
+                border: 0.5pt solid #ddd !important;
+                border-radius: 2mm !important;
+                page-break-inside: avoid !important;
+              }
+              
+              .photo-caption {
+                font-size: 7pt !important;
+                margin-top: 1mm !important;
+              }
+              
+              /* Text spacing optimization */
+              p {
+                margin-bottom: 2mm !important;
+                text-align: justify !important;
+                orphans: 3 !important;
+                widows: 3 !important;
+              }
+              
+              /* Enhanced headings */
+              h1, h2, h3, h4 {
+                page-break-after: avoid !important;
+                margin-bottom: 2mm !important;
+                margin-top: 4mm !important;
+                orphans: 3 !important;
+                widows: 3 !important;
+              }
+              
+              /* Enhanced signature section */
+              .signature-block {
+                text-align: center !important;
+              }
+              
+              .signature-line {
+                height: 30px !important;
+                margin-bottom: 4px !important;
+                border-bottom-width: 1pt !important;
+              }
+              
+              .signature-label {
+                font-size: 8pt !important;
+              }
+              
+              .signature-date {
+                font-size: 7pt !important;
+                margin-top: 2px !important;
+              }
+              
+              /* Status colors for print */
+              .status-pass { 
+                color: #000 !important; 
+                background-color: #e8f5e8 !important;
+                font-weight: bold !important;
+                -webkit-print-color-adjust: exact;
+              }
+              
+              .status-fail { 
+                color: #000 !important; 
+                background-color: #ffe8e8 !important;
+                font-weight: bold !important;
+                -webkit-print-color-adjust: exact;
+              }
+              
+              .status-snags { 
+                color: #000 !important; 
+                background-color: #fff3cd !important;
+                font-weight: bold !important;
+                -webkit-print-color-adjust: exact;
+              }
+              
+              /* Bilingual table enhancements */
+              .bilingual-disclaimer-section table {
+                page-break-inside: avoid !important;
+                margin-bottom: 4mm !important;
+              }
+              
+              .bilingual-disclaimer-section td {
+                padding: 3mm !important;
+                font-size: 8pt !important;
+              }
+              
+              .bilingual-disclaimer-section th {
+                padding: 2mm !important;
+                font-size: 9pt !important;
+              }
+              
+              /* Watermark for print */
+              .watermark {
+                font-size: 48pt !important;
+                opacity: 0.03 !important;
               }
             }
             

@@ -109,9 +109,11 @@ const BilingualReport: React.FC<BilingualReportProps> = ({ inspection, onBack })
 
         @media print {
             body {
-                margin: 0;
-                padding: 15mm;
-                font-size: 11pt;
+                margin: 0 !important;
+                padding: 0 !important;
+                font-size: 10pt !important;
+                background: white !important;
+                color: black !important;
             }
             
             .no-print {
@@ -120,7 +122,55 @@ const BilingualReport: React.FC<BilingualReportProps> = ({ inspection, onBack })
             
             @page {
                 size: A4;
-                margin: 20mm;
+                margin: 15mm 12mm;
+            }
+            
+            .page-break {
+                page-break-before: always;
+            }
+            
+            .avoid-break {
+                page-break-inside: avoid;
+            }
+            
+            .bilingual-table {
+                page-break-inside: avoid;
+                margin-bottom: 10px !important;
+            }
+            
+            .inspection-item {
+                page-break-inside: avoid;
+                margin-bottom: 8px !important;
+            }
+            
+            .photo-grid {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 8px !important;
+                margin: 8px 0 !important;
+            }
+            
+            .photo-item {
+                width: 100% !important;
+                max-width: 180px !important;
+                height: 135px !important;
+                object-fit: cover !important;
+                border: 1px solid #ddd !important;
+                border-radius: 4px !important;
+            }
+            
+            .header {
+                margin-bottom: 15px !important;
+                padding-bottom: 10px !important;
+            }
+            
+            .signature-section {
+                margin: 15px 0 !important;
+            }
+            
+            .signature-line {
+                width: 150px !important;
+                height: 30px !important;
             }
         }
 

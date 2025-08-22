@@ -28,12 +28,22 @@
             text-align: right;
         }
 
-        /* Print Styles */
+        /* Enhanced Print Styles */
         @media print {
             body {
-                margin: 0;
-                padding: 15mm;
-                font-size: 11pt;
+                margin: 0 !important;
+                padding: 0 !important;
+                font-size: 10pt !important;
+                line-height: 1.4 !important;
+                background: white !important;
+                color: black !important;
+            }
+            
+            .container {
+                max-width: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                box-shadow: none !important;
             }
             
             .no-print {
@@ -44,13 +54,96 @@
                 page-break-before: always;
             }
             
-            @page {
-                size: A4;
-                margin: 20mm;
+            .avoid-break {
+                page-break-inside: avoid;
             }
             
-            table {
+            @page {
+                size: A4;
+                margin: 15mm 12mm;
+            }
+            
+            .bilingual-table {
                 page-break-inside: avoid;
+                margin-bottom: 8mm !important;
+                font-size: 9pt !important;
+            }
+            
+            .bilingual-table th {
+                padding: 6mm !important;
+                font-size: 10pt !important;
+            }
+            
+            .bilingual-table td {
+                padding: 4mm !important;
+            }
+            
+            .header {
+                margin-bottom: 8mm !important;
+                padding-bottom: 4mm !important;
+            }
+            
+            .company-logo {
+                width: 60px !important;
+                height: 60px !important;
+                margin-bottom: 8px !important;
+            }
+            
+            .report-title h1 {
+                font-size: 14pt !important;
+            }
+            
+            .section-header {
+                font-size: 10pt !important;
+            }
+            
+            .contact-info {
+                padding: 3mm !important;
+                margin: 3mm 0 !important;
+                font-size: 9pt !important;
+            }
+            
+            .grade-table {
+                margin: 8mm 0 !important;
+                page-break-inside: avoid;
+            }
+            
+            .grade-table th,
+            .grade-table td {
+                padding: 3mm !important;
+                font-size: 9pt !important;
+            }
+            
+            .signature-section {
+                margin: 8mm 0 !important;
+                page-break-inside: avoid;
+            }
+            
+            .signature-line {
+                width: 120px !important;
+                height: 25px !important;
+                margin-bottom: 3mm !important;
+            }
+            
+            .stamp-placeholder {
+                width: 60px !important;
+                height: 60px !important;
+                line-height: 58px !important;
+                font-size: 8pt !important;
+            }
+            
+            /* Ensure proper spacing between elements */
+            p {
+                margin-bottom: 2mm !important;
+            }
+            
+            ul {
+                margin: 2mm 0 !important;
+                padding-left: 5mm !important;
+            }
+            
+            li {
+                margin-bottom: 1mm !important;
             }
         }
 
