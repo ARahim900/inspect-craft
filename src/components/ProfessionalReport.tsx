@@ -263,33 +263,59 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
                 page-break-inside: avoid !important;
               }
               
-              /* Enhanced Photo Grid */
-              .photo-section {
-                margin-top: 2mm !important;
-                page-break-inside: avoid;
-              }
-              
-              .photo-grid {
+            /* Enhanced Photo Grid for Inspection Tables */
+            .photo-grid {
                 display: grid !important;
                 grid-template-columns: repeat(2, 1fr) !important;
                 gap: 2mm !important;
                 margin-top: 2mm !important;
-              }
-              
-              .photo-item {
                 width: 100% !important;
-                max-width: 70mm !important;
-                height: 52mm !important;
+            }
+            
+            .photo-item {
+                width: 100% !important;
+                max-width: 65mm !important;
+                height: 48mm !important;
                 object-fit: cover !important;
                 border: 0.5pt solid #ddd !important;
                 border-radius: 2mm !important;
                 page-break-inside: avoid !important;
-              }
-              
-              .photo-caption {
+                display: block !important;
+            }
+            
+            .photo-caption {
                 font-size: 7pt !important;
                 margin-top: 1mm !important;
-              }
+                text-align: center !important;
+                color: #666 !important;
+            }
+
+            /* Fix inspection table column widths */
+            .inspection-table {
+                table-layout: fixed !important;
+                width: 100% !important;
+            }
+            
+            .inspection-table th:nth-child(1),
+            .inspection-table td:nth-child(1) {
+                width: 30% !important;
+            }
+            
+            .inspection-table th:nth-child(2),
+            .inspection-table td:nth-child(2) {
+                width: 10% !important;
+                text-align: center !important;
+            }
+            
+            .inspection-table th:nth-child(3),
+            .inspection-table td:nth-child(3) {
+                width: 30% !important;
+            }
+            
+            .inspection-table th:nth-child(4),
+            .inspection-table td:nth-child(4) {
+                width: 30% !important;
+            }
               
               /* Text spacing optimization */
               p {

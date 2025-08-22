@@ -94,11 +94,12 @@ const BilingualReport: React.FC<BilingualReportProps> = ({ inspection, onBack })
 
         body {
             font-family: 'Arial', 'Helvetica', sans-serif;
-            line-height: 1.6;
+            line-height: 1.5;
             color: #333;
             background: white;
-            font-size: 12pt;
-            padding: 15mm;
+            font-size: 11pt;
+            padding: 20px;
+            margin: 0;
         }
 
         .arabic {
@@ -107,70 +108,200 @@ const BilingualReport: React.FC<BilingualReportProps> = ({ inspection, onBack })
             text-align: right;
         }
 
+        /* CRITICAL PRINT FIXES */
         @media print {
+            @page {
+                size: A4;
+                margin: 18mm 15mm;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            
             body {
                 margin: 0 !important;
                 padding: 0 !important;
-                font-size: 10pt !important;
+                font-size: 9pt !important;
+                line-height: 1.3 !important;
                 background: white !important;
                 color: black !important;
+                font-family: 'Arial', 'Helvetica', sans-serif !important;
             }
             
             .no-print {
                 display: none !important;
             }
             
-            @page {
-                size: A4;
-                margin: 15mm 12mm;
-            }
-            
             .page-break {
                 page-break-before: always;
+                margin-top: 0;
             }
             
             .avoid-break {
                 page-break-inside: avoid;
+                break-inside: avoid;
             }
             
-            .bilingual-table {
-                page-break-inside: avoid;
-                margin-bottom: 10px !important;
-            }
-            
-            .inspection-item {
-                page-break-inside: avoid;
-                margin-bottom: 8px !important;
-            }
-            
-            .photo-grid {
-                display: grid !important;
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 8px !important;
-                margin: 8px 0 !important;
-            }
-            
-            .photo-item {
+            /* Fix all tables */
+            table {
                 width: 100% !important;
-                max-width: 180px !important;
-                height: 135px !important;
-                object-fit: cover !important;
-                border: 1px solid #ddd !important;
-                border-radius: 4px !important;
+                border-collapse: collapse !important;
+                table-layout: fixed !important;
+                margin-bottom: 4mm !important;
+                page-break-inside: avoid !important;
             }
             
-            .header {
-                margin-bottom: 15px !important;
-                padding-bottom: 10px !important;
+            th, td {
+                border: 0.5pt solid #333 !important;
+                padding: 2mm !important;
+                font-size: 8pt !important;
+                line-height: 1.2 !important;
+                vertical-align: top !important;
+                word-wrap: break-word !important;
+                overflow: visible !important;
             }
             
+            /* Bilingual table specific fixes */
+            .bilingual-table {
+                margin-bottom: 6mm !important;
+                page-break-inside: avoid !important;
+            }
+            
+            .bilingual-table th {
+                background: #1e3a8a !important;
+                color: white !important;
+                font-weight: bold !important;
+                padding: 3mm !important;
+                font-size: 9pt !important;
+                text-align: center !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            
+            .bilingual-table td {
+                padding: 4mm !important;
+                font-size: 8pt !important;
+                line-height: 1.3 !important;
+            }
+            
+            .english-col {
+                width: 50% !important;
+                text-align: left !important;
+            }
+            
+            .arabic-col {
+                width: 50% !important;
+                text-align: right !important;
+                direction: rtl !important;
+                font-family: 'Arial Unicode MS', 'Tahoma', sans-serif !important;
+            }
+            
+            .section-header {
+                background: #374151 !important;
+                color: white !important;
+                font-weight: bold !important;
+                font-size: 9pt !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            
+            /* Grade table fixes */
+            .grade-table {
+                margin: 6mm 0 !important;
+                page-break-inside: avoid !important;
+            }
+            
+            .grade-table th,
+            .grade-table td {
+                text-align: center !important;
+                padding: 2mm !important;
+                font-size: 8pt !important;
+            }
+            
+            .grade-highlighted {
+                background: #fbbf24 !important;
+                color: #000 !important;
+                font-weight: bold !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            
+            /* Contact info fixes */
+            .contact-info {
+                background: #f3f4f6 !important;
+                border-left: 2pt solid #3b82f6 !important;
+                padding: 2mm !important;
+                margin: 2mm 0 !important;
+                font-size: 8pt !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            
+            .contact-info.arabic {
+                border-left: none !important;
+                border-right: 2pt solid #3b82f6 !important;
+            }
+            
+            /* Signature section fixes */
             .signature-section {
-                margin: 15px 0 !important;
+                margin: 8mm 0 !important;
+                page-break-inside: avoid !important;
+            }
+            
+            .signature-row td {
+                padding: 4mm !important;
+                text-align: center !important;
             }
             
             .signature-line {
-                width: 150px !important;
-                height: 30px !important;
+                width: 80mm !important;
+                height: 20px !important;
+                border-bottom: 1pt solid #000 !important;
+                margin: 8px auto !important;
+            }
+            
+            .stamp-placeholder {
+                width: 40px !important;
+                height: 40px !important;
+                border: 1pt dashed #666 !important;
+                font-size: 6pt !important;
+                line-height: 38px !important;
+                margin: 4px auto !important;
+            }
+            
+            /* Typography fixes */
+            p {
+                margin-bottom: 2mm !important;
+                font-size: 8pt !important;
+                line-height: 1.3 !important;
+                text-align: justify !important;
+            }
+            
+            ul {
+                margin: 2mm 0 !important;
+                padding-left: 4mm !important;
+            }
+            
+            li {
+                margin-bottom: 1mm !important;
+                font-size: 8pt !important;
+            }
+            
+            /* Header improvements */
+            .header {
+                margin-bottom: 6mm !important;
+                padding-bottom: 4mm !important;
+                text-align: center !important;
+            }
+            
+            /* Remove problematic styling that causes layout breaks */
+            .bilingual-table,
+            .grade-table,
+            .signature-section {
+                border: 1pt solid #333 !important;
             }
         }
 
@@ -496,31 +627,36 @@ const BilingualReport: React.FC<BilingualReportProps> = ({ inspection, onBack })
 
     <table class="grade-table">
         <tr>
-            <th>Grade</th>
-            <th class="grade-${inspectionData.propertyGrade.toLowerCase() === 'aaa' ? 'highlighted' : ''}">AAA</th>
-            <th class="grade-${inspectionData.propertyGrade.toLowerCase() === 'aa' ? 'highlighted' : ''}">AA</th>
-            <th class="grade-${inspectionData.propertyGrade.toLowerCase() === 'a' ? 'highlighted' : ''}">A</th>
-            <th class="grade-${inspectionData.propertyGrade.toLowerCase() === 'b' ? 'highlighted' : ''}">B</th>
-            <th class="grade-${inspectionData.propertyGrade.toLowerCase() === 'c' ? 'highlighted' : ''}">C</th>
-            <th class="grade-${inspectionData.propertyGrade.toLowerCase() === 'd' ? 'highlighted' : ''}">D</th>
+            <th colspan="7" style="background: #1e3a8a; color: white; font-size: 12pt; padding: 8px;">
+                Property Grade Classification / تصنيف درجة العقار
+            </th>
+        </tr>
+        <tr style="background: #f8f9fa;">
+            <td style="font-weight: bold; width: 14%; text-align: center; background: #e9ecef;">Grade</td>
+            <td style="font-weight: bold; width: 14%; text-align: center; ${inspectionData.propertyGrade.toLowerCase() === 'aaa' ? 'background: #fbbf24; color: black;' : ''}">AAA</td>
+            <td style="font-weight: bold; width: 14%; text-align: center; ${inspectionData.propertyGrade.toLowerCase() === 'aa' ? 'background: #fbbf24; color: black;' : ''}">AA</td>
+            <td style="font-weight: bold; width: 14%; text-align: center; ${inspectionData.propertyGrade.toLowerCase() === 'a' ? 'background: #fbbf24; color: black;' : ''}">A</td>
+            <td style="font-weight: bold; width: 14%; text-align: center; ${inspectionData.propertyGrade.toLowerCase() === 'b' ? 'background: #fbbf24; color: black;' : ''}">B</td>
+            <td style="font-weight: bold; width: 14%; text-align: center; ${inspectionData.propertyGrade.toLowerCase() === 'c' ? 'background: #fbbf24; color: black;' : ''}">C</td>
+            <td style="font-weight: bold; width: 14%; text-align: center; ${inspectionData.propertyGrade.toLowerCase() === 'd' ? 'background: #fbbf24; color: black;' : ''}">D</td>
         </tr>
         <tr>
-            <td><strong>Description</strong></td>
-            <td class="grade-${inspectionData.propertyGrade.toLowerCase() === 'aaa' ? 'highlighted' : ''}">Excellent</td>
-            <td class="grade-${inspectionData.propertyGrade.toLowerCase() === 'aa' ? 'highlighted' : ''}">Very Good</td>
-            <td class="grade-${inspectionData.propertyGrade.toLowerCase() === 'a' ? 'highlighted' : ''}">Good</td>
-            <td class="grade-${inspectionData.propertyGrade.toLowerCase() === 'b' ? 'highlighted' : ''}">Meeting the standards</td>
-            <td class="grade-${inspectionData.propertyGrade.toLowerCase() === 'c' ? 'highlighted' : ''}">Acceptable</td>
-            <td class="grade-${inspectionData.propertyGrade.toLowerCase() === 'd' ? 'highlighted' : ''}">Require maintenance</td>
+            <td style="font-weight: bold; background: #f8f9fa; text-align: left;">Description</td>
+            <td style="text-align: center; ${inspectionData.propertyGrade.toLowerCase() === 'aaa' ? 'background: #fbbf24; color: black; font-weight: bold;' : ''}">Excellent</td>
+            <td style="text-align: center; ${inspectionData.propertyGrade.toLowerCase() === 'aa' ? 'background: #fbbf24; color: black; font-weight: bold;' : ''}">Very Good</td>
+            <td style="text-align: center; ${inspectionData.propertyGrade.toLowerCase() === 'a' ? 'background: #fbbf24; color: black; font-weight: bold;' : ''}">Good</td>
+            <td style="text-align: center; ${inspectionData.propertyGrade.toLowerCase() === 'b' ? 'background: #fbbf24; color: black; font-weight: bold;' : ''}">Meeting standards</td>
+            <td style="text-align: center; ${inspectionData.propertyGrade.toLowerCase() === 'c' ? 'background: #fbbf24; color: black; font-weight: bold;' : ''}">Acceptable</td>
+            <td style="text-align: center; ${inspectionData.propertyGrade.toLowerCase() === 'd' ? 'background: #fbbf24; color: black; font-weight: bold;' : ''}">Require maintenance</td>
         </tr>
         <tr>
-            <td><strong>الوصف</strong></td>
-            <td class="arabic grade-${inspectionData.propertyGrade.toLowerCase() === 'aaa' ? 'highlighted' : ''}">ممتاز</td>
-            <td class="arabic grade-${inspectionData.propertyGrade.toLowerCase() === 'aa' ? 'highlighted' : ''}">جيد جداً</td>
-            <td class="arabic grade-${inspectionData.propertyGrade.toLowerCase() === 'a' ? 'highlighted' : ''}">جيد</td>
-            <td class="arabic grade-${inspectionData.propertyGrade.toLowerCase() === 'b' ? 'highlighted' : ''}">يستوفي المعايير</td>
-            <td class="arabic grade-${inspectionData.propertyGrade.toLowerCase() === 'c' ? 'highlighted' : ''}">مقبول</td>
-            <td class="arabic grade-${inspectionData.propertyGrade.toLowerCase() === 'd' ? 'highlighted' : ''}">يحتاج صيانة</td>
+            <td style="font-weight: bold; background: #f8f9fa; direction: rtl; text-align: right;">الوصف</td>
+            <td style="text-align: center; direction: rtl; ${inspectionData.propertyGrade.toLowerCase() === 'aaa' ? 'background: #fbbf24; color: black; font-weight: bold;' : ''}">ممتاز</td>
+            <td style="text-align: center; direction: rtl; ${inspectionData.propertyGrade.toLowerCase() === 'aa' ? 'background: #fbbf24; color: black; font-weight: bold;' : ''}">جيد جداً</td>
+            <td style="text-align: center; direction: rtl; ${inspectionData.propertyGrade.toLowerCase() === 'a' ? 'background: #fbbf24; color: black; font-weight: bold;' : ''}">جيد</td>
+            <td style="text-align: center; direction: rtl; ${inspectionData.propertyGrade.toLowerCase() === 'b' ? 'background: #fbbf24; color: black; font-weight: bold;' : ''}">يلبي المعايير</td>
+            <td style="text-align: center; direction: rtl; ${inspectionData.propertyGrade.toLowerCase() === 'c' ? 'background: #fbbf24; color: black; font-weight: bold;' : ''}">مقبول</td>
+            <td style="text-align: center; direction: rtl; ${inspectionData.propertyGrade.toLowerCase() === 'd' ? 'background: #fbbf24; color: black; font-weight: bold;' : ''}">تحتاج صيانة</td>
         </tr>
     </table>
 
