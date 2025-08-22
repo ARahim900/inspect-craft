@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import { StorageService } from '@/services/storage-service';
+import type { SavedInspection } from '@/services/storage-service';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -48,6 +50,7 @@ interface BillingItem {
   description: string;
   services: ServiceItem[];
   notes: string;
+  inspectionId?: string; // Link to source inspection
 }
 
 interface ServiceItem {
@@ -72,6 +75,8 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
   const [viewingInvoice, setViewingInvoice] = useState<BillingItem | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [availableInspections, setAvailableInspections] = useState<SavedInspection[]>([]);
+  const [selectedInspection, setSelectedInspection] = useState<SavedInspection | null>(null);
 
   // Form state
   const [formData, setFormData] = useState<Partial<BillingItem>>({
@@ -101,7 +106,7 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
     amount: 0
   });
 
-  // Load billing items from localStorage
+  // Load billing items from localStorage and inspections
   useEffect(() => {
     const saved = localStorage.getItem('billing-items');
     if (saved) {
@@ -109,7 +114,19 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
       setBillingItems(items);
       setFilteredItems(items);
     }
+    
+    // Load available inspections
+    loadInspections();
   }, []);
+
+  const loadInspections = async () => {
+    try {
+      const inspections = await StorageService.getInspections();
+      setAvailableInspections(inspections);
+    } catch (error) {
+      console.error('Failed to load inspections:', error);
+    }
+  };
 
   // Filter and search functionality
   useEffect(() => {
@@ -284,6 +301,32 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
       quantity: 1,
       rate: 0,
       amount: 0
+    });
+    setSelectedInspection(null);
+  };
+
+  const handleInspectionSelect = (inspectionId: string) => {
+    const inspection = availableInspections.find(insp => insp.id === inspectionId);
+    if (!inspection) return;
+
+    setSelectedInspection(inspection);
+    
+    // Auto-populate form with inspection data
+    setFormData(prev => ({
+      ...prev,
+      clientName: inspection.clientName,
+      propertyLocation: inspection.propertyLocation,
+      propertyType: inspection.propertyType as 'residential' | 'commercial',
+      inspectionDate: inspection.inspectionDate,
+      inspectionId: inspection.id,
+      // Keep existing financial fields but update property details
+      propertyArea: prev.propertyArea || 0, // Keep manual input for area
+    }));
+
+    toast({
+      title: "Inspection Selected",
+      description: `Auto-populated form with data from ${inspection.clientName}'s inspection.`,
+      variant: "default"
     });
   };
 
@@ -570,6 +613,43 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
+            {/* Inspection Selection */}
+            {!editingItem && (
+              <div className="p-4 bg-primary/5 border border-primary/20 rounded-lg">
+                <h4 className="text-lg font-semibold text-foreground mb-3">Link to Inspection Report</h4>
+                <div className="space-y-2">
+                  <Label htmlFor="inspectionSelect">Select Inspection Report (Optional)</Label>
+                  <Select 
+                    value={selectedInspection?.id || ''} 
+                    onValueChange={handleInspectionSelect}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Choose an inspection to auto-populate data..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {availableInspections.length === 0 ? (
+                        <SelectItem value="" disabled>No inspection reports available</SelectItem>
+                      ) : (
+                        <>
+                          <SelectItem value="">Manual Entry (No Inspection Link)</SelectItem>
+                          {availableInspections.map((inspection) => (
+                            <SelectItem key={inspection.id} value={inspection.id}>
+                              {inspection.clientName} - {inspection.propertyLocation} ({new Date(inspection.inspectionDate).toLocaleDateString()})
+                            </SelectItem>
+                          ))}
+                        </>
+                      )}
+                    </SelectContent>
+                  </Select>
+                  {selectedInspection && (
+                    <div className="text-sm text-success bg-success/10 p-2 rounded mt-2">
+                      ✅ Linked to inspection: {selectedInspection.clientName} - {selectedInspection.propertyLocation}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* Basic Information */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -589,7 +669,11 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
                   value={formData.clientName}
                   onChange={(e) => setFormData({...formData, clientName: e.target.value})}
                   placeholder="John Smith"
+                  className={selectedInspection ? "bg-success/10 border-success/30" : ""}
                 />
+                {selectedInspection && (
+                  <p className="text-xs text-success">Auto-populated from inspection report</p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -620,7 +704,11 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
                   type="date"
                   value={formData.inspectionDate}
                   onChange={(e) => setFormData({...formData, inspectionDate: e.target.value})}
+                  className={selectedInspection ? "bg-success/10 border-success/30" : ""}
                 />
+                {selectedInspection && (
+                  <p className="text-xs text-success">Auto-populated from inspection report</p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -668,7 +756,11 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
                   value={formData.propertyLocation}
                   onChange={(e) => setFormData({...formData, propertyLocation: e.target.value})}
                   placeholder="Downtown Dubai, Villa 123"
+                  className={selectedInspection ? "bg-success/10 border-success/30" : ""}
                 />
+                {selectedInspection && (
+                  <p className="text-xs text-success">Auto-populated from inspection report</p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -677,7 +769,7 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
                   value={formData.propertyType} 
                   onValueChange={(value: 'residential' | 'commercial') => setFormData({...formData, propertyType: value})}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className={selectedInspection ? "bg-success/10 border-success/30" : ""}>
                     <SelectValue placeholder="Select property type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -685,6 +777,9 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
                     <SelectItem value="commercial">Commercial (1.0 OMR/sqm)</SelectItem>
                   </SelectContent>
                 </Select>
+                {selectedInspection && (
+                  <p className="text-xs text-success">Auto-populated from inspection report</p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -697,6 +792,7 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
                   onChange={(e) => setFormData({...formData, propertyArea: parseFloat(e.target.value) || 0})}
                   placeholder="150"
                 />
+                <p className="text-xs text-muted-foreground">Manual input required - not captured in inspection reports</p>
               </div>
             </div>
 
