@@ -1,14 +1,27 @@
 /* Navigation and sidebar styling overrides */
 :root {
-	--nav-bg: #0b1220;
-	--nav-text: #0f172a;
-	--nav-text-hover: #0b1220;
-	--nav-text-active: #ffffff;
-	--nav-bg-active: #1e40af;
-	--nav-border: #0f172a1a;
+	/* Light mode navigation colors */
+	--nav-bg: hsl(var(--sidebar-background));
+	--nav-text: hsl(var(--sidebar-foreground));
+	--nav-text-hover: hsl(var(--sidebar-accent-foreground));
+	--nav-text-active: hsl(var(--sidebar-primary-foreground));
+	--nav-bg-active: hsl(var(--sidebar-primary));
+	--nav-bg-hover: hsl(var(--sidebar-accent));
+	--nav-border: hsl(var(--sidebar-border));
 }
 
-/* High-specificity base targets with !important to force overrides */
+.dark {
+	/* Dark mode navigation colors */
+	--nav-bg: hsl(var(--sidebar-background));
+	--nav-text: hsl(var(--sidebar-foreground));
+	--nav-text-hover: hsl(var(--sidebar-accent-foreground));
+	--nav-text-active: hsl(var(--sidebar-primary-foreground));
+	--nav-bg-active: hsl(var(--sidebar-primary));
+	--nav-bg-hover: hsl(var(--sidebar-accent));
+	--nav-border: hsl(var(--sidebar-border));
+}
+
+/* Enhanced sidebar styling with proper theme support */
 nav,
 .navigation-menu,
 .navigation-menu__root,
@@ -18,6 +31,7 @@ nav,
 .menubar {
 	background-color: var(--nav-bg) !important;
 	border-color: var(--nav-border) !important;
+	transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .navigation-menu a,
@@ -27,6 +41,7 @@ nav a,
 .menubar a {
 	color: var(--nav-text) !important;
 	text-decoration: none !important;
+	transition: color 0.3s ease, background-color 0.3s ease;
 }
 
 .navigation-menu a:hover,
@@ -35,6 +50,7 @@ nav a:hover,
 .sidebar a:hover,
 .menubar a:hover {
 	color: var(--nav-text-hover) !important;
+	background-color: var(--nav-bg-hover) !important;
 }
 
 .navigation-menu .active a,
@@ -56,7 +72,7 @@ nav a,
 	border-radius: 0.5rem !important;
 }
 
-/* Ensure focus-visible styling is prominent */
+/* Enhanced focus-visible styling */
 .navigation-menu a:focus-visible,
 .navigation-menu__link:focus-visible,
 nav a:focus-visible,
@@ -64,18 +80,43 @@ nav a:focus-visible,
 .menubar a:focus-visible {
 	outline: 2px solid var(--nav-bg-active) !important;
 	outline-offset: 2px !important;
+	box-shadow: 0 0 0 4px hsl(var(--sidebar-ring) / 0.2) !important;
 }
 
-/* Sidebar nested items */
+/* Sidebar nested items with enhanced styling */
 .sidebar .sidebar-item,
 .sidebar .sidebar-item a {
 	color: var(--nav-text) !important;
+	transition: all 0.3s ease;
+}
+
+.sidebar .sidebar-item:hover,
+.sidebar .sidebar-item:hover a {
+	color: var(--nav-text-hover) !important;
+	background-color: var(--nav-bg-hover) !important;
 }
 
 .sidebar .sidebar-item.active,
 .sidebar .sidebar-item.active a {
 	color: var(--nav-text-active) !important;
 	background-color: var(--nav-bg-active) !important;
+	font-weight: 500;
+}
+
+/* Enhanced sidebar border and shadow for light mode */
+:root .sidebar,
+:root .sidebar-nav,
+:root .sidebar-menu {
+	border-right: 1px solid var(--nav-border) !important;
+	box-shadow: 0 4px 6px -1px hsl(0 0% 0% / 0.1), 0 2px 4px -2px hsl(0 0% 0% / 0.1);
+}
+
+/* Dark mode specific enhancements */
+.dark .sidebar,
+.dark .sidebar-nav,
+.dark .sidebar-menu {
+	border-right: 1px solid var(--nav-border) !important;
+	box-shadow: 0 10px 15px -3px hsl(0 0% 0% / 0.3), 0 4px 6px -4px hsl(0 0% 0% / 0.3);
 }
 
 

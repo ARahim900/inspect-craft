@@ -780,7 +780,6 @@ function Dashboard({
           <p className="text-muted-foreground mt-1">Manage your property inspections</p>
         </div>
         <div className="flex items-center gap-4">
-          <ThemeToggle />
           <button 
             onClick={() => navigateTo('newInspection')}
             className="flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors shadow-md w-full sm:w-auto justify-center"
@@ -1105,7 +1104,6 @@ function InspectionForm({
           <BackIcon />
           Back to Dashboard
         </button>
-        <ThemeToggle />
       </div>
 
       <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
@@ -1917,7 +1915,6 @@ function InspectionView({
             <BackIcon />
             Back to Dashboard
           </button>
-          <ThemeToggle />
         </div>
         <div className="flex gap-2">
           <button
