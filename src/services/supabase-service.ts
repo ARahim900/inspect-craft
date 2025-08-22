@@ -47,8 +47,6 @@ export class SupabaseService {
         console.error('Error uploading photo:', error);
         console.error('Upload error details:', {
           message: error.message,
-          status: error.status,
-          statusCode: error.statusCode,
           fileName: fileName,
           filePath: filePath,
           fileSize: file.size,

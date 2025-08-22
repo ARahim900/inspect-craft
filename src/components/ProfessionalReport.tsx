@@ -574,7 +574,7 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
   };
 
   const currentDate = new Date().toLocaleDateString();
-  const reportDate = inspection.inspection_date || currentDate;
+  const reportDate = inspection.inspectionDate || currentDate;
 
   return (
     <div className="space-y-6">
