@@ -190,94 +190,17 @@ const inspectionCategories = {
   "Bathroom Inspection": ["Tiling & Grouting", "Waterproofing Issues", "Toilet Flushing", "Water Pressure", "Toilets/Wet Areas Floor Slope", "Exhaust Fan Working", "Glass Shower Partition Sealing"]
 };
 
+import ScheduleSection from './ScheduleSection';
+import BillingSection from './BillingSection';
+
 // Report Scheduled Page Component  
 function ReportScheduled({ navigateTo }: { navigateTo: (page: string) => void }) {
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <h2 className="text-3xl font-bold text-gray-800">Report Scheduled</h2>
-      </div>
-      
-      <div className="bg-white border border-gray-100 rounded-xl p-8 shadow-lg">
-        <div className="text-center py-12">
-          <ScheduleIcon className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-          <h3 className="text-xl font-semibold text-gray-800 mb-2">Schedule Management</h3>
-          <p className="text-gray-600 mb-6">
-            Plan and schedule future inspections, manage appointments, and track upcoming work.
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
-            <div className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-all duration-200 hover:shadow-md bg-white shadow-sm">
-              <CalendarIcon className="w-8 h-8 mb-2 text-primary" />
-              <h4 className="font-semibold mb-1 text-gray-800">Calendar View</h4>
-              <p className="text-sm text-gray-500">View scheduled inspections in calendar format</p>
-            </div>
-            
-            <div className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-all duration-200 hover:shadow-md bg-white shadow-sm">
-              <ScheduleIcon className="w-8 h-8 mb-2 text-primary" />
-              <h4 className="font-semibold mb-1 text-gray-800">Schedule Planning</h4>
-              <p className="text-sm text-gray-500">Plan and organize upcoming inspection visits</p>
-            </div>
-            
-            <div className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-all duration-200 hover:shadow-md bg-white shadow-sm">
-              <InspectionsIcon className="w-8 h-8 mb-2 text-primary" />
-              <h4 className="font-semibold mb-1 text-gray-800">Appointment Management</h4>
-              <p className="text-sm text-gray-500">Manage client appointments and availability</p>
-            </div>
-          </div>
-          
-          <p className="text-sm text-gray-500 mt-8">
-            🚧 This feature is under development and will be available soon.
-          </p>
-        </div>
-      </div>
-    </div>
-  );
+  return <ScheduleSection onBack={() => navigateTo('dashboard')} />;
 }
 
 // Billing Page Component
 function Billing({ navigateTo }: { navigateTo: (page: string) => void }) {
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <h2 className="text-3xl font-bold text-gray-800">Billing & Invoices</h2>
-      </div>
-      
-      <div className="bg-white border border-gray-100 rounded-xl p-8 shadow-lg">
-        <div className="text-center py-12">
-          <BillingIcon className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-          <h3 className="text-xl font-semibold text-gray-800 mb-2">Financial Management</h3>
-          <p className="text-gray-600 mb-6">
-            Generate invoices, track payments, and manage your inspection business finances.
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
-            <div className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-all duration-200 hover:shadow-md bg-white shadow-sm">
-              <BillingIcon className="w-8 h-8 mb-2 text-primary" />
-              <h4 className="font-semibold mb-1 text-gray-800">Invoice Generation</h4>
-              <p className="text-sm text-gray-500">Create professional invoices from inspection reports</p>
-            </div>
-            
-            <div className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-all duration-200 hover:shadow-md bg-white shadow-sm">
-              <CalendarIcon className="w-8 h-8 mb-2 text-primary" />
-              <h4 className="font-semibold mb-1 text-gray-800">Payment Tracking</h4>
-              <p className="text-sm text-gray-500">Monitor payment status and outstanding balances</p>
-            </div>
-            
-            <div className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-all duration-200 hover:shadow-md bg-white shadow-sm">
-              <DashboardIcon className="w-8 h-8 mb-2 text-primary" />
-              <h4 className="font-semibold mb-1 text-gray-800">Financial Reports</h4>
-              <p className="text-sm text-gray-500">View revenue reports and business analytics</p>
-            </div>
-          </div>
-          
-          <p className="text-sm text-gray-500 mt-8">
-            🚧 This feature is under development and will be available soon.
-          </p>
-        </div>
-      </div>
-    </div>
-  );
+  return <BillingSection onBack={() => navigateTo('dashboard')} />;
 }
 
 // Sidebar Component
