@@ -22,11 +22,13 @@ interface AuthContextType {
   resetPassword: (email: string) => Promise<{ error: any }>;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType | null>(null);
 
 export function useAuth() {
+  console.log('useAuth called, context available:', !!useContext(AuthContext));
   const context = useContext(AuthContext);
-  if (context === undefined) {
+  if (!context) {
+    console.error('useAuth called but no AuthContext found!');
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
@@ -41,6 +43,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
+
+  console.log('AuthProvider rendering with loading:', loading, 'user:', user);
 
   const fetchProfile = async (userId: string) => {
     try {
@@ -146,5 +150,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     resetPassword,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  console.log('AuthProvider providing value:', value);
+  
+  return <AuthContext.Provider value={value}>
+    {children}
+  </AuthContext.Provider>;
 }
