@@ -344,10 +344,6 @@ function Sidebar({
           <div className="flex items-center justify-between p-6 border-b border-sidebar-border bg-sidebar-accent/30">
             <div className="flex items-center gap-3">
               <Logo size="small" />
-              <div className="hidden sm:block">
-                <h2 className="text-sm font-semibold text-sidebar-foreground">InspectCraft</h2>
-                <p className="text-xs text-sidebar-foreground/70">Property Solutions</p>
-              </div>
             </div>
             <button
               onClick={onClose}
