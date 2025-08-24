@@ -363,6 +363,7 @@
   }
 }
 
+@layer components {
   .swap {
     position: relative;
     display: inline-grid;
@@ -414,10 +415,8 @@
   .swap.swap-rotate.swap-active .swap-on {
     transform: rotate(0deg);
   }
-}
 
 /* Dark Mode Specific Styles */
-@layer components {
   /* Application Layout Dark Mode */
   .dark .bg-gradient-to-br {
     @apply from-gray-900 to-slate-900;
