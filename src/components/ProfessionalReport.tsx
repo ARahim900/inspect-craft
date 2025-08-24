@@ -75,9 +75,13 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
       const currentDate = new Date().toLocaleDateString();
       
       // Get computed styles from the original element to maintain consistency
+      // Enhanced pixel-perfect style extraction
       const computedStyles = window.getComputedStyle(printRef.current);
       const originalFontFamily = computedStyles.fontFamily;
       const originalLineHeight = computedStyles.lineHeight;
+      const originalFontSize = computedStyles.fontSize;
+      const originalColor = computedStyles.color;
+      const originalBackgroundColor = computedStyles.backgroundColor;
       
       printWindow.document.write(`
         <!DOCTYPE html>
@@ -101,16 +105,21 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
             }
             
             body {
-              font-family: ${originalFontFamily || "'Inter', 'Arial', 'Helvetica', sans-serif"};
+              font-family: ${originalFontFamily || "'Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif"};
               line-height: ${originalLineHeight || '1.5'};
-              color: #333;
-              background: white;
-              font-size: 11pt;
+              color: ${originalColor || '#333'};
+              background: ${originalBackgroundColor || 'white'};
+              font-size: ${originalFontSize || '11pt'};
               padding: 0;
               margin: 0;
               -webkit-print-color-adjust: exact;
               print-color-adjust: exact;
               color-adjust: exact;
+              box-sizing: border-box;
+              min-height: 100vh;
+              width: 100%;
+              transform: scale(1);
+              transform-origin: top left;
             }
             
             @media print {
@@ -139,6 +148,10 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
                 background: white !important;
                 width: 100% !important;
                 max-width: none !important;
+                min-height: 100vh !important;
+                position: relative !important;
+                overflow: visible !important;
+                display: block !important;
               }
               
               .no-print { display: none !important; }

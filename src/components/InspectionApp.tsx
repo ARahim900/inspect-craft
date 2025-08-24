@@ -259,22 +259,22 @@ function Sidebar({
         />
       )}
       
-      {/* Sidebar - Enhanced with solid background and better contrast */}
+      {/* Enhanced Sidebar with Modern Design */}
       <div className={cn(
-        "fixed top-0 left-0 h-full w-72 bg-sidebar z-50 transform transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:z-auto",
-        "border-r border-sidebar-border shadow-2xl lg:shadow-lg",
-        "supports-[backdrop-filter]:bg-sidebar/95 supports-[backdrop-filter]:backdrop-blur-xl",
+        "fixed top-0 left-0 h-full w-72 bg-gradient-sidebar z-50 transform transition-all duration-300 ease-spring lg:translate-x-0 lg:static lg:z-auto",
+        "border-r border-sidebar-border shadow-2xl lg:shadow-elegant backdrop-blur-xl",
+        "supports-[backdrop-filter]:bg-sidebar/98",
         isOpen ? "translate-x-0" : "-translate-x-full"
       )}>
-        <div className="flex flex-col h-full bg-sidebar">
-          {/* Sidebar Header - Enhanced with better spacing and contrast */}
-          <div className="flex items-center justify-between p-6 border-b border-sidebar-border bg-sidebar-accent/30">
+        <div className="flex flex-col h-full bg-gradient-sidebar">
+          {/* Enhanced Sidebar Header */}
+          <div className="flex items-center justify-between p-6 border-b border-sidebar-border/50 bg-gradient-to-r from-sidebar-accent/40 to-sidebar-accent/20 backdrop-blur-sm">
             <div className="flex items-center gap-3">
               <Logo size="small" />
             </div>
             <button
               onClick={onClose}
-              className="lg:hidden p-2 hover:bg-sidebar-accent rounded-lg transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-sidebar-ring"
+              className="lg:hidden p-2 hover:bg-sidebar-accent/80 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-sidebar-ring focus:ring-offset-2 focus:ring-offset-sidebar touch-manipulation min-h-[var(--touch-target-small)]"
               aria-label="Close navigation menu"
             >
               <CloseIcon className="w-5 h-5 text-sidebar-foreground" />
@@ -285,16 +285,16 @@ function Sidebar({
           <nav className="flex-1 p-4 overflow-y-auto" role="navigation" aria-label="Main navigation">
             <div className="space-y-2">
               {menuItems.map((item) => (
-                <button
+                  <button
                   key={item.id}
                   onClick={() => handleNavigation(item.id)}
                   className={cn(
-                    "w-full flex items-center gap-4 px-4 py-4 rounded-xl text-left transition-all duration-200 group relative",
+                    "w-full flex items-center gap-4 px-4 py-4 rounded-xl text-left transition-all duration-200 group relative touch-manipulation min-h-[var(--touch-target)]",
                     "focus:outline-none focus:ring-2 focus:ring-sidebar-ring focus:ring-offset-2 focus:ring-offset-sidebar",
                     "hover:transform hover:scale-[1.02] active:scale-[0.98]",
                     currentPage === item.id
-                      ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-lg shadow-sidebar-primary/25 border border-sidebar-primary/20"
-                      : "hover:bg-sidebar-accent hover:shadow-md text-sidebar-foreground hover:text-sidebar-accent-foreground border border-transparent hover:border-sidebar-border"
+                      ? "bg-gradient-primary text-primary-foreground shadow-elegant border border-primary/20 backdrop-blur-sm"
+                      : "hover:bg-sidebar-accent/80 hover:shadow-md text-sidebar-foreground hover:text-sidebar-accent-foreground border border-transparent hover:border-sidebar-border/50"
                   )}
                   aria-current={currentPage === item.id ? 'page' : undefined}
                 >
@@ -339,19 +339,19 @@ function Sidebar({
               <div className="space-y-2">
                 <button
                   onClick={() => handleNavigation('newInspection')}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 group hover:bg-sidebar-accent hover:shadow-sm text-sidebar-foreground hover:text-sidebar-accent-foreground border border-dashed border-sidebar-border hover:border-sidebar-primary"
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-200 group hover:bg-sidebar-accent/80 hover:shadow-card text-sidebar-foreground hover:text-sidebar-accent-foreground border border-dashed border-sidebar-border/60 hover:border-primary/50 backdrop-blur-sm touch-manipulation min-h-[var(--touch-target)]"
                 >
-                  <PlusIcon className="w-5 h-5 text-sidebar-foreground group-hover:text-sidebar-primary" />
+                  <PlusIcon className="w-5 h-5 text-sidebar-foreground group-hover:text-primary transition-colors duration-200" />
                   <span className="text-sm font-medium">New Inspection</span>
                 </button>
               </div>
             </div>
           </nav>
           
-          {/* Sidebar Footer - Enhanced with better styling */}
-          <div className="p-4 border-t border-sidebar-border bg-sidebar-accent/20">
+          {/* Enhanced Sidebar Footer */}
+          <div className="p-4 border-t border-sidebar-border/50 bg-gradient-to-t from-sidebar-accent/30 to-transparent backdrop-blur-sm">
             <div className="text-center">
-              <div className="text-xs text-sidebar-foreground/60 bg-sidebar-accent py-3 px-4 rounded-lg border border-sidebar-border">
+              <div className="text-xs text-sidebar-foreground/60 bg-gradient-to-r from-sidebar-accent/60 to-sidebar-accent/40 py-3 px-4 rounded-xl border border-sidebar-border/30 backdrop-blur-sm shadow-sm">
                 <div className="font-medium text-sidebar-foreground">Solution Property</div>
                 <div className="text-sidebar-foreground/50">v1.0.0</div>
               </div>
