@@ -9,7 +9,7 @@ import { ProfessionalReport } from './ProfessionalReport';
 import { BilingualDisclaimer } from './BilingualDisclaimer';
 import { ThemeToggle } from './ThemeToggle';
 import Logo from './Logo';
-import { AuthDebugger } from './AuthDebugger';
+
 import { getDisplayName } from '@/utils/user';
 import { Button } from './ui/button';
 import { LogOut, User } from 'lucide-react';
@@ -504,8 +504,6 @@ export default function InspectionApp({
                     isLoading={isLoading}
                     onDeleteConfirmation={handleDeleteConfirmation}
                   />
-                  {/* Temporary Auth Debugger */}
-                  <AuthDebugger />
                 </>
               )}
               {currentPage === 'reportScheduled' && (
