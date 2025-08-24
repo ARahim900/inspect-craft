@@ -74,6 +74,11 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
       const printContent = printRef.current.innerHTML;
       const currentDate = new Date().toLocaleDateString();
       
+      // Get computed styles from the original element to maintain consistency
+      const computedStyles = window.getComputedStyle(printRef.current);
+      const originalFontFamily = computedStyles.fontFamily;
+      const originalLineHeight = computedStyles.lineHeight;
+      
       printWindow.document.write(`
         <!DOCTYPE html>
         <html>
@@ -84,6 +89,8 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
           <style>
             * {
               box-sizing: border-box;
+              margin: 0;
+              padding: 0;
             }
           </style>
           <style>
@@ -94,8 +101,8 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
             }
             
             body {
-              font-family: 'Arial', 'Helvetica', sans-serif;
-              line-height: 1.4;
+              font-family: ${originalFontFamily || "'Inter', 'Arial', 'Helvetica', sans-serif"};
+              line-height: ${originalLineHeight || '1.5'};
               color: #333;
               background: white;
               font-size: 11pt;
@@ -694,10 +701,10 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
               /* Override browser default margins */
               @page {
                 size: A4 !important;
-                margin: 20mm 18mm !important;
+                margin: 15mm !important;
               }
               
-              /* CRITICAL: Ensure content fits within printable area */
+              /* CRITICAL: Ensure content fits within printable area and matches display */
               * {
                 max-width: 100% !important;
                 box-sizing: border-box !important;
@@ -706,28 +713,60 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
                 margin-right: 0 !important;
               }
               
-              /* Safe content positioning */
-              .report-container {
+              /* Safe content positioning - matches display layout */
+              .report-container, .print-wrapper {
                 margin: 0 auto !important;
                 padding: 0 !important;
                 width: 100% !important;
-                max-width: 180mm !important;
+                max-width: 190mm !important;
+                font-size: inherit !important;
               }
               
-              /* Fix table layouts */
+              /* Preserve original spacing and layout */
+              .space-y-6 > * + * {
+                margin-top: 1.5rem !important;
+              }
+              
+              .space-y-4 > * + * {
+                margin-top: 1rem !important;
+              }
+              
+              .space-y-3 > * + * {
+                margin-top: 0.75rem !important;
+              }
+              
+              /* Fix table layouts - maintain display consistency */
               table {
                 width: 100% !important;
-                table-layout: fixed !important;
+                table-layout: auto !important;
                 border-collapse: collapse !important;
-                margin: 0 !important;
+                margin: 0.5rem 0 !important;
+                font-size: inherit !important;
               }
               
               td, th {
                 word-wrap: break-word !important;
                 word-break: normal !important;
                 overflow: visible !important;
-                font-size: 8pt !important;
-                padding: 2mm !important;
+                font-size: 9pt !important;
+                padding: 4px 6px !important;
+                vertical-align: top !important;
+              }
+              
+              /* Status indicators maintain colors */
+              .bg-green-100, .text-green-800 {
+                background-color: #dcfce7 !important;
+                color: #166534 !important;
+              }
+              
+              .bg-red-100, .text-red-800 {
+                background-color: #fef2f2 !important;
+                color: #991b1b !important;
+              }
+              
+              .bg-yellow-100, .text-yellow-800 {
+                background-color: #fefce8 !important;
+                color: #854d0e !important;
               }
               
               /* Bilingual table fixes */
@@ -746,9 +785,9 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
             }
           </style>
         </head>
-        <body onload="window.print(); window.onafterprint = () => window.close();">
+        <body onload="setTimeout(() => { window.print(); window.onafterprint = () => window.close(); }, 500);">
           <div class="watermark">SOLUTION PROPERTY</div>
-          <div class="print-wrapper" style="margin: 0; padding: 0;">
+          <div class="print-wrapper" style="margin: 0; padding: 0; max-width: 190mm;">
             ${printContent}
           </div>
         </body>

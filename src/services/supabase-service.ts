@@ -276,6 +276,91 @@ export class SupabaseService {
     }
   }
 
+  // Update inspection
+  static async updateInspection(id: string, inspectionData: InspectionData): Promise<SavedInspection | null> {
+    try {
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        console.error('No authenticated user found');
+        return null;
+      }
+      
+      // Update the main inspection
+      const { data: inspection, error: inspectionError } = await supabase
+        .from('inspections')
+        .update({
+          client_name: inspectionData.clientName,
+          property_location: inspectionData.propertyLocation,
+          property_type: inspectionData.propertyType,
+          inspector_name: inspectionData.inspectorName,
+          inspection_date: inspectionData.inspectionDate,
+        })
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (inspectionError || !inspection) {
+        console.error('Error updating inspection:', inspectionError);
+        return null;
+      }
+
+      // Delete existing areas and items (cascade delete will handle items)
+      await supabase
+        .from('inspection_areas')
+        .delete()
+        .eq('inspection_id', id);
+
+      // Save new areas and their items
+      for (const area of inspectionData.areas) {
+        const { data: savedArea, error: areaError } = await supabase
+          .from('inspection_areas')
+          .insert({
+            inspection_id: inspection.id,
+            name: area.name,
+          })
+          .select()
+          .single();
+
+        if (areaError || !savedArea) {
+          console.error('Error saving area:', areaError);
+          continue;
+        }
+
+        // Save items for this area
+        if (area.items.length > 0) {
+          const items = area.items.map(item => ({
+            area_id: savedArea.id,
+            category: item.category,
+            point: item.point,
+            status: item.status,
+            comments: item.comments,
+            location: item.location,
+            photos: item.photos,
+          }));
+
+          const { error: itemsError } = await supabase
+            .from('inspection_items')
+            .insert(items);
+
+          if (itemsError) {
+            console.error('Error saving items:', itemsError);
+          }
+        }
+      }
+
+      return {
+        ...inspectionData,
+        id: inspection.id,
+        created_at: inspection.created_at,
+        updated_at: inspection.updated_at,
+      };
+    } catch (error) {
+      console.error('Error updating inspection - Exception:', error);
+      return null;
+    }
+  }
+
   // Delete inspection
   static async deleteInspection(id: string): Promise<boolean> {
     try {

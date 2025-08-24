@@ -181,16 +181,12 @@ export class StorageService {
     }
 
     try {
-      // For Supabase, we need to implement update logic
+      // For Supabase, use the proper update method
       console.log('☁️ Updating inspection in Supabase...');
-      // Since SupabaseService doesn't have update method, we'll delete and recreate
-      const deleteSuccess = await SupabaseService.deleteInspection(id);
-      if (deleteSuccess) {
-        const newInspection = await SupabaseService.saveInspection(inspectionData);
-        if (newInspection) {
-          console.log('✅ Inspection updated in Supabase successfully');
-          return newInspection;
-        }
+      const updatedInspection = await SupabaseService.updateInspection(id, inspectionData);
+      if (updatedInspection) {
+        console.log('✅ Inspection updated in Supabase successfully');
+        return updatedInspection;
       }
       
       // If Supabase update fails, fallback to local storage
