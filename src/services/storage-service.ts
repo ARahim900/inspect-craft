@@ -126,7 +126,16 @@ export class StorageService {
 
   // Get single inspection with fallback
   static async getInspection(id: string): Promise<SavedInspection | null> {
-    // Always use local storage for now
+    if (!this.useLocalStorage) {
+      try {
+        return await SupabaseService.getInspection(id);
+      } catch (error) {
+        console.error('Supabase error:', error);
+        this.useLocalStorage = true;
+        return await LocalStorageService.getInspection(id);
+      }
+    }
+    
     try {
       return await LocalStorageService.getInspection(id);
     } catch (error) {
@@ -137,11 +146,24 @@ export class StorageService {
 
   // Delete inspection with fallback
   static async deleteInspection(id: string): Promise<boolean> {
-    // Always use local storage for now
+    if (!this.useLocalStorage) {
+      try {
+        const result = await SupabaseService.deleteInspection(id);
+        if (result) {
+          console.log('✅ Inspection deleted successfully from Supabase');
+        }
+        return result;
+      } catch (error) {
+        console.error('Supabase delete error:', error);
+        this.useLocalStorage = true;
+        return await LocalStorageService.deleteInspection(id);
+      }
+    }
+    
     try {
       const result = await LocalStorageService.deleteInspection(id);
       if (result) {
-        console.log('✅ Inspection deleted successfully');
+        console.log('✅ Inspection deleted successfully from local storage');
       }
       return result;
     } catch (error) {
