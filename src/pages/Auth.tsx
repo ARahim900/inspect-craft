@@ -9,6 +9,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Building2, Shield } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
+import { robustSignIn } from '@/utils/auth-cleanup';
 
 export default function Auth() {
   const { user, loading, signIn, signUp, resetPassword } = useAuth();
@@ -39,16 +40,17 @@ export default function Auth() {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
 
-    const { error } = await signIn(email, password);
+    // Use robust sign-in with auth cleanup
+    const { error } = await robustSignIn(email, password);
     
     if (error) {
       setError(error.message);
       toast.error('Sign in failed', { description: error.message });
+      setIsLoading(false);
     } else {
       toast.success('Welcome back!');
+      // robustSignIn handles the redirect
     }
-    
-    setIsLoading(false);
   };
 
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
