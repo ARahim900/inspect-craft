@@ -370,7 +370,15 @@ function Sidebar({
 }
 
 // Main App Component
-export default function InspectionApp() {
+export default function InspectionApp({ 
+  user, 
+  profile, 
+  onSignOut 
+}: { 
+  user: any; 
+  profile: any; 
+  onSignOut: () => void; 
+}) {
   const [currentPage, setCurrentPage] = useState('dashboard');
   const [selectedInspectionId, setSelectedInspectionId] = useState<string | null>(null);
   const [inspections, setInspections] = useState<SavedInspection[]>([]);
@@ -487,6 +495,9 @@ export default function InspectionApp() {
           <Header 
             onMenuClick={() => setSidebarOpen(true)}
             sidebarOpen={sidebarOpen}
+            user={user}
+            profile={profile}
+            onSignOut={onSignOut}
           />
           
           <main className="flex-1 overflow-auto bg-background shadow-inner">
@@ -571,49 +582,103 @@ export default function InspectionApp() {
   );
 }
 
-// Header Component - Enhanced with better integration and theme support
+// Header Component - Enhanced with user information and elegant styling
 function Header({ 
   onMenuClick, 
-  sidebarOpen 
+  sidebarOpen,
+  user,
+  profile,
+  onSignOut
 }: { 
   onMenuClick: () => void; 
   sidebarOpen: boolean; 
+  user: any;
+  profile: any;
+  onSignOut: () => void;
 }) {
+  const getUserInitials = (email: string) => {
+    const name = email.split('@')[0];
+    return name.substring(0, 2).toUpperCase();
+  };
+
+  const getDisplayName = (email: string) => {
+    const name = email.split('@')[0];
+    return name.charAt(0).toUpperCase() + name.slice(1);
+  };
+
   return (
-    <header className="sticky top-0 z-30 bg-background/95 backdrop-blur-xl supports-[backdrop-filter]:bg-background/90 border-b border-border shadow-sm">
-      <div className="flex h-16 items-center justify-between px-4 lg:px-6">
-        {/* Mobile Menu Button & Logo */}
-        <div className="flex items-center gap-4">
+    <header className="sticky top-0 z-30 bg-background/95 backdrop-blur-xl supports-[backdrop-filter]:bg-background/90 border-b border-border/60 shadow-sm">
+      <div className="flex h-20 items-center justify-between px-4 lg:px-8">
+        {/* Left Section: Mobile Menu & Company Logo */}
+        <div className="flex items-center gap-6">
           <button
             onClick={onMenuClick}
             className={cn(
-              "lg:hidden p-2 hover:bg-accent rounded-lg transition-all duration-200 hover:scale-105",
-              "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
-              sidebarOpen && "bg-accent"
+              "lg:hidden p-2.5 hover:bg-accent/80 rounded-xl transition-all duration-200 hover:scale-105",
+              "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background",
+              "border border-transparent hover:border-border/50",
+              sidebarOpen && "bg-accent border-border/50"
             )}
             aria-label="Toggle navigation menu"
             aria-expanded={sidebarOpen}
           >
-            <HamburgerIcon className="w-6 h-6 text-foreground" />
+            <HamburgerIcon className="w-5 h-5 text-foreground" />
           </button>
-          <div className="lg:hidden">
-            <Logo size="small" />
+          
+          <div className="flex items-center">
+            <Logo size="small" showText={true} />
           </div>
         </div>
         
-        {/* Desktop Title & Breadcrumb */}
-        <div className="hidden lg:flex items-center gap-4 flex-1 justify-center">
-          <div className="text-center">
-            <h1 className="text-sm font-semibold text-foreground">Professional Property Inspection Solutions</h1>
-            <p className="text-xs text-muted-foreground">Comprehensive inspection management platform</p>
-          </div>
+        {/* Center Section: Dashboard Title (Desktop) */}
+        <div className="hidden lg:flex flex-col items-center text-center">
+          <h1 className="text-lg font-bold text-foreground tracking-tight">
+            Building Inspection System
+          </h1>
+          <p className="text-sm text-muted-foreground font-medium">
+            {profile?.role === 'admin' ? 'Administrator Dashboard' : 'Staff Dashboard'}
+          </p>
         </div>
         
-        {/* Header Actions - Enhanced with theme toggle and better styling */}
-        <div className="flex items-center gap-3">
-          <ThemeToggle />
-          <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-dark rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 border-2 border-primary/20">
-            <span className="text-sm font-bold text-primary-foreground">SP</span>
+        {/* Right Section: User Actions */}
+        <div className="flex items-center gap-4">
+          {/* User Information (Desktop) */}
+          <div className="hidden sm:flex items-center gap-3 px-4 py-2 rounded-xl bg-card/50 border border-border/50 shadow-sm">
+            <div className="text-right">
+              <p className="text-sm font-semibold text-foreground leading-tight">
+                {getDisplayName(user.email)}
+              </p>
+              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
+                {profile?.role}
+              </p>
+            </div>
+            <div className="w-9 h-9 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-md border-2 border-primary/20">
+              <span className="text-sm font-bold text-primary-foreground tracking-wide">
+                {getUserInitials(user.email)}
+              </span>
+            </div>
+          </div>
+
+          {/* Theme Toggle */}
+          <ThemeToggle size="small" className="border border-border/40 shadow-sm bg-card/30" />
+
+          {/* Sign Out Button */}
+          <button
+            onClick={onSignOut}
+            className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground bg-card/30 hover:bg-accent/80 border border-border/40 hover:border-border/60 rounded-xl transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background shadow-sm hover:shadow-md"
+            aria-label="Sign out"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            <span className="hidden sm:inline">Sign Out</span>
+          </button>
+
+          {/* Mobile User Avatar */}
+          <div className="sm:hidden w-9 h-9 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-md border-2 border-primary/20">
+            <span className="text-sm font-bold text-primary-foreground tracking-wide">
+              {getUserInitials(user.email)}
+            </span>
           </div>
         </div>
       </div>

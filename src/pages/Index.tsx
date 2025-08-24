@@ -35,39 +35,7 @@ const Index = () => {
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-background">
-        <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-          <div className="container mx-auto px-4 py-3 flex flex-col sm:flex-row gap-3 sm:gap-0 justify-between items-start sm:items-center">
-            <div className="flex items-center space-x-3">
-              <Building2 className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
-              <div>
-                <h1 className="text-lg sm:text-xl font-bold">Building Inspection</h1>
-                <p className="text-xs sm:text-sm text-muted-foreground">
-                  {profile?.role === 'admin' ? 'Administrator Dashboard' : 'Staff Dashboard'}
-                </p>
-              </div>
-            </div>
-            
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
-              <div className="flex items-center space-x-2 text-sm order-2 sm:order-1">
-                <User className="h-4 w-4" />
-                <span className="font-medium">{getDisplayName(user.email)}</span>
-                <span className="px-2 py-1 rounded-full text-xs bg-primary/10 text-primary">
-                  {profile?.role}
-                </span>
-              </div>
-              
-              <Button variant="ghost" size="sm" onClick={signOut} className="order-1 sm:order-2 self-end sm:self-auto">
-                <LogOut className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">Sign Out</span>
-                <span className="sm:hidden">Exit</span>
-              </Button>
-            </div>
-          </div>
-        </header>
-        
-        <main>
-          <InspectionApp />
-        </main>
+        <InspectionApp user={user} profile={profile} onSignOut={signOut} />
       </div>
     </ProtectedRoute>
   );
