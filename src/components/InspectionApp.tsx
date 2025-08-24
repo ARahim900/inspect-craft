@@ -313,16 +313,6 @@ function Sidebar({
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
                       <span className="font-medium text-sm truncate">{item.label}</span>
-                      {item.badge && (
-                        <span className={cn(
-                          "text-xs px-2 py-1 rounded-full font-medium",
-                          currentPage === item.id
-                            ? "bg-sidebar-primary-foreground/20 text-sidebar-primary-foreground"
-                            : "bg-sidebar-accent text-sidebar-foreground"
-                        )}>
-                          {item.badge}
-                        </span>
-                      )}
                     </div>
                     <div className={cn(
                       "text-xs truncate transition-colors mt-0.5",
