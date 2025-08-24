@@ -9,6 +9,10 @@ import { ProfessionalReport } from './ProfessionalReport';
 import { BilingualDisclaimer } from './BilingualDisclaimer';
 import { ThemeToggle } from './ThemeToggle';
 import Logo from './Logo';
+import { AuthDebugger } from './AuthDebugger';
+import { getDisplayName } from '@/utils/user';
+import { Button } from './ui/button';
+import { LogOut, User } from 'lucide-react';
 
 // Types
 interface InspectionItem {
@@ -493,12 +497,16 @@ export default function InspectionApp({
           <main className="flex-1 overflow-auto bg-background shadow-inner">
             <div className="container mx-auto px-6 py-8 max-w-7xl">
               {currentPage === 'dashboard' && (
-                <Dashboard 
-                  navigateTo={navigateTo} 
-                  inspections={inspections} 
-                  isLoading={isLoading}
-                  onDeleteConfirmation={handleDeleteConfirmation}
-                />
+                <>
+                  <Dashboard 
+                    navigateTo={navigateTo} 
+                    inspections={inspections} 
+                    isLoading={isLoading}
+                    onDeleteConfirmation={handleDeleteConfirmation}
+                  />
+                  {/* Temporary Auth Debugger */}
+                  <AuthDebugger />
+                </>
               )}
               {currentPage === 'reportScheduled' && (
                 <ReportScheduled navigateTo={navigateTo} />

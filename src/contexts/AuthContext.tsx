@@ -65,14 +65,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('🔒 Auth state change:', event, session?.user?.id, session?.access_token ? 'has_token' : 'no_token');
         setSession(session);
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          // Defer profile fetching to prevent deadlock
+          // Test database authentication
           setTimeout(async () => {
-            const profileData = await fetchProfile(session.user.id);
-            setProfile(profileData);
+            try {
+              const { data: authTest } = await supabase.rpc('get_current_user_role');
+              console.log('🔍 Database auth test:', authTest);
+              
+              const profileData = await fetchProfile(session.user.id);
+              setProfile(profileData);
+            } catch (error) {
+              console.error('🚨 Auth test failed:', error);
+            }
           }, 0);
         } else {
           setProfile(null);
@@ -84,6 +92,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     // Check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('🔍 Initial session check:', session?.user?.id, session?.access_token ? 'has_token' : 'no_token');
       setSession(session);
       setUser(session?.user ?? null);
       
