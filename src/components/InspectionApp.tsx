@@ -452,17 +452,31 @@ export default function InspectionApp({
   const deleteInspection = async () => {
     if (!deleteConfirmation.inspectionId) return;
     
-    const success = await StorageService.deleteInspection(deleteConfirmation.inspectionId);
-    if (success) {
-      await loadInspections();
-      toast({
-        title: "Success",
-        description: "Inspection deleted successfully!",
-      });
-    } else {
+    try {
+      const success = await StorageService.deleteInspection(deleteConfirmation.inspectionId);
+      if (success) {
+        // Force immediate state update by filtering out the deleted inspection
+        setInspections(prev => prev.filter(inspection => inspection.id !== deleteConfirmation.inspectionId));
+        
+        // Also reload to ensure consistency
+        await loadInspections();
+        
+        toast({
+          title: "Success",
+          description: "Inspection deleted successfully!",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to delete inspection",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Delete error:', error);
       toast({
         title: "Error",
-        description: "Failed to delete inspection",
+        description: "An error occurred while deleting the inspection",
         variant: "destructive",
       });
     }
