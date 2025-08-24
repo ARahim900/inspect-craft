@@ -279,8 +279,8 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({ onBack }) => {
               <div>
                 <p className="text-sm text-muted-foreground">Revenue (Est.)</p>
                 <p className="text-2xl font-bold text-foreground">
-                  ${scheduleItems.reduce((sum, item) => sum + (item.estimatedCost || 0), 0).toLocaleString()}
-                </p>
+                   OMR {scheduleItems.reduce((sum, item) => sum + (item.estimatedCost || 0), 0).toLocaleString()}
+                 </p>
               </div>
               <MapPin className="w-8 h-8 text-warning" />
             </div>
@@ -413,7 +413,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({ onBack }) => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="estimatedCost">Estimated Cost ($)</Label>
+                <Label htmlFor="estimatedCost">Estimated Cost (OMR)</Label>
                 <Input
                   id="estimatedCost"
                   type="number"
@@ -568,7 +568,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({ onBack }) => {
                       
                       {item.estimatedCost > 0 && (
                         <div className="text-sm font-medium text-foreground">
-                          Estimated Cost: ${item.estimatedCost.toLocaleString()}
+                          Estimated Cost: OMR {item.estimatedCost.toLocaleString()}
                         </div>
                       )}
                     </div>
