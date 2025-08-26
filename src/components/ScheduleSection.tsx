@@ -8,23 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
+import { ScheduleService, type ScheduleItem } from '@/services/schedule-service';
 import { CalendarDays, Clock, MapPin, User, Phone, Edit, Trash2, Plus, Filter, Search } from 'lucide-react';
-
-interface ScheduleItem {
-  id: string;
-  title: string;
-  clientName: string;
-  clientPhone: string;
-  propertyLocation: string;
-  propertyType: string;
-  date: string;
-  time: string;
-  duration: number; // in minutes
-  status: 'scheduled' | 'confirmed' | 'in-progress' | 'completed' | 'cancelled';
-  notes: string;
-  priority: 'low' | 'medium' | 'high';
-  estimatedCost: number;
-}
 
 interface ScheduleSectionProps {
   onBack?: () => void;
@@ -40,6 +25,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({ onBack }) => {
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Form state
   const [formData, setFormData] = useState<Partial<ScheduleItem>>({
@@ -53,19 +39,31 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({ onBack }) => {
     duration: 120,
     status: 'scheduled',
     notes: '',
-    priority: 'medium',
-    estimatedCost: 0
+    priority: 'medium'
   });
 
-  // Load schedule items from localStorage
+  // Load schedule items from Supabase
   useEffect(() => {
-    const saved = localStorage.getItem('schedule-items');
-    if (saved) {
-      const items = JSON.parse(saved);
-      setScheduleItems(items);
-      setFilteredItems(items);
-    }
+    loadSchedules();
   }, []);
+
+  const loadSchedules = async () => {
+    try {
+      setIsLoading(true);
+      const schedules = await ScheduleService.getSchedules();
+      setScheduleItems(schedules);
+      setFilteredItems(schedules);
+    } catch (error) {
+      console.error('Failed to load schedules:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load schedules from database.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Filter and search functionality
   useEffect(() => {
@@ -78,7 +76,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({ onBack }) => {
     if (searchTerm) {
       filtered = filtered.filter(item =>
         item.clientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.propertyLocation.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (item.propertyLocation && item.propertyLocation.toLowerCase().includes(searchTerm.toLowerCase())) ||
         item.title.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
@@ -86,12 +84,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({ onBack }) => {
     setFilteredItems(filtered);
   }, [scheduleItems, filterStatus, searchTerm]);
 
-  const saveScheduleItems = (items: ScheduleItem[]) => {
-    setScheduleItems(items);
-    localStorage.setItem('schedule-items', JSON.stringify(items));
-  };
-
-  const handleAddSchedule = () => {
+  const handleAddSchedule = async () => {
     if (!formData.title || !formData.clientName || !formData.date || !formData.time) {
       toast({
         title: "Missing Information",
@@ -101,52 +94,102 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({ onBack }) => {
       return;
     }
 
-    const newItem: ScheduleItem = {
-      ...formData as ScheduleItem,
-      id: Date.now().toString()
-    };
-
-    const updatedItems = [...scheduleItems, newItem];
-    saveScheduleItems(updatedItems);
-
-    toast({
-      title: "Schedule Added",
-      description: `Appointment scheduled for ${formData.clientName} on ${formData.date}`,
-      variant: "default"
-    });
-
-    setShowAddForm(false);
-    resetForm();
+    try {
+      setIsLoading(true);
+      const newSchedule = await ScheduleService.createSchedule(formData as Omit<ScheduleItem, 'id'>);
+      
+      if (newSchedule) {
+        await loadSchedules(); // Refresh the list
+        toast({
+          title: "Schedule Added",
+          description: `Appointment scheduled for ${formData.clientName} on ${formData.date}`,
+          variant: "default"
+        });
+        setShowAddForm(false);
+        resetForm();
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to create appointment. Please try again.",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      console.error('Error creating schedule:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create appointment. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleEditSchedule = () => {
+  const handleEditSchedule = async () => {
     if (!editingItem) return;
 
-    const updatedItems = scheduleItems.map(item =>
-      item.id === editingItem.id ? { ...formData as ScheduleItem, id: editingItem.id } : item
-    );
-
-    saveScheduleItems(updatedItems);
-
-    toast({
-      title: "Schedule Updated",
-      description: "Appointment has been updated successfully.",
-      variant: "default"
-    });
-
-    setEditingItem(null);
-    resetForm();
+    try {
+      setIsLoading(true);
+      const updatedSchedule = await ScheduleService.updateSchedule(editingItem.id, formData);
+      
+      if (updatedSchedule) {
+        await loadSchedules(); // Refresh the list
+        toast({
+          title: "Schedule Updated",
+          description: "Appointment has been updated successfully.",
+          variant: "default"
+        });
+        setEditingItem(null);
+        resetForm();
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to update appointment. Please try again.",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      console.error('Error updating schedule:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update appointment. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleDeleteSchedule = (id: string) => {
-    const updatedItems = scheduleItems.filter(item => item.id !== id);
-    saveScheduleItems(updatedItems);
-
-    toast({
-      title: "Schedule Deleted",
-      description: "Appointment has been removed from the schedule.",
-      variant: "default"
-    });
+  const handleDeleteSchedule = async (id: string) => {
+    try {
+      setIsLoading(true);
+      const success = await ScheduleService.deleteSchedule(id);
+      
+      if (success) {
+        await loadSchedules(); // Refresh the list
+        toast({
+          title: "Schedule Deleted",
+          description: "Appointment has been removed from the schedule.",
+          variant: "default"
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to delete appointment. Please try again.",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      console.error('Error deleting schedule:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete appointment. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const resetForm = () => {
@@ -161,8 +204,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({ onBack }) => {
       duration: 120,
       status: 'scheduled',
       notes: '',
-      priority: 'medium',
-      estimatedCost: 0
+      priority: 'medium'
     });
   };
 
@@ -176,7 +218,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({ onBack }) => {
     switch (status) {
       case 'scheduled': return 'bg-blue-100 text-blue-800 border-blue-200';
       case 'confirmed': return 'bg-green-100 text-green-800 border-green-200';
-      case 'in-progress': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'rescheduled': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
       case 'completed': return 'bg-gray-100 text-gray-800 border-gray-200';
       case 'cancelled': return 'bg-red-100 text-red-800 border-red-200';
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
@@ -277,10 +319,8 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({ onBack }) => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Revenue (Est.)</p>
-                <p className="text-2xl font-bold text-foreground">
-                   OMR {scheduleItems.reduce((sum, item) => sum + (item.estimatedCost || 0), 0).toLocaleString()}
-                 </p>
+                <p className="text-sm text-muted-foreground">Total Schedules</p>
+                <p className="text-2xl font-bold text-foreground">{scheduleItems.length}</p>
               </div>
               <MapPin className="w-8 h-8 text-warning" />
             </div>
@@ -405,23 +445,13 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({ onBack }) => {
                   <SelectContent>
                     <SelectItem value="scheduled">Scheduled</SelectItem>
                     <SelectItem value="confirmed">Confirmed</SelectItem>
-                    <SelectItem value="in-progress">In Progress</SelectItem>
+                    <SelectItem value="rescheduled">Rescheduled</SelectItem>
                     <SelectItem value="completed">Completed</SelectItem>
                     <SelectItem value="cancelled">Cancelled</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="estimatedCost">Estimated Cost (OMR)</Label>
-                <Input
-                  id="estimatedCost"
-                  type="number"
-                  value={formData.estimatedCost}
-                  onChange={(e) => setFormData({...formData, estimatedCost: parseFloat(e.target.value) || 0})}
-                  placeholder="500"
-                />
-              </div>
             </div>
 
             <div className="space-y-2">
@@ -449,8 +479,9 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({ onBack }) => {
               <Button 
                 onClick={editingItem ? handleEditSchedule : handleAddSchedule}
                 className="bg-primary hover:bg-primary-dark text-primary-foreground"
+                disabled={isLoading}
               >
-                {editingItem ? 'Update Appointment' : 'Schedule Appointment'}
+                {isLoading ? 'Saving...' : (editingItem ? 'Update Appointment' : 'Schedule Appointment')}
               </Button>
               <Button 
                 variant="outline" 
@@ -492,7 +523,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({ onBack }) => {
                     <SelectItem value="all">All Status</SelectItem>
                     <SelectItem value="scheduled">Scheduled</SelectItem>
                     <SelectItem value="confirmed">Confirmed</SelectItem>
-                    <SelectItem value="in-progress">In Progress</SelectItem>
+                    <SelectItem value="rescheduled">Rescheduled</SelectItem>
                     <SelectItem value="completed">Completed</SelectItem>
                     <SelectItem value="cancelled">Cancelled</SelectItem>
                   </SelectContent>
@@ -564,12 +595,6 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({ onBack }) => {
                         <p className="text-sm text-muted-foreground bg-accent/30 p-2 rounded">
                           {item.notes}
                         </p>
-                      )}
-                      
-                      {item.estimatedCost > 0 && (
-                        <div className="text-sm font-medium text-foreground">
-                          Estimated Cost: OMR {item.estimatedCost.toLocaleString()}
-                        </div>
                       )}
                     </div>
                     

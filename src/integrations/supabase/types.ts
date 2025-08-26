@@ -123,6 +123,130 @@ export type Database = {
         }
         Relationships: []
       }
+      invoice_services: {
+        Row: {
+          amount: number
+          created_at: string | null
+          description: string
+          id: string
+          invoice_id: string
+          quantity: number
+          rate: number
+        }
+        Insert: {
+          amount?: number
+          created_at?: string | null
+          description: string
+          id?: string
+          invoice_id: string
+          quantity?: number
+          rate?: number
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          description?: string
+          id?: string
+          invoice_id?: string
+          quantity?: number
+          rate?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoice_services_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoices: {
+        Row: {
+          amount: number
+          client_email: string | null
+          client_name: string
+          client_phone: string | null
+          created_at: string | null
+          description: string | null
+          due_date: string
+          id: string
+          inspection_date: string | null
+          inspection_id: string | null
+          invoice_number: string
+          issue_date: string
+          notes: string | null
+          payment_date: string | null
+          payment_method: string | null
+          property_area: number | null
+          property_location: string
+          property_type: string | null
+          status: string | null
+          tax: number
+          total_amount: number
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          client_email?: string | null
+          client_name: string
+          client_phone?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_date: string
+          id?: string
+          inspection_date?: string | null
+          inspection_id?: string | null
+          invoice_number: string
+          issue_date: string
+          notes?: string | null
+          payment_date?: string | null
+          payment_method?: string | null
+          property_area?: number | null
+          property_location: string
+          property_type?: string | null
+          status?: string | null
+          tax?: number
+          total_amount?: number
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          client_email?: string | null
+          client_name?: string
+          client_phone?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_date?: string
+          id?: string
+          inspection_date?: string | null
+          inspection_id?: string | null
+          invoice_number?: string
+          issue_date?: string
+          notes?: string | null
+          payment_date?: string | null
+          payment_method?: string | null
+          property_area?: number | null
+          property_location?: string
+          property_type?: string | null
+          status?: string | null
+          tax?: number
+          total_amount?: number
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_inspection_id_fkey"
+            columns: ["inspection_id"]
+            isOneToOne: false
+            referencedRelation: "inspections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string | null
@@ -145,6 +269,63 @@ export type Database = {
           email?: string
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      schedules: {
+        Row: {
+          client_email: string | null
+          client_name: string
+          client_phone: string | null
+          created_at: string | null
+          date: string
+          duration: number | null
+          id: string
+          notes: string | null
+          priority: string | null
+          property_location: string | null
+          property_type: string | null
+          status: string | null
+          time: string
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          client_email?: string | null
+          client_name: string
+          client_phone?: string | null
+          created_at?: string | null
+          date: string
+          duration?: number | null
+          id?: string
+          notes?: string | null
+          priority?: string | null
+          property_location?: string | null
+          property_type?: string | null
+          status?: string | null
+          time: string
+          title: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          client_email?: string | null
+          client_name?: string
+          client_phone?: string | null
+          created_at?: string | null
+          date?: string
+          duration?: number | null
+          id?: string
+          notes?: string | null
+          priority?: string | null
+          property_location?: string | null
+          property_type?: string | null
+          status?: string | null
+          time?: string
+          title?: string
           updated_at?: string | null
           user_id?: string
         }

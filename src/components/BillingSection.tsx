@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { StorageService } from '@/services/storage-service';
 import type { SavedInspection } from '@/services/storage-service';
+import { InvoiceService, type BillingItem, type ServiceItem } from '@/services/invoice-service';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -29,38 +30,6 @@ import {
   Send
 } from 'lucide-react';
 
-interface BillingItem {
-  id: string;
-  invoiceNumber: string;
-  clientName: string;
-  clientEmail: string;
-  clientPhone: string;
-  propertyLocation: string;
-  propertyType: 'residential' | 'commercial';
-  propertyArea: number;
-  inspectionDate: string;
-  issueDate: string;
-  dueDate: string;
-  amount: number;
-  tax: number;
-  totalAmount: number;
-  status: 'draft' | 'sent' | 'paid' | 'overdue' | 'cancelled';
-  paymentMethod?: string;
-  paymentDate?: string;
-  description: string;
-  services: ServiceItem[];
-  notes: string;
-  inspectionId?: string; // Link to source inspection
-}
-
-interface ServiceItem {
-  id: string;
-  description: string;
-  quantity: number;
-  rate: number;
-  amount: number;
-}
-
 interface BillingSectionProps {
   onBack?: () => void;
 }
@@ -77,6 +46,7 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [availableInspections, setAvailableInspections] = useState<SavedInspection[]>([]);
   const [selectedInspection, setSelectedInspection] = useState<SavedInspection | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Form state
   const [formData, setFormData] = useState<Partial<BillingItem>>({
@@ -99,18 +69,29 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
     notes: ''
   });
 
-  // Load billing items from localStorage and inspections
+  // Load billing items from Supabase and inspections
   useEffect(() => {
-    const saved = localStorage.getItem('billing-items');
-    if (saved) {
-      const items = JSON.parse(saved);
-      setBillingItems(items);
-      setFilteredItems(items);
-    }
-    
-    // Load available inspections
+    loadBillingItems();
     loadInspections();
   }, []);
+
+  const loadBillingItems = async () => {
+    try {
+      setIsLoading(true);
+      const invoices = await InvoiceService.getInvoices();
+      setBillingItems(invoices);
+      setFilteredItems(invoices);
+    } catch (error) {
+      console.error('Failed to load invoices:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load invoices from database.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const loadInspections = async () => {
     try {
@@ -157,12 +138,7 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
     }
   }, [formData.propertyType, formData.propertyArea]);
 
-  const saveBillingItems = (items: BillingItem[]) => {
-    setBillingItems(items);
-    localStorage.setItem('billing-items', JSON.stringify(items));
-  };
-
-  const handleCreateInvoice = () => {
+  const handleCreateInvoice = async () => {
     if (!formData.clientName || !formData.propertyLocation || !formData.propertyArea || !formData.propertyType) {
       toast({
         title: "Missing Information",
@@ -172,90 +148,147 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
       return;
     }
 
-    // Auto-generate inspection service based on property info
-    const rate = formData.propertyType === 'commercial' ? 1 : 0.7;
-    const autoService: ServiceItem = {
-      id: Date.now().toString(),
-      description: `Property Inspection - ${formData.propertyType} (${formData.propertyArea} sqm)`,
-      quantity: formData.propertyArea || 0,
-      rate: rate,
-      amount: (formData.propertyArea || 0) * rate
-    };
-    
-    const updatedFormData = {
-      ...formData,
-      services: [autoService]
-    };
-    
-    // Calculate totals with the service
-    const subtotal = autoService.amount;
-    const tax = subtotal * 0.05; // 5% tax
-    const totalAmount = subtotal + tax;
+    try {
+      setIsLoading(true);
+      
+      // Auto-generate inspection service based on property info
+      const rate = formData.propertyType === 'commercial' ? 1 : 0.7;
+      const autoService: ServiceItem = {
+        id: Date.now().toString(),
+        description: `Property Inspection - ${formData.propertyType} (${formData.propertyArea} sqm)`,
+        quantity: formData.propertyArea || 0,
+        rate: rate,
+        amount: (formData.propertyArea || 0) * rate
+      };
+      
+      const updatedFormData = {
+        ...formData,
+        services: [autoService]
+      };
+      
+      // Calculate totals with the service
+      const subtotal = autoService.amount;
+      const tax = subtotal * 0.05; // 5% tax
+      const totalAmount = subtotal + tax;
 
-    const newItem: BillingItem = {
-      ...updatedFormData,
-      id: editingItem?.id || Date.now().toString(),
-      amount: subtotal,
-      tax: tax,
-      totalAmount: totalAmount,
-      inspectionId: selectedInspection?.id
-    } as BillingItem;
+      const invoiceData: Omit<BillingItem, 'id'> = {
+        ...updatedFormData,
+        amount: subtotal,
+        tax: tax,
+        totalAmount: totalAmount,
+        inspectionId: selectedInspection?.id
+      } as Omit<BillingItem, 'id'>;
 
-    if (editingItem) {
-      const updatedItems = billingItems.map(item =>
-        item.id === editingItem.id ? newItem : item
-      );
-      saveBillingItems(updatedItems);
-      toast({
-        title: "Invoice Updated",
-        description: "Invoice has been updated successfully.",
-        variant: "default"
-      });
-      setEditingItem(null);
-    } else {
-      const updatedItems = [...billingItems, newItem];
-      saveBillingItems(updatedItems);
-      toast({
-        title: "Invoice Created",
-        description: `Invoice ${formData.invoiceNumber} has been created successfully.`,
-        variant: "default"
-      });
-    }
-
-    setShowCreateForm(false);
-    resetForm();
-  };
-
-  const handleDeleteInvoice = (id: string) => {
-    const updatedItems = billingItems.filter(item => item.id !== id);
-    saveBillingItems(updatedItems);
-
-    toast({
-      title: "Invoice Deleted",
-      description: "Invoice has been removed from the system.",
-      variant: "default"
-    });
-  };
-
-  const handleStatusChange = (id: string, status: BillingItem['status']) => {
-    const updatedItems = billingItems.map(item => {
-      if (item.id === id) {
-        const updates: Partial<BillingItem> = { status };
-        if (status === 'paid') {
-          updates.paymentDate = new Date().toISOString().split('T')[0];
+      let result;
+      if (editingItem) {
+        result = await InvoiceService.updateInvoice(editingItem.id, invoiceData);
+        if (result) {
+          toast({
+            title: "Invoice Updated",
+            description: "Invoice has been updated successfully.",
+            variant: "default"
+          });
         }
-        return { ...item, ...updates };
+      } else {
+        result = await InvoiceService.createInvoice(invoiceData);
+        if (result) {
+          toast({
+            title: "Invoice Created",
+            description: `Invoice ${formData.invoiceNumber} has been created successfully.`,
+            variant: "default"
+          });
+        }
       }
-      return item;
-    });
 
-    saveBillingItems(updatedItems);
+      if (result) {
+        await loadBillingItems(); // Refresh the list
+        setShowCreateForm(false);
+        setEditingItem(null);
+        resetForm();
+      } else {
+        toast({
+          title: "Error",
+          description: `Failed to ${editingItem ? 'update' : 'create'} invoice. Please try again.`,
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      console.error('Error saving invoice:', error);
+      toast({
+        title: "Error",
+        description: `Failed to ${editingItem ? 'update' : 'create'} invoice. Please try again.`,
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    toast({
-      title: "Status Updated",
-      description: `Invoice status changed to ${status}.`,
-      variant: "default"
-    });
+  const handleDeleteInvoice = async (id: string) => {
+    try {
+      setIsLoading(true);
+      const success = await InvoiceService.deleteInvoice(id);
+      
+      if (success) {
+        await loadBillingItems(); // Refresh the list
+        toast({
+          title: "Invoice Deleted",
+          description: "Invoice has been removed from the system.",
+          variant: "default"
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to delete invoice. Please try again.",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      console.error('Error deleting invoice:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete invoice. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleStatusChange = async (id: string, status: BillingItem['status']) => {
+    try {
+      setIsLoading(true);
+      const updates: Partial<BillingItem> = { status };
+      if (status === 'paid') {
+        updates.paymentDate = new Date().toISOString().split('T')[0];
+      }
+      
+      const result = await InvoiceService.updateInvoice(id, updates);
+      
+      if (result) {
+        await loadBillingItems(); // Refresh the list
+        toast({
+          title: "Status Updated",
+          description: `Invoice status changed to ${status}.`,
+          variant: "default"
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to update invoice status. Please try again.",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      console.error('Error updating invoice status:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update invoice status. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const resetForm = () => {
@@ -816,12 +849,14 @@ const BillingSection: React.FC<BillingSectionProps> = ({ onBack }) => {
             </div>
 
             <div className="flex gap-3 pt-4">
-              <Button 
-                onClick={handleCreateInvoice}
-                className="bg-primary hover:bg-primary-dark text-primary-foreground"
-              >
-                {editingItem ? 'Update Invoice' : 'Create Invoice'}
-              </Button>
+               <Button 
+                 onClick={handleCreateInvoice}
+                 className="bg-primary hover:bg-primary-dark text-primary-foreground"
+                 disabled={isLoading}
+               >
+                 <Plus className="w-4 h-4 mr-2" />
+                 {isLoading ? 'Saving...' : (editingItem ? 'Update Invoice' : 'Create Invoice')}
+               </Button>
               <Button 
                 variant="outline" 
                 onClick={() => {
