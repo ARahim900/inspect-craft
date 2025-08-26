@@ -47,34 +47,58 @@ export class LocalStorageService {
   // Upload photo (stores as base64 in localStorage)
   static async uploadPhoto(file: File): Promise<string | null> {
     try {
-      console.log('LocalStorage: Uploading photo:', file.name);
+      console.log('LocalStorage: Starting photo upload...', { 
+        fileName: file.name, 
+        fileSize: file.size, 
+        fileType: file.type 
+      });
+      
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        console.error('Invalid file type. Only images are allowed.');
+        throw new Error('Invalid file type. Only images are allowed.');
+      }
       
       // Check file size (localStorage has limits)
       if (file.size > 5 * 1024 * 1024) { // 5MB limit
         console.error('File too large for local storage (max 5MB)');
-        return null;
+        throw new Error('File too large. Maximum size is 5MB.');
       }
 
+      console.log('Converting file to base64...');
       const base64 = await this.fileToBase64(file);
+      console.log('Base64 conversion completed, length:', base64.length);
+      
       const photoId = `photo_${Date.now()}_${Math.random().toString(36).substring(7)}`;
       
       // Store photo in localStorage
       const photos = this.getPhotos();
+      console.log('Current photos count:', Object.keys(photos).length);
+      
       photos[photoId] = base64;
       
       try {
-        localStorage.setItem(this.PHOTOS_KEY, JSON.stringify(photos));
+        const photosJson = JSON.stringify(photos);
+        console.log('Attempting to save photo to localStorage, total size:', photosJson.length);
+        localStorage.setItem(this.PHOTOS_KEY, photosJson);
         console.log('LocalStorage: Photo uploaded successfully:', photoId);
-        return photoId; // Return the ID instead of base64 to save space in inspection data
-      } catch (e) {
-        console.error('LocalStorage quota exceeded. Clearing old photos...');
-        // Clear old photos if storage is full
-        localStorage.setItem(this.PHOTOS_KEY, JSON.stringify({ [photoId]: base64 }));
         return photoId;
+      } catch (storageError) {
+        console.error('LocalStorage quota exceeded, attempting recovery...', storageError);
+        
+        // Try to clear old photos and save just this one
+        try {
+          localStorage.setItem(this.PHOTOS_KEY, JSON.stringify({ [photoId]: base64 }));
+          console.log('LocalStorage: Photo saved after clearing old photos:', photoId);
+          return photoId;
+        } catch (recoveryError) {
+          console.error('Failed to save photo even after clearing storage:', recoveryError);
+          throw new Error('Storage quota exceeded and recovery failed. Please try a smaller image.');
+        }
       }
     } catch (error) {
       console.error('LocalStorage: Error uploading photo:', error);
-      return null;
+      throw error; // Re-throw the error so it can be handled by the calling code
     }
   }
 

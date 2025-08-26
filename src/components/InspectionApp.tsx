@@ -1013,7 +1013,14 @@ function InspectionForm({
   const handlePhotoUpload = async (areaId: number, itemId: number, file: File) => {
     setIsUploadingPhoto(true);
     try {
-      console.log('Uploading photo:', { areaId, itemId, fileName: file.name, fileSize: file.size, fileType: file.type });
+      console.log('Starting photo upload process:', { 
+        areaId, 
+        itemId, 
+        fileName: file.name, 
+        fileSize: file.size, 
+        fileType: file.type 
+      });
+      
       const photoURL = await StorageService.uploadPhoto(file);
       
       if (photoURL) {
@@ -1035,22 +1042,23 @@ function InspectionForm({
           })
         }));
         toast({
-          title: "Photo uploaded",
-          description: "Photo has been added to the inspection point",
+          title: "Photo uploaded successfully",
+          description: `Photo "${file.name}" added to inspection point`,
         });
       } else {
         console.error('Photo upload failed - no URL returned');
         toast({
           title: "Upload failed",
-          description: "Failed to upload photo. Check console for details.",
+          description: "Could not upload photo. Please try a smaller image (max 5MB).",
           variant: "destructive",
         });
       }
     } catch (error) {
       console.error('Error in handlePhotoUpload:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
       toast({
-        title: "Error",
-        description: `Upload failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        title: "Upload failed",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
