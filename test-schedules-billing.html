@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Schedules & Billing - Supabase Connection</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        button.danger {
+            background: #f44336;
+        }
+        button.danger:hover {
+            background: #da190b;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        h2 {
+            color: #555;
+            margin-bottom: 15px;
+        }
+        .config-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .auth-section {
+            background: #f0f7ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .auth-status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Schedules & Billing - Supabase Testing</h1>
+        
+        <div class="config-info">
+            <strong>Supabase URL:</strong> <span id="supabase-url"></span><br>
+            <strong>Status:</strong> <span id="connection-status">Not connected</span>
+        </div>
+
+        <!-- Authentication Section -->
+        <div class="auth-section">
+            <h2>🔐 Authentication</h2>
+            <div>
+                <input type="email" id="auth-email" placeholder="Email" value="test@example.com">
+                <input type="password" id="auth-password" placeholder="Password" value="testpassword123">
+                <button onclick="signIn()">Sign In</button>
+                <button onclick="signUp()">Sign Up</button>
+                <button onclick="signOut()">Sign Out</button>
+                <button onclick="checkAuthStatus()">Check Auth Status</button>
+            </div>
+            <div id="auth-status" class="auth-status"></div>
+        </div>
+
+        <!-- Test Sections -->
+        <div class="test-section">
+            <h2>1. Test Basic Connection</h2>
+            <button onclick="testConnection()">Test Connection</button>
+            <div id="connection-result" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>2. Check Database Tables</h2>
+            <button onclick="checkTables()">Check All Tables</button>
+            <button onclick="checkSchedulesTable()">Check Schedules Table</button>
+            <button onclick="checkInvoicesTable()">Check Invoices Table</button>
+            <div id="tables-result" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>3. Test Schedules Operations</h2>
+            <button onclick="testScheduleInsert()">Test Create Schedule</button>
+            <button onclick="testScheduleRead()">Test Read Schedules</button>
+            <button onclick="testScheduleUpdate()">Test Update Schedule</button>
+            <button onclick="testScheduleDelete()">Test Delete Schedule</button>
+            <div id="schedule-result" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>4. Test Invoices Operations</h2>
+            <button onclick="testInvoiceInsert()">Test Create Invoice</button>
+            <button onclick="testInvoiceRead()">Test Read Invoices</button>
+            <button onclick="testInvoiceUpdate()">Test Update Invoice</button>
+            <button onclick="testInvoiceDelete()">Test Delete Invoice</button>
+            <div id="invoice-result" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>5. Check Row Level Security (RLS)</h2>
+            <button onclick="checkRLS()">Check RLS Status</button>
+            <button onclick="testRLSPolicies()">Test RLS Policies</button>
+            <div id="rls-result" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>6. Run Migration Scripts</h2>
+            <button onclick="runMigrations()" class="danger">Run All Migrations (Careful!)</button>
+            <button onclick="disableRLS()" class="danger">Disable RLS (Testing Only!)</button>
+            <div id="migration-result" class="result"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+        const SUPABASE_URL = "https://epirocvvdzxiypdvdlwf.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwaXJvY3Z2ZHp4aXlwZHZkbHdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQzNjI1MzgsImV4cCI6MjA2OTkzODUzOH0.Y0VlkV8XqO55En1zTLZ7iinorMHt72O37oFDbhywdTE";
+
+        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        // Display configuration
+        document.getElementById('supabase-url').textContent = SUPABASE_URL;
+
+        let testScheduleId = null;
+        let testInvoiceId = null;
+
+        // Make functions globally accessible
+        window.supabase = supabase;
+
+        // Authentication functions
+        window.signIn = async function() {
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                });
+                
+                if (error) throw error;
+                
+                updateAuthStatus('✅ Signed in successfully!', 'success');
+                console.log('Auth data:', data);
+            } catch (error) {
+                updateAuthStatus(`❌ Sign in failed: ${error.message}`, 'error');
+            }
+        };
+
+        window.signUp = async function() {
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+            
+            try {
+                const { data, error } = await supabase.auth.signUp({
+                    email,
+                    password
+                });
+                
+                if (error) throw error;
+                
+                updateAuthStatus('✅ Sign up successful! Check email for confirmation.', 'success');
+                console.log('Sign up data:', data);
+            } catch (error) {
+                updateAuthStatus(`❌ Sign up failed: ${error.message}`, 'error');
+            }
+        };
+
+        window.signOut = async function() {
+            try {
+                const { error } = await supabase.auth.signOut();
+                if (error) throw error;
+                
+                updateAuthStatus('✅ Signed out successfully!', 'success');
+            } catch (error) {
+                updateAuthStatus(`❌ Sign out failed: ${error.message}`, 'error');
+            }
+        };
+
+        window.checkAuthStatus = async function() {
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                
+                if (user) {
+                    updateAuthStatus(`✅ Authenticated as: ${user.email}\nUser ID: ${user.id}`, 'success');
+                } else {
+                    updateAuthStatus('⚠️ Not authenticated', 'warning');
+                }
+            } catch (error) {
+                updateAuthStatus(`❌ Error checking auth: ${error.message}`, 'error');
+            }
+        };
+
+        function updateAuthStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('auth-status');
+            statusDiv.className = `auth-status ${type}`;
+            statusDiv.textContent = message;
+        }
+
+        // Test functions
+        window.testConnection = async function() {
+            const resultDiv = document.getElementById('connection-result');
+            try {
+                // Test basic connection by attempting to get user
+                const { data: { user } } = await supabase.auth.getUser();
+                
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ Connected to Supabase!\nAuthenticated: ${user ? 'Yes - ' + user.email : 'No (anonymous)'}`;
+                document.getElementById('connection-status').textContent = 'Connected';
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Connection failed:\n${error.message}`;
+                document.getElementById('connection-status').textContent = 'Failed';
+            }
+        };
+
+        window.checkTables = async function() {
+            const resultDiv = document.getElementById('tables-result');
+            try {
+                const tables = ['schedules', 'invoices', 'invoice_services', 'inspections', 'profiles'];
+                const results = [];
+                
+                for (const table of tables) {
+                    try {
+                        const { data, error } = await supabase
+                            .from(table)
+                            .select('*')
+                            .limit(0);
+                        
+                        if (error) {
+                            results.push(`❌ ${table}: ${error.message}`);
+                        } else {
+                            results.push(`✅ ${table}: EXISTS`);
+                        }
+                    } catch (err) {
+                        results.push(`❌ ${table}: ${err.message}`);
+                    }
+                }
+                
+                resultDiv.className = 'result info';
+                resultDiv.textContent = 'Table Status:\n' + results.join('\n');
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Error checking tables:\n${error.message}`;
+            }
+        };
+
+        window.checkSchedulesTable = async function() {
+            const resultDiv = document.getElementById('tables-result');
+            try {
+                const { data, error, count } = await supabase
+                    .from('schedules')
+                    .select('*', { count: 'exact' });
+                
+                if (error) throw error;
+                
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ Schedules table exists!\nTotal records: ${count || 0}\n\nSample data:\n${JSON.stringify(data?.slice(0, 2), null, 2)}`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Schedules table error:\n${error.message}\n\nThis table might not exist. Run migrations to create it.`;
+            }
+        };
+
+        window.checkInvoicesTable = async function() {
+            const resultDiv = document.getElementById('tables-result');
+            try {
+                const { data, error, count } = await supabase
+                    .from('invoices')
+                    .select('*', { count: 'exact' });
+                
+                if (error) throw error;
+                
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ Invoices table exists!\nTotal records: ${count || 0}\n\nSample data:\n${JSON.stringify(data?.slice(0, 2), null, 2)}`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Invoices table error:\n${error.message}\n\nThis table might not exist. Run migrations to create it.`;
+            }
+        };
+
+        window.testScheduleInsert = async function() {
+            const resultDiv = document.getElementById('schedule-result');
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                
+                const testSchedule = {
+                    title: 'Test Inspection',
+                    client_name: 'Test Client',
+                    client_email: 'test@example.com',
+                    client_phone: '+971501234567',
+                    date: new Date().toISOString().split('T')[0],
+                    time: '10:00:00',
+                    duration: 120,
+                    status: 'scheduled',
+                    priority: 'medium',
+                    property_location: 'Test Location, Dubai',
+                    property_type: 'villa',
+                    notes: 'Test schedule created for debugging',
+                    user_id: user?.id || null
+                };
+                
+                const { data, error } = await supabase
+                    .from('schedules')
+                    .insert(testSchedule)
+                    .select()
+                    .single();
+                
+                if (error) throw error;
+                
+                testScheduleId = data.id;
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ Schedule created successfully!\nID: ${data.id}\n\nData:\n${JSON.stringify(data, null, 2)}`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Failed to create schedule:\n${error.message}\n\nPossible issues:\n- Table doesn't exist\n- RLS policies blocking insert\n- Not authenticated`;
+            }
+        };
+
+        window.testScheduleRead = async function() {
+            const resultDiv = document.getElementById('schedule-result');
+            try {
+                const { data, error, count } = await supabase
+                    .from('schedules')
+                    .select('*', { count: 'exact' })
+                    .order('created_at', { ascending: false })
+                    .limit(5);
+                
+                if (error) throw error;
+                
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ Schedules retrieved!\nTotal: ${count || 0}\n\nData:\n${JSON.stringify(data, null, 2)}`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Failed to read schedules:\n${error.message}`;
+            }
+        };
+
+        window.testScheduleUpdate = async function() {
+            const resultDiv = document.getElementById('schedule-result');
+            
+            if (!testScheduleId) {
+                resultDiv.className = 'result warning';
+                resultDiv.textContent = '⚠️ Please create a test schedule first';
+                return;
+            }
+            
+            try {
+                const { data, error } = await supabase
+                    .from('schedules')
+                    .update({ 
+                        status: 'confirmed',
+                        notes: 'Updated for testing at ' + new Date().toISOString()
+                    })
+                    .eq('id', testScheduleId)
+                    .select()
+                    .single();
+                
+                if (error) throw error;
+                
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ Schedule updated!\n\nUpdated data:\n${JSON.stringify(data, null, 2)}`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Failed to update schedule:\n${error.message}`;
+            }
+        };
+
+        window.testScheduleDelete = async function() {
+            const resultDiv = document.getElementById('schedule-result');
+            
+            if (!testScheduleId) {
+                resultDiv.className = 'result warning';
+                resultDiv.textContent = '⚠️ Please create a test schedule first';
+                return;
+            }
+            
+            try {
+                const { error } = await supabase
+                    .from('schedules')
+                    .delete()
+                    .eq('id', testScheduleId);
+                
+                if (error) throw error;
+                
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ Schedule deleted successfully!`;
+                testScheduleId = null;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Failed to delete schedule:\n${error.message}`;
+            }
+        };
+
+        window.testInvoiceInsert = async function() {
+            const resultDiv = document.getElementById('invoice-result');
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                
+                const testInvoice = {
+                    invoice_number: `INV-TEST-${Date.now()}`,
+                    client_name: 'Test Client',
+                    client_email: 'test@example.com',
+                    client_phone: '+971501234567',
+                    property_location: 'Test Property, Dubai',
+                    property_type: 'residential',
+                    property_area: 250,
+                    inspection_date: new Date().toISOString().split('T')[0],
+                    issue_date: new Date().toISOString().split('T')[0],
+                    due_date: new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0],
+                    amount: 175.00,
+                    tax: 8.75,
+                    total_amount: 183.75,
+                    status: 'draft',
+                    description: 'Test invoice for debugging',
+                    notes: 'This is a test invoice',
+                    user_id: user?.id || null
+                };
+                
+                const { data, error } = await supabase
+                    .from('invoices')
+                    .insert(testInvoice)
+                    .select()
+                    .single();
+                
+                if (error) throw error;
+                
+                testInvoiceId = data.id;
+                
+                // Try to add a service item
+                const serviceItem = {
+                    invoice_id: data.id,
+                    description: 'Property Inspection - Residential (250 sqm)',
+                    quantity: 250,
+                    rate: 0.7,
+                    amount: 175
+                };
+                
+                const { data: serviceData, error: serviceError } = await supabase
+                    .from('invoice_services')
+                    .insert(serviceItem)
+                    .select();
+                
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ Invoice created successfully!\nID: ${data.id}\n\nInvoice Data:\n${JSON.stringify(data, null, 2)}\n\nService Item: ${serviceError ? 'Failed - ' + serviceError.message : 'Created'}`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Failed to create invoice:\n${error.message}\n\nPossible issues:\n- Table doesn't exist\n- RLS policies blocking insert\n- Not authenticated`;
+            }
+        };
+
+        window.testInvoiceRead = async function() {
+            const resultDiv = document.getElementById('invoice-result');
+            try {
+                const { data, error, count } = await supabase
+                    .from('invoices')
+                    .select(`
+                        *,
+                        invoice_services (*)
+                    `, { count: 'exact' })
+                    .order('created_at', { ascending: false })
+                    .limit(5);
+                
+                if (error) throw error;
+                
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ Invoices retrieved!\nTotal: ${count || 0}\n\nData:\n${JSON.stringify(data, null, 2)}`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Failed to read invoices:\n${error.message}`;
+            }
+        };
+
+        window.testInvoiceUpdate = async function() {
+            const resultDiv = document.getElementById('invoice-result');
+            
+            if (!testInvoiceId) {
+                resultDiv.className = 'result warning';
+                resultDiv.textContent = '⚠️ Please create a test invoice first';
+                return;
+            }
+            
+            try {
+                const { data, error } = await supabase
+                    .from('invoices')
+                    .update({ 
+                        status: 'sent',
+                        notes: 'Updated for testing at ' + new Date().toISOString()
+                    })
+                    .eq('id', testInvoiceId)
+                    .select()
+                    .single();
+                
+                if (error) throw error;
+                
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ Invoice updated!\n\nUpdated data:\n${JSON.stringify(data, null, 2)}`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Failed to update invoice:\n${error.message}`;
+            }
+        };
+
+        window.testInvoiceDelete = async function() {
+            const resultDiv = document.getElementById('invoice-result');
+            
+            if (!testInvoiceId) {
+                resultDiv.className = 'result warning';
+                resultDiv.textContent = '⚠️ Please create a test invoice first';
+                return;
+            }
+            
+            try {
+                const { error } = await supabase
+                    .from('invoices')
+                    .delete()
+                    .eq('id', testInvoiceId);
+                
+                if (error) throw error;
+                
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ Invoice deleted successfully!`;
+                testInvoiceId = null;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Failed to delete invoice:\n${error.message}`;
+            }
+        };
+
+        window.checkRLS = async function() {
+            const resultDiv = document.getElementById('rls-result');
+            try {
+                // Check RLS status using raw SQL
+                const { data, error } = await supabase.rpc('get_rls_status', {});
+                
+                if (error) {
+                    // If the function doesn't exist, try a basic query
+                    const tables = ['schedules', 'invoices', 'invoice_services'];
+                    const results = [];
+                    
+                    for (const table of tables) {
+                        try {
+                            const { error: tableError } = await supabase
+                                .from(table)
+                                .select('*')
+                                .limit(0);
+                            
+                            if (tableError && tableError.message.includes('row-level security')) {
+                                results.push(`🔒 ${table}: RLS ENABLED`);
+                            } else {
+                                results.push(`🔓 ${table}: RLS DISABLED or PERMISSIVE`);
+                            }
+                        } catch (err) {
+                            results.push(`❓ ${table}: UNKNOWN`);
+                        }
+                    }
+                    
+                    resultDiv.className = 'result info';
+                    resultDiv.textContent = 'RLS Status:\n' + results.join('\n');
+                } else {
+                    resultDiv.className = 'result info';
+                    resultDiv.textContent = `RLS Status:\n${JSON.stringify(data, null, 2)}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Error checking RLS:\n${error.message}`;
+            }
+        };
+
+        window.testRLSPolicies = async function() {
+            const resultDiv = document.getElementById('rls-result');
+            const results = [];
+            
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                results.push(`Current user: ${user ? user.email : 'Not authenticated'}`);
+                
+                // Test schedule policies
+                const { data: scheduleData, error: scheduleError } = await supabase
+                    .from('schedules')
+                    .select('*')
+                    .limit(1);
+                
+                if (scheduleError) {
+                    results.push(`❌ Schedule SELECT: ${scheduleError.message}`);
+                } else {
+                    results.push(`✅ Schedule SELECT: Allowed`);
+                }
+                
+                // Test invoice policies
+                const { data: invoiceData, error: invoiceError } = await supabase
+                    .from('invoices')
+                    .select('*')
+                    .limit(1);
+                
+                if (invoiceError) {
+                    results.push(`❌ Invoice SELECT: ${invoiceError.message}`);
+                } else {
+                    results.push(`✅ Invoice SELECT: Allowed`);
+                }
+                
+                resultDiv.className = 'result info';
+                resultDiv.textContent = 'RLS Policy Test:\n' + results.join('\n');
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Error testing policies:\n${error.message}`;
+            }
+        };
+
+        window.runMigrations = async function() {
+            const resultDiv = document.getElementById('migration-result');
+            
+            if (!confirm('This will attempt to create/update database tables. Are you sure?')) {
+                return;
+            }
+            
+            resultDiv.className = 'result warning';
+            resultDiv.textContent = '⚠️ Migration must be run in Supabase SQL Editor.\n\nPlease go to your Supabase dashboard:\n1. Navigate to SQL Editor\n2. Run the migration script from the file:\n   supabase/migrations/20250826204901_484e685f-0adf-4577-a8ea-42079504f19c.sql\n\nThis will create:\n- schedules table\n- invoices table\n- invoice_services table\n- All necessary indexes and RLS policies';
+        };
+
+        window.disableRLS = async function() {
+            const resultDiv = document.getElementById('migration-result');
+            
+            if (!confirm('This will disable RLS for testing. Only do this in development! Continue?')) {
+                return;
+            }
+            
+            resultDiv.className = 'result warning';
+            resultDiv.textContent = `⚠️ To disable RLS, run this in Supabase SQL Editor:
+
+ALTER TABLE schedules DISABLE ROW LEVEL SECURITY;
+ALTER TABLE invoices DISABLE ROW LEVEL SECURITY;
+ALTER TABLE invoice_services DISABLE ROW LEVEL SECURITY;
+
+To re-enable RLS:
+
+ALTER TABLE schedules ENABLE ROW LEVEL SECURITY;
+ALTER TABLE invoices ENABLE ROW LEVEL SECURITY;
+ALTER TABLE invoice_services ENABLE ROW LEVEL SECURITY;`;
+        };
+
+        // Check auth status on load
+        checkAuthStatus();
+    </script>
+</body>
+</html>

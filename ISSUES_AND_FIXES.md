@@ -1,5 +1,26 @@
 # Inspection App Issues and Fixes
 
+## NEW: Schedules & Billing Issues (Fixed)
+
+### **Problem: Report Scheduled & Billing Sections Not Saving**
+The Schedule Management and Billing/Invoices sections were not saving or displaying data properly.
+
+**Root Causes:**
+1. Database tables (`schedules`, `invoices`, `invoice_services`) were not created
+2. Row Level Security (RLS) policies were blocking operations
+3. Authentication issues preventing data access
+
+**Solution:**
+1. **Run the Fix Script**: Go to Supabase SQL Editor and run the entire contents of `fix-schedules-billing.sql`
+2. **Test the Connection**: Open `test-schedules-billing.html` in your browser to verify everything works
+3. **Sign In**: Make sure you're authenticated in the app before using these features
+
+**Quick Fix Commands:**
+```sql
+-- Run this in Supabase SQL Editor to fix everything
+-- Copy the entire contents of fix-schedules-billing.sql and run it
+```
+
 ## Issues Identified
 
 ### 1. **Supabase Database Tables Not Created**
