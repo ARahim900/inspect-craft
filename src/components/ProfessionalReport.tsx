@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import { PhotoDisplay } from './PhotoDisplay';
 import { BilingualDisclaimer } from './BilingualDisclaimer';
 import { DISCLAIMER_CONTENT, REPORT_CONFIG, EXECUTIVE_SUMMARY_TEMPLATE } from '@/config/disclaimer';
+import { LocalStorageService } from '@/services/local-storage-service';
 import type { SavedInspection } from '@/services/storage-service';
 
 interface ProfessionalReportProps {
@@ -935,33 +936,47 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
                             </div>
                           )}
                         </td>
-                        <td>
-                          {item.photos.length > 0 ? (
-                            <div className="photo-section">
-                              <div className="photo-grid">
-                                {item.photos.slice(0, 2).map((photoId, idx) => (
-                                  <div key={idx}>
-                                    <PhotoDisplay
-                                      photoId={photoId}
-                                      className="photo-item"
-                                      alt={`${item.point} - Photo ${idx + 1}`}
-                                    />
-                                    <div className="photo-caption">
-                                      Photo {idx + 1}
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                              {item.photos.length > 2 && (
-                                <p style={{ fontSize: '9pt', fontStyle: 'italic', marginTop: '10px' }}>
-                                  + {item.photos.length - 2} additional photo(s)
-                                </p>
-                              )}
-                            </div>
-                          ) : (
-                            <em style={{ color: '#666', fontSize: '9pt' }}>No photos</em>
-                          )}
-                        </td>
+                         <td>
+                           {item.photos.length > 0 && item.photos.some(photoId => {
+                             // Check if at least one photo exists in storage
+                             const isBase64 = photoId.startsWith('data:');
+                             const isUrl = photoId.startsWith('http://') || photoId.startsWith('https://');
+                             return isBase64 || isUrl || LocalStorageService.getPhoto(photoId);
+                           }) ? (
+                             <div className="photo-section">
+                               <div className="photo-grid">
+                                 {item.photos.slice(0, 2).map((photoId, idx) => {
+                                   // Only render if photo exists
+                                   const isBase64 = photoId.startsWith('data:');
+                                   const isUrl = photoId.startsWith('http://') || photoId.startsWith('https://');
+                                   const hasPhoto = isBase64 || isUrl || LocalStorageService.getPhoto(photoId);
+                                   
+                                   if (!hasPhoto) return null;
+                                   
+                                   return (
+                                     <div key={idx}>
+                                       <PhotoDisplay
+                                         photoId={photoId}
+                                         className="photo-item"
+                                         alt={`${item.point} - Photo ${idx + 1}`}
+                                       />
+                                       <div className="photo-caption">
+                                         Photo {idx + 1}
+                                       </div>
+                                     </div>
+                                   );
+                                 }).filter(Boolean)}
+                               </div>
+                               {item.photos.length > 2 && (
+                                 <p style={{ fontSize: '9pt', fontStyle: 'italic', marginTop: '10px' }}>
+                                   + {item.photos.length - 2} additional photo(s)
+                                 </p>
+                               )}
+                             </div>
+                           ) : (
+                             <em style={{ color: '#666', fontSize: '9pt' }}>No photos</em>
+                           )}
+                         </td>
                       </tr>
                     ))}
                   </tbody>

@@ -19,18 +19,32 @@ export const PhotoDisplay: React.FC<PhotoDisplayProps> = ({ photoId, className =
     const base64 = LocalStorageService.getPhoto(photoId);
     if (base64) {
       imageSrc = base64;
+    } else {
+      console.warn('PhotoDisplay: No image found for photoId:', photoId);
+      // Return null to not render anything if no image is found
+      return null;
     }
   }
   
+  // Don't render image if no valid source
+  if (!imageSrc || imageSrc === photoId && !isBase64 && !isUrl) {
+    console.warn('PhotoDisplay: Invalid image source:', photoId);
+    return null;
+  }
+
   return (
     <img 
       src={imageSrc} 
       alt={alt}
       className={className}
+      onLoad={() => {
+        console.log('PhotoDisplay: Image loaded successfully for photoId:', photoId);
+      }}
       onError={(e) => {
+        console.error('PhotoDisplay: Failed to load image for photoId:', photoId, 'imageSrc:', imageSrc);
         const target = e.target as HTMLImageElement;
-        target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRTVFN0VCIi8+CjxwYXRoIGQ9Ik04NSA4NUgxMTVWMTE1SDg1Vjg1WiIgZmlsbD0iIzlDQTNCRiIvPgo8L3N2Zz4=';
-        target.alt = 'Image not found';
+        // Hide the image completely instead of showing placeholder
+        target.style.display = 'none';
       }}
     />
   );
