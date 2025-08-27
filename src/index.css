@@ -688,3 +688,109 @@
     @apply text-foreground bg-background border-border;
   }
 }
+
+/* ===== ENHANCED DASHBOARD COMPONENTS ===== */
+@layer components {
+  /* Enhanced card styles with micro-animations */
+  .card-enhanced {
+    @apply bg-card border border-border/50 rounded-xl shadow-card backdrop-blur-sm;
+    background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--card)/.95) 100%);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateZ(0); /* Enable hardware acceleration */
+  }
+
+  .card-enhanced:hover {
+    @apply shadow-elegant border-border/80;
+    transform: translateY(-2px) scale(1.005) translateZ(0);
+  }
+
+  /* Metric cards for dashboard */
+  .metric-card {
+    @apply card-enhanced p-6 hover:shadow-glow;
+    background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--primary)/.05) 100%);
+  }
+
+  .metric-card:hover {
+    @apply shadow-primary/20;
+    transform: translateY(-4px) scale(1.02) translateZ(0);
+  }
+
+  /* Interactive elements micro-animations */
+  .micro-bounce {
+    @apply transition-transform duration-200 ease-out;
+  }
+
+  .micro-bounce:hover {
+    transform: scale(1.05) translateZ(0);
+  }
+
+  .micro-bounce:active {
+    transform: scale(0.95) translateZ(0);
+  }
+
+  /* Enhanced grid layouts */
+  .grid-responsive {
+    @apply grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+  }
+
+  .grid-metrics {
+    @apply grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4;
+  }
+
+  /* Dashboard specific layouts */
+  .dashboard-container {
+    @apply p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto;
+  }
+
+  .dashboard-section {
+    @apply mb-8;
+  }
+
+  .dashboard-header {
+    @apply mb-6 pb-4 border-b border-border/50;
+  }
+
+  /* Enhanced buttons with micro-animations */
+  .btn-enhanced {
+    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+    transform: translateZ(0);
+  }
+
+  .btn-enhanced:hover {
+    transform: translateY(-1px) translateZ(0);
+    box-shadow: var(--shadow-card);
+  }
+
+  .btn-enhanced:active {
+    transform: translateY(0) scale(0.98) translateZ(0);
+  }
+
+  /* Status indicators with animations */
+  .status-indicator {
+    @apply inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium transition-all duration-200;
+  }
+
+  .status-scheduled {
+    @apply bg-blue-500/10 text-blue-600 border border-blue-500/20;
+  }
+
+  .status-in-progress {
+    @apply bg-yellow-500/10 text-yellow-600 border border-yellow-500/20;
+  }
+
+  .status-completed {
+    @apply bg-green-500/10 text-green-600 border border-green-500/20;
+  }
+
+  .status-draft {
+    @apply bg-gray-500/10 text-gray-600 border border-gray-500/20;
+  }
+
+  .status-paid {
+    @apply bg-green-500/10 text-green-600 border border-green-500/20;
+  }
+
+  .status-overdue {
+    @apply bg-red-500/10 text-red-600 border border-red-500/20;
+  }
+}

@@ -196,6 +196,7 @@ const inspectionCategories = {
 
 import ScheduleSection from './ScheduleSection';
 import BillingSection from './BillingSection';
+import { Dashboard as DashboardComponent } from './Dashboard';
 
 // Report Scheduled Page Component  
 function ReportScheduled({ navigateTo }: { navigateTo: (page: string) => void }) {
@@ -205,6 +206,11 @@ function ReportScheduled({ navigateTo }: { navigateTo: (page: string) => void })
 // Billing Page Component
 function Billing({ navigateTo }: { navigateTo: (page: string) => void }) {
   return <BillingSection onBack={() => navigateTo('dashboard')} />;
+}
+
+// Dashboard Page Component
+function DashboardPage({ user, profile, navigateTo }: { user: any, profile: any, navigateTo: (page: string) => void }) {
+  return <DashboardComponent user={user} profile={profile} onNavigate={navigateTo} />;
 }
 
 // Sidebar Component
@@ -511,14 +517,7 @@ export default function InspectionApp({
           <main className="flex-1 overflow-auto bg-background shadow-inner">
             <div className="container mx-auto px-6 py-8 max-w-7xl">
               {currentPage === 'dashboard' && (
-                <>
-                  <Dashboard 
-                    navigateTo={navigateTo} 
-                    inspections={inspections} 
-                    isLoading={isLoading}
-                    onDeleteConfirmation={handleDeleteConfirmation}
-                  />
-                </>
+                <DashboardPage user={user} profile={profile} navigateTo={navigateTo} />
               )}
               {currentPage === 'reportScheduled' && (
                 <ReportScheduled navigateTo={navigateTo} />
