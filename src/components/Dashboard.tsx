@@ -147,6 +147,25 @@ export function Dashboard({ user, profile, onNavigate }: DashboardProps) {
               </div>
             </div>
           </div>
+
+          <div 
+            className="card-enhanced p-6 cursor-pointer group"
+            onClick={() => onNavigate('savedInspections')}
+          >
+            <div className="flex items-start gap-4">
+              <div className="p-3 bg-purple-500/10 text-purple-600 rounded-lg group-hover:bg-purple-500/20 transition-colors">
+                <FileText className="w-6 h-6" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-foreground group-hover:text-purple-600 transition-colors">
+                  View Reports
+                </h3>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Access all completed inspection reports
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

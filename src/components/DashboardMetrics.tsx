@@ -232,7 +232,7 @@ export function DashboardMetrics({ onSectionClick }: DashboardMetricsProps) {
       {/* Invoice Metrics */}
       <MetricCard
         title="Revenue (Paid)"
-        value={`$${invoiceMetrics.totalRevenue.toLocaleString()}`}
+        value={`${invoiceMetrics.totalRevenue.toLocaleString()} OMR`}
         subtitle={`${invoiceMetrics.paid} invoices paid`}
         icon={<DollarSign className="w-5 h-5" />}
         color="success"
@@ -243,7 +243,7 @@ export function DashboardMetrics({ onSectionClick }: DashboardMetricsProps) {
 
       <MetricCard
         title="Pending Revenue"
-        value={`$${invoiceMetrics.pendingRevenue.toLocaleString()}`}
+        value={`${invoiceMetrics.pendingRevenue.toLocaleString()} OMR`}
         subtitle={`${invoiceMetrics.pending + invoiceMetrics.overdue} invoices pending`}
         icon={<Clock className="w-5 h-5" />}
         color="warning"

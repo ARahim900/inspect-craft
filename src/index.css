@@ -750,9 +750,22 @@
     @apply mb-6 pb-4 border-b border-border/50;
   }
 
+  /* Enhanced Header Styling */
+  .app-header {
+    @apply sticky top-0 z-40 w-full;
+    @apply bg-gradient-to-r from-primary/10 via-primary/5 to-background/95 backdrop-blur-md;
+    @apply border-b border-primary/20;
+    @apply shadow-lg;
+  }
+
   /* Enhanced buttons with micro-animations */
   .btn-enhanced {
     @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+    @apply bg-gradient-to-r from-primary to-primary/90;
+    @apply hover:from-primary/90 hover:to-primary/80;
+    @apply border-primary/20 hover:border-primary/40;
+    @apply shadow-md hover:shadow-lg;
+    @apply text-primary-foreground hover:text-primary-foreground/95;
     transform: translateZ(0);
   }
 

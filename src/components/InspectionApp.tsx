@@ -238,14 +238,21 @@ function Sidebar({
       label: 'Report Scheduled', 
       icon: <ScheduleIcon />, 
       description: 'Planning & Scheduling',
-      badge: 'Coming Soon'
+      badge: null
     },
     { 
       id: 'billing', 
       label: 'Billing', 
       icon: <BillingIcon />, 
       description: 'Invoices & Payments',
-      badge: 'Coming Soon'
+      badge: null
+    },
+    { 
+      id: 'savedInspections', 
+      label: 'Inspection Reports', 
+      icon: <InspectionsIcon />, 
+      description: 'View Completed Reports',
+      badge: null
     },
   ];
 
@@ -267,14 +274,14 @@ function Sidebar({
       
       {/* Enhanced Sidebar with Modern Design */}
       <div className={cn(
-        "fixed top-0 left-0 h-full w-72 bg-gradient-sidebar z-50 transform transition-all duration-300 ease-spring lg:translate-x-0 lg:static lg:z-auto",
-        "border-r border-sidebar-border shadow-2xl lg:shadow-elegant backdrop-blur-xl",
-        "supports-[backdrop-filter]:bg-sidebar/98",
+        "fixed top-0 left-0 h-full w-72 bg-gradient-to-b from-primary/5 to-primary/10 backdrop-blur-xl z-50 transform transition-all duration-300 ease-spring lg:translate-x-0 lg:static lg:z-auto",
+        "border-r border-primary/20 shadow-2xl lg:shadow-elegant",
+        "supports-[backdrop-filter]:bg-background/95",
         isOpen ? "translate-x-0" : "-translate-x-full"
       )}>
-        <div className="flex flex-col h-full bg-gradient-sidebar">
+        <div className="flex flex-col h-full bg-gradient-to-b from-primary/5 to-primary/10">
           {/* Enhanced Sidebar Header */}
-          <div className="flex items-center justify-between p-6 border-b border-sidebar-border/50 bg-gradient-to-r from-sidebar-accent/40 to-sidebar-accent/20 backdrop-blur-sm">
+          <div className="flex items-center justify-between p-6 border-b border-primary/20 bg-gradient-to-r from-primary/10 to-primary/5 backdrop-blur-sm">
             <div className="flex items-center gap-3">
               <Logo size="small" />
             </div>
@@ -548,6 +555,14 @@ export default function InspectionApp({
                 <ProfessionalReport 
                   inspection={inspections.find(i => i.id === selectedInspectionId)!}
                   onBack={() => navigateTo('dashboard')} 
+                />
+              )}
+              {currentPage === 'savedInspections' && (
+                <Dashboard 
+                  navigateTo={navigateTo}
+                  inspections={inspections}
+                  isLoading={isLoading}
+                  onDeleteConfirmation={handleDeleteConfirmation}
                 />
               )}
             </div>
