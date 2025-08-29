@@ -15,7 +15,7 @@ export function Dashboard({ user, profile, onNavigate }: DashboardProps) {
   const handleSectionClick = (section: 'inspections' | 'schedules' | 'invoices') => {
     switch (section) {
       case 'inspections':
-        onNavigate('newInspection');
+        onNavigate('savedInspections');
         break;
       case 'schedules':
         onNavigate('reportScheduled');

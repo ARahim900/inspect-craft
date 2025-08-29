@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Layout System Test</title>
+    <style>
+        /* Test styles for grid layout system */
+        .grid-layout-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr; /* 2/3 text, 1/3 image */
+            gap: 20px;
+            align-items: start;
+            margin: 15px 0;
+            border: 1px solid #e2e8f0;
+            padding: 15px;
+            background: #fafafa;
+        }
+        
+        .grid-text-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+        }
+        
+        .grid-image-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+        }
+        
+        .finding-category {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1e40af;
+            margin: 0 0 8px 0;
+        }
+        
+        .finding-point {
+            font-size: 12px;
+            color: #6b7280;
+            margin: 0 0 10px 0;
+        }
+        
+        .finding-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+            margin: 8px 0;
+        }
+        
+        .status-pass {
+            background: #dcfce7;
+            color: #059669;
+        }
+        
+        .status-fail {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .status-snags {
+            background: #fed7aa;
+            color: #d97706;
+        }
+        
+        .finding-comments {
+            font-size: 11px;
+            color: #374151;
+            font-style: italic;
+            margin: 8px 0;
+            padding: 8px;
+            background: #f8fafc;
+            border-left: 3px solid #e2e8f0;
+        }
+        
+        .test-image {
+            width: 100%;
+            max-width: 150px;
+            height: 100px;
+            background: #e2e8f0;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            font-size: 12px;
+        }
+        
+        .image-caption {
+            font-size: 10px;
+            color: #6b7280;
+            text-align: center;
+            font-style: italic;
+            margin-top: 4px;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        
+        h1 {
+            color: #1e40af;
+            margin-bottom: 20px;
+        }
+        
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Grid Layout System Test - 2/3 Text, 1/3 Image</h1>
+        
+        <!-- Test Case 1: Pass Status -->
+        <div class="grid-layout-container">
+            <div class="grid-text-section">
+                <h3 class="finding-category">Electrical Systems</h3>
+                <p class="finding-point">Check all electrical outlets and switches for proper operation</p>
+                <span class="finding-status status-pass">Pass</span>
+                <div class="finding-comments">
+                    <strong>Comments:</strong> All electrical outlets tested and functioning properly. No issues found.
+                </div>
+            </div>
+            <div class="grid-image-section">
+                <div class="test-image">Test Image 1</div>
+                <div class="image-caption">Photo 1</div>
+            </div>
+        </div>
+        
+        <!-- Test Case 2: Fail Status -->
+        <div class="grid-layout-container">
+            <div class="grid-text-section">
+                <h3 class="finding-category">Plumbing</h3>
+                <p class="finding-point">Inspect all faucets and water pressure</p>
+                <span class="finding-status status-fail">Fail</span>
+                <div class="finding-comments">
+                    <strong>Comments:</strong> Low water pressure detected in kitchen sink. Requires immediate attention.
+                </div>
+            </div>
+            <div class="grid-image-section">
+                <div class="test-image">Test Image 2</div>
+                <div class="image-caption">Photo 2</div>
+            </div>
+        </div>
+        
+        <!-- Test Case 3: Snags Status -->
+        <div class="grid-layout-container">
+            <div class="grid-text-section">
+                <h3 class="finding-category">Windows & Doors</h3>
+                <p class="finding-point">Check all windows and doors for proper sealing and operation</p>
+                <span class="finding-status status-snags">Snags</span>
+                <div class="finding-comments">
+                    <strong>Comments:</strong> Minor gap in window seal. Recommend weather stripping replacement.
+                </div>
+            </div>
+            <div class="grid-image-section">
+                <div class="test-image">Test Image 3</div>
+                <div class="image-caption">Photo 3</div>
+            </div>
+        </div>
+        
+        <h2>Perfect Alignment Test</h2>
+        <p>The grid system should maintain perfect alignment with 2/3 width for text content and 1/3 width for images, ensuring consistent presentation across all findings.</p>
+    </div>
+</body>
+</html>

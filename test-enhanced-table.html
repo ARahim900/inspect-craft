@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Table Test</title>
+    <style>
+        /* Import the enhanced table styles from print-styles.css */
+        
+        /* Professional Tables - Clean design with horizontal dividers only */
+        .inspection-table, .professional-table, .enhanced-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 4mm 0 6mm 0;
+            font-size: 10pt;
+            page-break-inside: auto;
+            table-layout: fixed;
+            border: none;
+            font-family: 'Arial', 'Helvetica', sans-serif;
+        }
+        
+        /* Clean table headers - no borders, just background */
+        .inspection-table th, .professional-table th, .enhanced-table th {
+            background: #f8fafc;
+            color: #1e40af;
+            font-weight: bold;
+            padding: 3mm 2mm;
+            border: none;
+            border-bottom: 1pt solid #e2e8f0;
+            text-align: left;
+            font-size: 10pt;
+        }
+        
+        /* Clean table cells - horizontal dividers only */
+        .inspection-table td, .professional-table td, .enhanced-table td {
+            padding: 3mm 2mm;
+            border: none;
+            border-bottom: 1pt solid #e2e8f0;
+            vertical-align: top;
+            font-size: 10pt;
+            line-height: 1.4;
+        }
+        
+        .inspection-table tr, .professional-table tr, .enhanced-table tr {
+            page-break-inside: avoid;
+        }
+        
+        /* Remove alternating row colors for cleaner look */
+        .inspection-table tr:nth-child(even), .professional-table tr:nth-child(even), .enhanced-table tr:nth-child(even) {
+            background: transparent;
+        }
+        
+        /* Grade column highlighting - bold formatting only */
+        .inspection-table td.grade-column, .professional-table td.grade-column, .enhanced-table td.grade-column {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Strategic color application for Grade D */
+        .grade-d, .grade-highlight-d {
+            background-color: #fef3c7; /* Light amber background */
+            font-weight: bold;
+        }
+        
+        /* Enhanced Table Specific Styles */
+        .enhanced-table {
+            border: none;
+        }
+        
+        .enhanced-table .table-header {
+            background: #f8fafc;
+            color: #1e40af;
+            font-weight: bold;
+            padding: 3mm 2mm;
+            border: none;
+            border-bottom: 1pt solid #e2e8f0;
+            text-align: left;
+            font-size: 10pt;
+        }
+        
+        .enhanced-table .table-cell {
+            padding: 3mm 2mm;
+            border: none;
+            border-bottom: 1pt solid #e2e8f0;
+            vertical-align: top;
+            font-size: 10pt;
+            line-height: 1.4;
+        }
+        
+        .enhanced-table .table-row {
+            background: transparent;
+            page-break-inside: avoid;
+        }
+        
+        /* Grade column specific styling - bold formatting exclusively */
+        .enhanced-table .grade-column-header {
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .enhanced-table .grade-column {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grade D highlighting with light amber background */
+        .enhanced-table .grade-highlight-d {
+            background-color: #fef3c7;
+        }
+        
+        .enhanced-table .grade-highlight-d .grade-column {
+            background-color: #fef3c7;
+            font-weight: bold;
+        }
+        
+        /* Status badges */
+        .status-pass {
+            background: #dcfce7;
+            color: #059669;
+            font-weight: bold;
+            padding: 1.5mm 3mm;
+            border-radius: 2mm;
+            display: inline-block;
+            font-size: 9pt;
+        }
+        
+        .status-fail {
+            background: #fee2e2;
+            color: #dc2626;
+            font-weight: bold;
+            padding: 1.5mm 3mm;
+            border-radius: 2mm;
+            display: inline-block;
+            font-size: 9pt;
+        }
+        
+        .status-snags {
+            background: #fed7aa;
+            color: #d97706;
+            font-weight: bold;
+            padding: 1.5mm 3mm;
+            border-radius: 2mm;
+            display: inline-block;
+            font-size: 9pt;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            margin: 20px;
+            background: #f9fafb;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #1e40af;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #374151;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        .test-description {
+            background: #f0f9ff;
+            border-left: 4px solid #1e40af;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .photo-placeholder {
+            width: 40mm;
+            height: 30mm;
+            background: #e5e7eb;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8pt;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Enhanced Table Component Test</h1>
+        
+        <div class="test-description">
+            <strong>Testing Requirements:</strong>
+            <ul>
+                <li>✓ Subtle horizontal dividers between rows (no vertical lines)</li>
+                <li>✓ Bold formatting exclusively in Grade/Status column</li>
+                <li>✓ Light amber background for Grade D items</li>
+                <li>✓ Clean design without visual clutter</li>
+                <li>✓ Responsive layout for different screen sizes</li>
+            </ul>
+        </div>
+        
+        <h2>Sample Inspection Table</h2>
+        
+        <table class="enhanced-table">
+            <thead>
+                <tr>
+                    <th class="table-header" style="width: 30%;">Inspection Point</th>
+                    <th class="table-header grade-column-header" style="width: 12%;">Status</th>
+                    <th class="table-header" style="width: 28%;">Comments & Location</th>
+                    <th class="table-header" style="width: 30%;">Photographic Evidence</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Pass item -->
+                <tr class="table-row">
+                    <td class="table-cell">
+                        <div style="font-weight: bold; margin-bottom: 2mm;">Electrical Systems</div>
+                        <div style="font-size: 9pt; line-height: 1.3;">Check all electrical outlets and switches for proper operation</div>
+                    </td>
+                    <td class="table-cell grade-column">
+                        <span class="status-pass">Pass</span>
+                    </td>
+                    <td class="table-cell">
+                        <div style="margin-bottom: 2mm;"><strong>Comments:</strong> All outlets functioning properly</div>
+                        <div><strong>Location:</strong> Living room, kitchen, bedrooms</div>
+                    </td>
+                    <td class="table-cell">
+                        <div class="photo-placeholder">Photo 1</div>
+                    </td>
+                </tr>
+                
+                <!-- Fail item with Grade D highlighting -->
+                <tr class="table-row grade-highlight-d">
+                    <td class="table-cell">
+                        <div style="font-weight: bold; margin-bottom: 2mm;">Plumbing</div>
+                        <div style="font-size: 9pt; line-height: 1.3;">Inspect water pressure and drainage systems</div>
+                    </td>
+                    <td class="table-cell grade-column">
+                        <span class="status-fail">Fail</span>
+                    </td>
+                    <td class="table-cell">
+                        <div style="margin-bottom: 2mm;"><strong>Comments:</strong> Low water pressure in master bathroom</div>
+                        <div><strong>Location:</strong> Master bathroom sink</div>
+                    </td>
+                    <td class="table-cell">
+                        <div class="photo-placeholder">Photo 1</div>
+                    </td>
+                </tr>
+                
+                <!-- Snags item -->
+                <tr class="table-row">
+                    <td class="table-cell">
+                        <div style="font-weight: bold; margin-bottom: 2mm;">Windows & Doors</div>
+                        <div style="font-size: 9pt; line-height: 1.3;">Check operation and sealing of all windows and doors</div>
+                    </td>
+                    <td class="table-cell grade-column">
+                        <span class="status-snags">Snags</span>
+                    </td>
+                    <td class="table-cell">
+                        <div style="margin-bottom: 2mm;"><strong>Comments:</strong> Minor adjustment needed on front door</div>
+                        <div><strong>Location:</strong> Main entrance</div>
+                    </td>
+                    <td class="table-cell">
+                        <div class="photo-placeholder">Photo 1</div>
+                    </td>
+                </tr>
+                
+                <!-- Another Pass item -->
+                <tr class="table-row">
+                    <td class="table-cell">
+                        <div style="font-weight: bold; margin-bottom: 2mm;">HVAC System</div>
+                        <div style="font-size: 9pt; line-height: 1.3;">Test heating and cooling system operation</div>
+                    </td>
+                    <td class="table-cell grade-column">
+                        <span class="status-pass">Pass</span>
+                    </td>
+                    <td class="table-cell">
+                        <div style="margin-bottom: 2mm;"><strong>Comments:</strong> System operating within normal parameters</div>
+                        <div><strong>Location:</strong> Central unit and all vents</div>
+                    </td>
+                    <td class="table-cell">
+                        <div class="photo-placeholder">Photo 1</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h2>Design Features Demonstrated</h2>
+        <ul>
+            <li><strong>Clean Design:</strong> No excessive borders or grid lines - only subtle horizontal dividers</li>
+            <li><strong>Grade Column:</strong> Bold formatting exclusively in the Status column for visual separation</li>
+            <li><strong>Grade D Highlighting:</strong> Light amber background (#fef3c7) for failed items</li>
+            <li><strong>Professional Typography:</strong> Consistent font sizes and weights throughout</li>
+            <li><strong>Status Badges:</strong> Color-coded status indicators with professional styling</li>
+            <li><strong>Responsive Layout:</strong> Table maintains readability across different screen sizes</li>
+        </ul>
+    </div>
+</body>
+</html>

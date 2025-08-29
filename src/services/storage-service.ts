@@ -63,8 +63,27 @@ export class StorageService {
 
   // Upload photo with fallback
   static async uploadPhoto(file: File): Promise<string | null> {
-    // Always use local storage for photos to avoid Supabase setup issues
-    console.log('Using local storage for photo upload');
+    // Test Supabase connection first
+    await this.testSupabase();
+    
+    // Try Supabase first, fallback to localStorage if it fails
+    if (!this.useLocalStorage) {
+      try {
+        console.log('☁️ Attempting to upload photo to Supabase...');
+        const result = await SupabaseService.uploadPhoto(file);
+        if (result) {
+          console.log('✅ Photo uploaded successfully to Supabase:', result);
+          return result;
+        }
+        console.warn('Supabase upload returned null, falling back to local storage');
+      } catch (error) {
+        console.error('Supabase photo upload error:', error);
+        console.warn('Falling back to local storage for photo upload');
+      }
+    }
+    
+    // Fallback to local storage
+    console.log('💾 Using local storage for photo upload');
     return await LocalStorageService.uploadPhoto(file);
   }
 

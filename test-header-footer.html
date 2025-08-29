@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Header Footer Test</title>
+    <style>
+        @media print {
+            @page {
+                size: A4;
+                margin: 31.75mm;
+            }
+            
+            .professional-header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 20mm;
+                background: white;
+                z-index: 1000;
+                page-break-inside: avoid;
+                margin: 0;
+                padding: 3mm 31.75mm 0 31.75mm;
+            }
+            
+            .header-content {
+                display: grid;
+                grid-template-columns: 1fr 2fr 1fr;
+                align-items: center;
+                height: 15mm;
+                gap: 5mm;
+            }
+            
+            .header-company-name {
+                font-size: 12pt;
+                font-weight: bold;
+                color: #1e40af;
+                margin-bottom: 1mm;
+            }
+            
+            .header-report-title {
+                font-size: 10pt;
+                color: #374151;
+            }
+            
+            .header-divider {
+                position: absolute;
+                bottom: 0;
+                left: 31.75mm;
+                right: 31.75mm;
+                height: 1pt;
+                background: #1e40af;
+            }
+            
+            .professional-footer {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 25mm;
+                background: white;
+                z-index: 1000;
+                padding: 0 31.75mm 3mm 31.75mm;
+            }
+            
+            .footer-divider {
+                position: absolute;
+                top: 0;
+                left: 31.75mm;
+                right: 31.75mm;
+                height: 1pt;
+                background: #e2e8f0;
+            }
+            
+            .footer-content {
+                display: grid;
+                grid-template-columns: 2fr 1fr 1fr;
+                align-items: center;
+                height: 20mm;
+                gap: 5mm;
+                padding-top: 3mm;
+            }
+            
+            .footer-company-name {
+                font-size: 9pt;
+                font-weight: bold;
+                color: #1e40af;
+            }
+            
+            .footer-tagline {
+                font-size: 7pt;
+                color: #6b7280;
+            }
+            
+            .print-container {
+                margin-top: 25mm;
+                margin-bottom: 30mm;
+            }
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .content {
+            height: 2000px;
+            background: linear-gradient(to bottom, #f0f0f0, #ffffff);
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="professional-header">
+        <div class="header-content">
+            <div class="header-left">
+                <div>Logo</div>
+            </div>
+            <div class="header-center">
+                <div class="header-company-name">Solution Property</div>
+                <div class="header-report-title">Property Inspection Report</div>
+            </div>
+            <div class="header-right">
+                <div>Page 1 of 3</div>
+            </div>
+        </div>
+        <div class="header-divider"></div>
+    </div>
+    
+    <div class="professional-footer">
+        <div class="footer-divider"></div>
+        <div class="footer-content">
+            <div class="footer-left">
+                <div>
+                    <div class="footer-company-name">Solution Property</div>
+                    <div class="footer-tagline">Professional Property Inspection Services</div>
+                </div>
+            </div>
+            <div class="footer-center">
+                <div>Report ID: TEST-123</div>
+                <div>Generated: 2024-01-15</div>
+            </div>
+            <div class="footer-right">
+                <div>Page 1 of 3</div>
+                <div style="font-size: 6pt; color: #9ca3af; font-style: italic;">
+                    This document is confidential and proprietary.
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="print-container">
+        <div class="content">
+            <h1>Test Content</h1>
+            <p>This is test content to verify that the header and footer appear correctly on every page when printed.</p>
+            <p>The content should be properly spaced to accommodate the fixed header and footer.</p>
+            
+            <div style="margin-top: 500px;">
+                <h2>Section 2</h2>
+                <p>More content to test page breaks...</p>
+            </div>
+            
+            <div style="margin-top: 500px;">
+                <h2>Section 3</h2>
+                <p>Even more content to ensure multiple pages...</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function printTest() {
+            window.print();
+        }
+        
+        // Add print button
+        const button = document.createElement('button');
+        button.textContent = 'Print Test';
+        button.onclick = printTest;
+        button.style.cssText = 'position: fixed; top: 10px; right: 10px; z-index: 9999; padding: 10px; background: #1e40af; color: white; border: none; border-radius: 5px; cursor: pointer;';
+        document.body.appendChild(button);
+    </script>
+</body>
+</html>

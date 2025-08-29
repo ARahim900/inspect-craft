@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Grid Layout System Test</title>
+    <style>
+        /* Import the grid layout styles */
+        .grid-layout-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr; /* 2/3 text, 1/3 image */
+            gap: 20px;
+            align-items: start;
+            margin: 15px 0;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #fafafa;
+            page-break-inside: avoid;
+        }
+        
+        .grid-layout-reverse {
+            grid-template-columns: 1fr 2fr; /* Reverse: 1/3 image, 2/3 text */
+        }
+        
+        .grid-text-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 15px;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .grid-image-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 15px;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .finding-content {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+        }
+        
+        .finding-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+        
+        .finding-category {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1e40af;
+            margin: 0;
+            flex: 1;
+        }
+        
+        .finding-status {
+            flex-shrink: 0;
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .status-pass {
+            background: #dcfce7;
+            color: #059669;
+        }
+        
+        .status-fail {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .status-snags {
+            background: #fed7aa;
+            color: #d97706;
+        }
+        
+        .finding-point {
+            font-size: 12px;
+            color: #6b7280;
+            margin: 0 0 8px 0;
+            line-height: 1.4;
+        }
+        
+        .finding-comments {
+            font-size: 11px;
+            color: #374151;
+            margin: 8px 0;
+            padding: 8px;
+            background: #f8fafc;
+            border-left: 3px solid #e2e8f0;
+            border-radius: 0 4px 4px 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .finding-location {
+            font-size: 11px;
+            color: #6b7280;
+            margin: 4px 0 0 0;
+        }
+        
+        .finding-evidence {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+        }
+        
+        .photo-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .photo-container.multiple-images {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        
+        .photo-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .test-image {
+            width: 100%;
+            max-width: 120px;
+            height: 90px;
+            background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .image-caption {
+            font-size: 9px;
+            color: #6b7280;
+            text-align: center;
+            font-style: italic;
+            margin-top: 4px;
+        }
+        
+        .no-photos {
+            font-size: 10px;
+            color: #9ca3af;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        /* Alignment verification */
+        .grid-layout-container::before {
+            content: '';
+            position: absolute;
+            left: 66.666%; /* At 2/3 mark */
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, #e2e8f0, transparent);
+            opacity: 0.5;
+        }
+        
+        .grid-layout-reverse::before {
+            left: 33.333%; /* At 1/3 mark for reversed layout */
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+            line-height: 1.4;
+        }
+        
+        h1, h2 {
+            color: #1e40af;
+            margin-bottom: 20px;
+        }
+        
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid #1e40af;
+        }
+        
+        .alignment-guide {
+            background: repeating-linear-gradient(
+                to right,
+                transparent,
+                transparent 66.666%,
+                rgba(30, 64, 175, 0.1) 66.666%,
+                rgba(30, 64, 175, 0.1) 66.667%,
+                transparent 66.667%
+            );
+        }
+        
+        .print-test {
+            page-break-before: always;
+        }
+        
+        @media print {
+            body { background: white; }
+            .test-container { box-shadow: none; }
+            .test-section { background: transparent; }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Grid Layout System - Comprehensive Test Suite</h1>
+        <p><strong>Requirements Testing:</strong> 5.1, 5.2, 5.3, 5.4 - CSS Grid system with 2/3 column for text and 1/3 column for images</p>
+        
+        <div class="test-section">
+            <h2>Test 1: Standard Grid Layout (2/3 Text, 1/3 Image)</h2>
+            
+            <!-- Standard layout with Pass status -->
+            <div class="grid-layout-container alignment-guide">
+                <div class="grid-text-section">
+                    <div class="finding-content">
+                        <div class="finding-header">
+                            <h3 class="finding-category">Electrical Systems</h3>
+                            <span class="finding-status status-pass">Pass</span>
+                        </div>
+                        <p class="finding-point">Check all electrical outlets and switches for proper operation and safety compliance</p>
+                        <div class="finding-comments">
+                            <strong>Comments:</strong> All electrical outlets tested and functioning properly. GFCI outlets working correctly. No exposed wiring detected.
+                        </div>
+                        <div class="finding-location">
+                            <strong>Location:</strong> Kitchen, bathrooms, and all bedrooms
+                        </div>
+                    </div>
+                </div>
+                <div class="grid-image-section">
+                    <div class="finding-evidence">
+                        <div class="photo-container">
+                            <div class="photo-item">
+                                <div class="test-image">ELECTRICAL<br>OUTLET</div>
+                                <div class="image-caption">Photo 1</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Standard layout with Fail status -->
+            <div class="grid-layout-container alignment-guide">
+                <div class="grid-text-section">
+                    <div class="finding-content">
+                        <div class="finding-header">
+                            <h3 class="finding-category">Plumbing Systems</h3>
+                            <span class="finding-status status-fail">Fail</span>
+                        </div>
+                        <p class="finding-point">Inspect all faucets, water pressure, and check for leaks</p>
+                        <div class="finding-comments">
+                            <strong>Comments:</strong> Significant water leak detected under kitchen sink. Low water pressure in master bathroom. Requires immediate professional attention.
+                        </div>
+                        <div class="finding-location">
+                            <strong>Location:</strong> Kitchen sink area and master bathroom
+                        </div>
+                    </div>
+                </div>
+                <div class="grid-image-section">
+                    <div class="finding-evidence">
+                        <div class="photo-container multiple-images">
+                            <div class="photo-item">
+                                <div class="test-image">WATER<br>LEAK</div>
+                                <div class="image-caption">Photo 1</div>
+                            </div>
+                            <div class="photo-item">
+                                <div class="test-image">LOW<br>PRESSURE</div>
+                                <div class="image-caption">Photo 2</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Test 2: Perfect Alignment Verification</h2>
+            <p>The following examples demonstrate perfect alignment within the grid system:</p>
+            
+            <!-- Snags status with detailed content -->
+            <div class="grid-layout-container alignment-guide">
+                <div class="grid-text-section">
+                    <div class="finding-content">
+                        <div class="finding-header">
+                            <h3 class="finding-category">Windows & Doors</h3>
+                            <span class="finding-status status-snags">Snags</span>
+                        </div>
+                        <p class="finding-point">Check all windows and doors for proper sealing, operation, and security features</p>
+                        <div class="finding-comments">
+                            <strong>Comments:</strong> Minor gap detected in master bedroom window seal. Front door lock mechanism slightly stiff but functional. Recommend weather stripping replacement and lock lubrication.
+                        </div>
+                        <div class="finding-location">
+                            <strong>Location:</strong> Master bedroom window and front entrance door
+                        </div>
+                    </div>
+                </div>
+                <div class="grid-image-section">
+                    <div class="finding-evidence">
+                        <div class="photo-container">
+                            <div class="photo-item">
+                                <div class="test-image">WINDOW<br>SEAL GAP</div>
+                                <div class="image-caption">Photo 1</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- No photos example -->
+            <div class="grid-layout-container alignment-guide">
+                <div class="grid-text-section">
+                    <div class="finding-content">
+                        <div class="finding-header">
+                            <h3 class="finding-category">HVAC System</h3>
+                            <span class="finding-status status-pass">Pass</span>
+                        </div>
+                        <p class="finding-point">Inspect heating, ventilation, and air conditioning systems for proper operation</p>
+                        <div class="finding-comments">
+                            <strong>Comments:</strong> All HVAC systems operating within normal parameters. Filters recently changed. No unusual noises or odors detected.
+                        </div>
+                        <div class="finding-location">
+                            <strong>Location:</strong> Central air unit and all room vents
+                        </div>
+                    </div>
+                </div>
+                <div class="grid-image-section">
+                    <div class="finding-evidence">
+                        <div class="no-photos">
+                            No photos available
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Test 3: Dynamic Grid Presentation</h2>
+            <p>Demonstrating how the grid system replaces traditional table layouts with dynamic presentation:</p>
+            
+            <!-- Multiple findings in sequence -->
+            <div class="grid-layout-container alignment-guide">
+                <div class="grid-text-section">
+                    <div class="finding-content">
+                        <div class="finding-header">
+                            <h3 class="finding-category">Structural Elements</h3>
+                            <span class="finding-status status-pass">Pass</span>
+                        </div>
+                        <p class="finding-point">Examine foundation, walls, ceiling, and structural integrity</p>
+                        <div class="finding-comments">
+                            <strong>Comments:</strong> All structural elements appear sound. No cracks in foundation or walls. Ceiling shows no signs of water damage or sagging.
+                        </div>
+                    </div>
+                </div>
+                <div class="grid-image-section">
+                    <div class="finding-evidence">
+                        <div class="photo-container multiple-images">
+                            <div class="photo-item">
+                                <div class="test-image">FOUNDATION</div>
+                                <div class="image-caption">Photo 1</div>
+                            </div>
+                            <div class="photo-item">
+                                <div class="test-image">CEILING</div>
+                                <div class="image-caption">Photo 2</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section print-test">
+            <h2>Test 4: Print Layout Verification</h2>
+            <p>This section tests how the grid layout appears in print mode. Use browser print preview to verify:</p>
+            <ul>
+                <li>✓ 2/3 column width maintained for text content</li>
+                <li>✓ 1/3 column width maintained for image content</li>
+                <li>✓ Perfect alignment of all elements within grid system</li>
+                <li>✓ Page break handling preserves grid structure</li>
+                <li>✓ Professional margins (1.25 inches) maintained</li>
+            </ul>
+            
+            <div class="grid-layout-container alignment-guide">
+                <div class="grid-text-section">
+                    <div class="finding-content">
+                        <div class="finding-header">
+                            <h3 class="finding-category">Print Test Finding</h3>
+                            <span class="finding-status status-pass">Pass</span>
+                        </div>
+                        <p class="finding-point">This finding tests the grid layout system in print mode to ensure professional presentation</p>
+                        <div class="finding-comments">
+                            <strong>Comments:</strong> Grid layout system successfully replaces traditional table layout with dynamic, professional presentation that maintains perfect alignment and readability.
+                        </div>
+                    </div>
+                </div>
+                <div class="grid-image-section">
+                    <div class="finding-evidence">
+                        <div class="photo-container">
+                            <div class="photo-item">
+                                <div class="test-image">PRINT<br>TEST</div>
+                                <div class="image-caption">Print Test Photo</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Add print test functionality
+        function testPrint() {
+            window.print();
+        }
+        
+        // Add alignment verification
+        function verifyAlignment() {
+            const containers = document.querySelectorAll('.grid-layout-container');
+            containers.forEach(container => {
+                const textSection = container.querySelector('.grid-text-section');
+                const imageSection = container.querySelector('.grid-image-section');
+                
+                if (textSection && imageSection) {
+                    const textWidth = textSection.offsetWidth;
+                    const imageWidth = imageSection.offsetWidth;
+                    const ratio = textWidth / imageWidth;
+                    
+                    console.log(`Grid ratio: ${ratio.toFixed(2)} (should be ~2.0 for 2:1 ratio)`);
+                }
+            });
+        }
+        
+        // Run alignment verification on load
+        window.addEventListener('load', verifyAlignment);
+    </script>
+</body>
+</html>

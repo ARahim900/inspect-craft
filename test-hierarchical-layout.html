@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hierarchical Layout Test - Professional Report Design</title>
+    <style>
+        /* Import the enhanced print styles for testing */
+        @import url('./src/styles/print-styles.css');
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-container {
+            max-width: 210mm;
+            margin: 0 auto;
+            background: white;
+            padding: 31.75mm;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .test-section {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px dashed #ccc;
+        }
+        
+        .test-title {
+            background: #1e40af;
+            color: white;
+            padding: 5px 10px;
+            margin: -10px -10px 10px -10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Hierarchical Layout Design Test</h1>
+        <p>This page tests the implementation of hierarchical layout design with strategic whitespace allocation.</p>
+        
+        <!-- Test Typography Hierarchy -->
+        <div class="test-section">
+            <div class="test-title">Typography Hierarchy Test</div>
+            
+            <h1 class="main-heading">Main Heading (Level 1)</h1>
+            <p>This demonstrates the main heading style with enhanced strategic whitespace and professional styling.</p>
+            
+            <h2 class="section-header">Section Header (Level 2)</h2>
+            <p>This shows the section header with attention guide and background gradient.</p>
+            
+            <h3 class="subsection-header">Subsection Header (Level 3)</h3>
+            <p>This demonstrates the subsection header with consistent spacing.</p>
+            
+            <h4 class="sub-subsection-header">Sub-subsection Header (Level 4)</h4>
+            <p>This shows the smallest header level with proper hierarchy.</p>
+        </div>
+        
+        <!-- Test Strategic Whitespace -->
+        <div class="test-section">
+            <div class="test-title">Strategic Whitespace Test</div>
+            
+            <div class="whitespace-large">Large strategic whitespace container</div>
+            <div class="whitespace-medium">Medium strategic whitespace container</div>
+            <div class="whitespace-small">Small strategic whitespace container</div>
+            <div class="whitespace-micro">Micro strategic whitespace container</div>
+        </div>
+        
+        <!-- Test Content Hierarchy -->
+        <div class="test-section">
+            <div class="test-title">Content Hierarchy Test</div>
+            
+            <div class="content-hierarchy-level-1">
+                <h2>Level 1 Content Hierarchy</h2>
+                <p>This demonstrates the highest level content container with enhanced spacing and visual elements.</p>
+                
+                <div class="content-hierarchy-level-2">
+                    <h3>Level 2 Content Hierarchy</h3>
+                    <p>This shows the second level with gradient background and left border.</p>
+                    
+                    <div class="content-hierarchy-level-3">
+                        <h4>Level 3 Content Hierarchy</h4>
+                        <p>This demonstrates the third level with subtle styling.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test Multi-Column Layouts -->
+        <div class="test-section">
+            <div class="test-title">Multi-Column Layout Test</div>
+            
+            <h3>Two-Column Layout</h3>
+            <div class="multi-column-2">
+                <div class="column-content-primary">
+                    <h4>Primary Column</h4>
+                    <p>This is the primary column content with enhanced styling and visual hierarchy.</p>
+                    <ul class="hierarchy-level-1">
+                        <li>Primary list item 1</li>
+                        <li>Primary list item 2</li>
+                        <li>Primary list item 3</li>
+                    </ul>
+                </div>
+                <div class="column-content-secondary">
+                    <h4>Secondary Column</h4>
+                    <p>This is the secondary column content with complementary styling.</p>
+                    <ul class="hierarchy-level-2">
+                        <li>Secondary list item 1</li>
+                        <li>Secondary list item 2</li>
+                        <li>Secondary list item 3</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h3>Three-Column Layout</h3>
+            <div class="multi-column-3">
+                <div class="column-content">Column 1 Content</div>
+                <div class="column-content">Column 2 Content</div>
+                <div class="column-content">Column 3 Content</div>
+            </div>
+            
+            <h3>Information Dense Layout</h3>
+            <div class="multi-column-info-dense">
+                <div>
+                    <strong>Key 1:</strong> Value 1<br>
+                    <strong>Key 2:</strong> Value 2<br>
+                    <strong>Key 3:</strong> Value 3
+                </div>
+                <div>
+                    <strong>Key 4:</strong> Value 4<br>
+                    <strong>Key 5:</strong> Value 5<br>
+                    <strong>Key 6:</strong> Value 6
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test Visual Flow and Attention Guidance -->
+        <div class="test-section">
+            <div class="test-title">Visual Flow and Attention Guidance Test</div>
+            
+            <div class="visual-flow-container">
+                <h3>Visual Flow Container</h3>
+                <p>This container demonstrates visual flow indicators with gradient lines.</p>
+            </div>
+            
+            <div class="attention-guide-primary">
+                <h3>Primary Attention Guide</h3>
+                <p>This demonstrates primary attention guidance with enhanced visual elements.</p>
+            </div>
+            
+            <div class="attention-guide-secondary">
+                <h3>Secondary Attention Guide</h3>
+                <p>This shows secondary attention guidance with subtle styling.</p>
+            </div>
+            
+            <div class="reading-flow-indicator">
+                <p>This paragraph has reading flow indicators to guide attention.</p>
+            </div>
+        </div>
+        
+        <!-- Test Data Relationships -->
+        <div class="test-section">
+            <div class="test-title">Data Relationship Test</div>
+            
+            <div class="data-relationship-primary">
+                <div class="data-key">Client Name</div>
+                <div class="data-value">John Smith</div>
+                <div class="data-key">Property Type</div>
+                <div class="data-value">Residential</div>
+                <div class="data-key">Inspection Date</div>
+                <div class="data-value">2024-01-15</div>
+            </div>
+            
+            <div class="data-relationship-secondary">
+                <div class="data-key">Inspector</div>
+                <div class="data-value">Jane Doe</div>
+                <div class="data-key">Report ID</div>
+                <div class="data-value">RPT-2024-001</div>
+            </div>
+        </div>
+        
+        <!-- Test Highlight Boxes -->
+        <div class="test-section">
+            <div class="test-title">Highlight Box Test</div>
+            
+            <div class="highlight-primary">
+                Primary highlight box with enhanced styling and professional appearance.
+            </div>
+            
+            <div class="highlight-secondary">
+                Secondary highlight box with complementary styling.
+            </div>
+            
+            <div class="important-note">
+                Important note box with enhanced visual indicators and professional styling for critical information.
+            </div>
+            
+            <div class="highlight-text">
+                Standard highlight text for general emphasis.
+            </div>
+        </div>
+        
+        <!-- Test Content Groups -->
+        <div class="test-section">
+            <div class="test-title">Content Group Test</div>
+            
+            <div class="content-group-primary">
+                <h4>Primary Content Group</h4>
+                <p>This demonstrates the primary content group with enhanced styling and visual hierarchy.</p>
+            </div>
+            
+            <div class="content-group-secondary">
+                <h4>Secondary Content Group</h4>
+                <p>This shows the secondary content group with complementary styling.</p>
+            </div>
+            
+            <div class="content-group">
+                <h4>Standard Content Group</h4>
+                <p>This demonstrates the standard content group styling.</p>
+            </div>
+        </div>
+        
+        <!-- Test Print Preview -->
+        <div class="test-section">
+            <div class="test-title">Print Preview Instructions</div>
+            <p><strong>To test the hierarchical layout in print preview:</strong></p>
+            <ol>
+                <li>Press Ctrl+P (or Cmd+P on Mac) to open print preview</li>
+                <li>Verify that typography hierarchy is clear and readable</li>
+                <li>Check that strategic whitespace creates proper visual separation</li>
+                <li>Ensure multi-column layouts maintain alignment</li>
+                <li>Confirm that attention guides and visual flow elements are visible</li>
+                <li>Validate that content groups have proper spacing and organization</li>
+            </ol>
+        </div>
+    </div>
+    
+    <script>
+        // Add print button for easy testing
+        const printButton = document.createElement('button');
+        printButton.textContent = 'Print Preview Test';
+        printButton.style.position = 'fixed';
+        printButton.style.top = '20px';
+        printButton.style.right = '20px';
+        printButton.style.padding = '10px 20px';
+        printButton.style.backgroundColor = '#1e40af';
+        printButton.style.color = 'white';
+        printButton.style.border = 'none';
+        printButton.style.borderRadius = '5px';
+        printButton.style.cursor = 'pointer';
+        printButton.style.zIndex = '1000';
+        printButton.onclick = () => window.print();
+        document.body.appendChild(printButton);
+    </script>
+</body>
+</html>

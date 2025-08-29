@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print Functionality Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        @media print {
+            body {
+                margin: 0;
+                font-size: 12pt;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+            
+            .test-section {
+                page-break-inside: avoid;
+                margin-bottom: 10mm;
+            }
+            
+            .page-break {
+                page-break-before: always;
+                padding-top: 5mm;
+            }
+            
+            @page {
+                size: A4;
+                margin: 15mm;
+            }
+        }
+        
+        .print-button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        
+        .print-button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="no-print">
+        <h1>Print Functionality Test</h1>
+        <p>This page tests multi-page printing functionality. Click the print button to test.</p>
+        
+        <button class="print-button" onclick="testPrint()">🖨️ Test Print (All Pages)</button>
+        <button class="print-button" onclick="debugPrint()">🔍 Debug Print Info</button>
+        
+        <div id="debug-info" style="margin-top: 20px; padding: 10px; background: #f8f9fa; border-radius: 5px;"></div>
+    </div>
+
+    <!-- Page 1 Content -->
+    <div class="test-section">
+        <h2>Page 1 - Executive Summary</h2>
+        <p>This is the first page of the test document. It should print as page 1.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    </div>
+
+    <!-- Page 2 Content -->
+    <div class="test-section page-break">
+        <h2>Page 2 - Detailed Information</h2>
+        <p>This is the second page of the test document. It should print as page 2.</p>
+        <table border="1" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th style="padding: 8px;">Item</th>
+                    <th style="padding: 8px;">Status</th>
+                    <th style="padding: 8px;">Comments</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="padding: 8px;">Test Item 1</td>
+                    <td style="padding: 8px;">Pass</td>
+                    <td style="padding: 8px;">All good</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px;">Test Item 2</td>
+                    <td style="padding: 8px;">Fail</td>
+                    <td style="padding: 8px;">Needs attention</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px;">Test Item 3</td>
+                    <td style="padding: 8px;">Pass</td>
+                    <td style="padding: 8px;">Excellent condition</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Page 3 Content -->
+    <div class="test-section page-break">
+        <h2>Page 3 - Additional Details</h2>
+        <p>This is the third page of the test document. It should print as page 3.</p>
+        <ul>
+            <li>Point 1: This should be visible in print</li>
+            <li>Point 2: All content should be included</li>
+            <li>Point 3: No content should be cut off</li>
+            <li>Point 4: Page breaks should work correctly</li>
+            <li>Point 5: Headers and footers should appear on each page</li>
+        </ul>
+        <p>Final paragraph to ensure all content is captured in the print output.</p>
+    </div>
+
+    <!-- Page 4 Content -->
+    <div class="test-section page-break">
+        <h2>Page 4 - Conclusion</h2>
+        <p>This is the fourth and final page of the test document. It should print as page 4.</p>
+        <p>If you can see this page in the print preview and it prints correctly, then the multi-page printing functionality is working as expected.</p>
+        
+        <div style="margin-top: 30px; padding: 15px; background: #e8f5e8; border: 1px solid #4caf50; border-radius: 5px;">
+            <h3>✅ Print Test Checklist</h3>
+            <ul>
+                <li>All 4 pages should be visible in print preview</li>
+                <li>Page breaks should occur at the right places</li>
+                <li>Content should not be cut off</li>
+                <li>Tables and formatting should be preserved</li>
+                <li>No content should be missing</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function testPrint() {
+            // Enhanced print function similar to the one we created
+            try {
+                // Ensure all content is visible
+                document.body.style.display = 'block';
+                document.body.style.visibility = 'visible';
+                document.body.style.height = 'auto';
+                document.body.style.overflow = 'visible';
+                
+                // Wait a moment for layout to settle
+                setTimeout(() => {
+                    window.print();
+                }, 100);
+            } catch (error) {
+                console.error('Print failed:', error);
+                // Fallback
+                window.print();
+            }
+        }
+        
+        function debugPrint() {
+            const debugInfo = document.getElementById('debug-info');
+            const sections = document.querySelectorAll('.test-section');
+            const tables = document.querySelectorAll('table');
+            
+            const info = `
+                <h3>Debug Information:</h3>
+                <p><strong>Total sections:</strong> ${sections.length}</p>
+                <p><strong>Total tables:</strong> ${tables.length}</p>
+                <p><strong>Document height:</strong> ${document.body.scrollHeight}px</p>
+                <p><strong>Document width:</strong> ${document.body.scrollWidth}px</p>
+                <p><strong>Viewport height:</strong> ${window.innerHeight}px</p>
+                <p><strong>Viewport width:</strong> ${window.innerWidth}px</p>
+                <p><strong>Page break elements:</strong> ${document.querySelectorAll('.page-break').length}</p>
+            `;
+            
+            debugInfo.innerHTML = info;
+            console.log('Print Debug Info:', {
+                sections: sections.length,
+                tables: tables.length,
+                documentHeight: document.body.scrollHeight,
+                documentWidth: document.body.scrollWidth,
+                pageBreaks: document.querySelectorAll('.page-break').length
+            });
+        }
+        
+        // Auto-debug on load
+        window.addEventListener('load', debugPrint);
+    </script>
+</body>
+</html>

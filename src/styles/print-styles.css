@@ -1,0 +1,2709 @@
+/* Professional Print Styles for Inspection Reports - Enhanced Design System */
+
+@media print {
+  /* Page Setup - Professional 1.25-inch margins */
+  @page {
+    size: A4;
+    margin: 31.75mm; /* 1.25 inches uniform margins */
+  }
+  
+  @page :first {
+    margin: 31.75mm;
+  }
+  
+  /* Ensure all content is printable */
+  html {
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
+  /* Reset and Base Styles */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    font-family: 'Arial', 'Helvetica', sans-serif !important;
+    font-size: 10pt !important; /* Professional body text size */
+    line-height: 1.4 !important;
+    color: #000000 !important;
+    background: white !important;
+  }
+  
+  /* Professional body text and paragraph styling */
+  p, .body-text {
+    font-size: 10pt !important;
+    line-height: 1.4 !important;
+    color: #000000 !important;
+    margin: 0 0 3mm 0 !important;
+  }
+  
+  /* Caption and small text styling */
+  .caption, .small-text {
+    font-size: 8pt !important;
+    font-style: italic !important;
+    color: #9ca3af !important;
+    line-height: 1.3 !important;
+  }
+  
+  /* Container - Professional layout with proper margins */
+  .print-container {
+    width: 100% !important;
+    max-width: 146.5mm !important; /* Adjusted for 1.25-inch margins */
+    margin: 0 auto !important;
+    padding: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+    display: block !important;
+    visibility: visible !important;
+  }
+  
+  /* Hide Non-Print Elements */
+  .no-print,
+  button,
+  .navigation,
+  .toolbar {
+    display: none !important;
+  }
+  
+  /* Enhanced Professional Typography Hierarchy with Strategic Whitespace */
+  h1, .main-heading {
+    font-size: 18pt !important;
+    font-weight: bold !important;
+    color: #1e40af !important;
+    margin: 8mm 0 6mm 0 !important; /* Increased strategic whitespace */
+    line-height: 1.2 !important;
+    letter-spacing: 0.5pt !important;
+    text-transform: uppercase !important;
+    border-bottom: 2pt solid #1e40af !important;
+    padding-bottom: 2mm !important;
+  }
+  
+  h2, .section-header {
+    font-size: 14pt !important;
+    font-weight: bold !important;
+    color: #374151 !important;
+    margin: 8mm 0 4mm 0 !important; /* Enhanced section spacing */
+    line-height: 1.3 !important;
+    letter-spacing: 0.3pt !important;
+    padding-left: 3mm !important;
+    border-left: 3pt solid #1e40af !important;
+    background: linear-gradient(to right, rgba(30, 64, 175, 0.05), transparent 15mm) !important;
+    padding: 2mm 0 2mm 3mm !important;
+  }
+  
+  h3, .subsection-header {
+    font-size: 12pt !important;
+    font-weight: bold !important;
+    color: #6b7280 !important;
+    margin: 6mm 0 3mm 0 !important; /* Consistent subsection spacing */
+    line-height: 1.3 !important;
+    letter-spacing: 0.2pt !important;
+    padding-left: 2mm !important;
+    border-left: 2pt solid #6b7280 !important;
+  }
+  
+  h4, .sub-subsection-header {
+    font-size: 11pt !important;
+    font-weight: bold !important;
+    color: #9ca3af !important;
+    margin: 4mm 0 2mm 0 !important;
+    line-height: 1.3 !important;
+    text-transform: uppercase !important;
+    font-size: 9pt !important;
+    letter-spacing: 0.5pt !important;
+  }
+  
+  /* Professional Header System - Consistent across all pages */
+  .professional-header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 25mm !important;
+    background: white !important;
+    z-index: 1000 !important;
+    page-break-inside: avoid !important;
+    margin: 0 !important;
+    padding: 3mm 31.75mm 0 31.75mm !important; /* Match page margins */
+    border-bottom: 1pt solid #e2e8f0 !important;
+    box-shadow: 0 1pt 3pt rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  .header-content {
+    display: grid !important;
+    grid-template-columns: 2fr 3fr 2fr !important;
+    align-items: center !important;
+    height: 20mm !important;
+    gap: 3mm !important;
+  }
+  
+  .header-left {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 3mm !important;
+  }
+  
+  .header-logo {
+    width: 15mm !important;
+    height: 15mm !important;
+    object-fit: contain !important;
+    border-radius: 1mm !important;
+  }
+  
+  .header-branding {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+  }
+  
+  .header-company-name {
+    font-size: 11pt !important;
+    font-weight: bold !important;
+    color: #1e40af !important;
+    line-height: 1.1 !important;
+    margin-bottom: 0.5mm !important;
+  }
+  
+  .header-tagline {
+    font-size: 7pt !important;
+    color: #6b7280 !important;
+    line-height: 1.1 !important;
+    font-style: italic !important;
+  }
+  
+  .header-center {
+    text-align: center !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+  }
+  
+  .header-report-title {
+    font-size: 12pt !important;
+    font-weight: bold !important;
+    color: #374151 !important;
+    line-height: 1.2 !important;
+    margin-bottom: 1mm !important;
+  }
+  
+  .header-report-id {
+    font-size: 8pt !important;
+    color: #6b7280 !important;
+    line-height: 1.1 !important;
+    margin-bottom: 0.5mm !important;
+  }
+  
+  .header-inspection-date {
+    font-size: 8pt !important;
+    color: #6b7280 !important;
+    line-height: 1.1 !important;
+  }
+  
+  .header-right {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    justify-content: center !important;
+  }
+  
+  .header-page-info {
+    font-size: 10pt !important;
+    color: #1e40af !important;
+    font-weight: bold !important;
+    margin-bottom: 1mm !important;
+  }
+  
+  .header-timestamp {
+    font-size: 7pt !important;
+    color: #6b7280 !important;
+    font-style: italic !important;
+  }
+  
+  .header-divider {
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 31.75mm !important;
+    right: 31.75mm !important;
+    height: 2pt !important;
+    background: linear-gradient(to right, #1e40af, #3b82f6, #1e40af) !important;
+  }
+  
+  .header-continuity-marker {
+    position: absolute !important;
+    right: 31.75mm !important;
+    bottom: -3mm !important;
+    width: 8mm !important;
+    height: 3mm !important;
+    background: linear-gradient(135deg, #1e40af, #3b82f6) !important;
+    opacity: 0.7 !important;
+    border-radius: 0 0 2mm 2mm !important;
+  }
+  
+  .header-brand-accent {
+    position: absolute !important;
+    left: 31.75mm !important;
+    bottom: -3mm !important;
+    width: 15mm !important;
+    height: 2mm !important;
+    background: linear-gradient(to right, #1e40af, transparent) !important;
+    opacity: 0.4 !important;
+  }
+  
+  /* Professional Footer System - Consistent across all pages */
+  .professional-footer {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 30mm !important;
+    background: white !important;
+    z-index: 1000 !important;
+    page-break-inside: avoid !important;
+    margin: 0 !important;
+    padding: 0 31.75mm 3mm 31.75mm !important; /* Match page margins */
+    border-top: 1pt solid #e2e8f0 !important;
+    box-shadow: 0 -1pt 3pt rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  .footer-divider {
+    position: absolute !important;
+    top: 0 !important;
+    left: 31.75mm !important;
+    right: 31.75mm !important;
+    height: 2pt !important;
+    background: linear-gradient(to right, #1e40af, #3b82f6, #1e40af) !important;
+  }
+  
+  .footer-content {
+    display: grid !important;
+    grid-template-columns: 2fr 2fr 2fr !important;
+    align-items: center !important;
+    height: 25mm !important;
+    gap: 3mm !important;
+    padding-top: 4mm !important;
+  }
+  
+  .footer-left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 3mm !important;
+  }
+  
+  .footer-logo {
+    width: 12mm !important;
+    height: 12mm !important;
+    object-fit: contain !important;
+    opacity: 0.9 !important;
+    border-radius: 1mm !important;
+  }
+  
+  .footer-company-info {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  .footer-company-name {
+    font-size: 9pt !important;
+    font-weight: bold !important;
+    color: #1e40af !important;
+    line-height: 1.1 !important;
+    margin-bottom: 0.5mm !important;
+  }
+  
+  .footer-tagline {
+    font-size: 7pt !important;
+    color: #6b7280 !important;
+    line-height: 1.1 !important;
+    margin-bottom: 0.5mm !important;
+  }
+  
+  .footer-inspector {
+    font-size: 6pt !important;
+    color: #9ca3af !important;
+    line-height: 1.1 !important;
+  }
+  
+  .footer-center {
+    text-align: center !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+  }
+  
+  .footer-report-info {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.5mm !important;
+  }
+  
+  .footer-report-id {
+    font-size: 8pt !important;
+    color: #374151 !important;
+    font-weight: bold !important;
+    line-height: 1.2 !important;
+  }
+  
+  .footer-generated {
+    font-size: 7pt !important;
+    color: #6b7280 !important;
+    line-height: 1.2 !important;
+  }
+  
+  .footer-property {
+    font-size: 6pt !important;
+    color: #9ca3af !important;
+    line-height: 1.2 !important;
+    font-style: italic !important;
+  }
+  
+  .footer-right {
+    text-align: right !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+  }
+  
+  .footer-page-number {
+    font-size: 10pt !important;
+    color: #1e40af !important;
+    font-weight: bold !important;
+    margin-bottom: 1mm !important;
+  }
+  
+  .footer-confidential {
+    font-size: 6pt !important;
+    color: #9ca3af !important;
+    font-style: italic !important;
+    line-height: 1.2 !important;
+    margin-bottom: 0.5mm !important;
+  }
+  
+  .footer-quality-mark {
+    font-size: 6pt !important;
+    color: #059669 !important;
+    font-weight: bold !important;
+    line-height: 1.2 !important;
+  }
+  
+  .footer-continuity-marker {
+    position: absolute !important;
+    left: 31.75mm !important;
+    top: -3mm !important;
+    width: 8mm !important;
+    height: 3mm !important;
+    background: linear-gradient(135deg, #3b82f6, #1e40af) !important;
+    opacity: 0.7 !important;
+    border-radius: 2mm 2mm 0 0 !important;
+  }
+  
+  .footer-brand-accent {
+    position: absolute !important;
+    right: 31.75mm !important;
+    top: -3mm !important;
+    width: 15mm !important;
+    height: 2mm !important;
+    background: linear-gradient(to left, #1e40af, transparent) !important;
+    opacity: 0.4 !important;
+  }
+  
+  /* Adjust page content to accommodate fixed header and footer */
+  .print-container {
+    margin-top: 30mm !important; /* Space for enhanced header */
+    margin-bottom: 35mm !important; /* Space for enhanced footer */
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  
+  /* Enhanced Visual Continuity Elements */
+  .visual-continuity-line {
+    height: 2pt !important;
+    background: linear-gradient(to right, #1e40af, #3b82f6, #60a5fa, #3b82f6, #1e40af) !important;
+    margin: 4mm 0 !important;
+    opacity: 0.4 !important;
+    border-radius: 1pt !important;
+  }
+  
+  .section-divider {
+    height: 1pt !important;
+    background: linear-gradient(to right, transparent, #e2e8f0, transparent) !important;
+    margin: 5mm 0 !important;
+    width: 100% !important;
+  }
+  
+  .page-continuation-marker {
+    position: absolute !important;
+    right: -2mm !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 4mm !important;
+    height: 20mm !important;
+    background: linear-gradient(to bottom, transparent, #1e40af, #3b82f6, #1e40af, transparent) !important;
+    opacity: 0.15 !important;
+    border-radius: 2mm !important;
+  }
+  
+  /* Enhanced visual continuity for page flow */
+  .page-flow-indicator {
+    position: relative !important;
+  }
+  
+  .page-flow-indicator::before {
+    content: '' !important;
+    position: absolute !important;
+    left: -3mm !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    width: 2pt !important;
+    background: linear-gradient(to bottom, transparent, #1e40af, #3b82f6, #1e40af, transparent) !important;
+    opacity: 0.25 !important;
+    border-radius: 1pt !important;
+  }
+  
+  .page-flow-indicator::after {
+    content: '' !important;
+    position: absolute !important;
+    right: -3mm !important;
+    top: 25% !important;
+    bottom: 25% !important;
+    width: 1pt !important;
+    background: linear-gradient(to bottom, #3b82f6, #1e40af) !important;
+    opacity: 0.2 !important;
+  }
+  
+  /* Section continuity markers */
+  .section-continuity {
+    border-left: 3pt solid #1e40af !important;
+    padding-left: 4mm !important;
+    position: relative !important;
+    background: linear-gradient(to right, rgba(30, 64, 175, 0.02), transparent 10mm) !important;
+  }
+  
+  .section-continuity::before {
+    content: '' !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 3pt !important;
+    height: 5mm !important;
+    background: linear-gradient(to bottom, #3b82f6, #1e40af) !important;
+  }
+  
+  .section-continuity::after {
+    content: '' !important;
+    position: absolute !important;
+    right: -2mm !important;
+    top: 0 !important;
+    width: 1pt !important;
+    height: 100% !important;
+    background: linear-gradient(to bottom, #1e40af, transparent, #1e40af) !important;
+    opacity: 0.3 !important;
+  }
+  
+  /* Brand consistency elements */
+  .brand-accent {
+    border-left: 3pt solid #1e40af !important;
+    padding-left: 4mm !important;
+    position: relative !important;
+  }
+  
+  .brand-accent::before {
+    content: '' !important;
+    position: absolute !important;
+    left: -1pt !important;
+    top: 0 !important;
+    width: 1pt !important;
+    height: 100% !important;
+    background: #3b82f6 !important;
+    opacity: 0.6 !important;
+  }
+  
+  .brand-highlight {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f8fafc 100%) !important;
+    border-left: 4pt solid #1e40af !important;
+    border-right: 1pt solid #e2e8f0 !important;
+    padding: 3mm 4mm !important;
+    margin: 3mm 0 !important;
+    position: relative !important;
+    box-shadow: inset 0 0 5mm rgba(30, 64, 175, 0.05) !important;
+  }
+  
+  .brand-highlight::before {
+    content: '' !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 4pt !important;
+    height: 3mm !important;
+    background: linear-gradient(to bottom, #3b82f6, #1e40af) !important;
+  }
+  
+  /* Professional document flow elements */
+  .document-flow-accent {
+    position: relative !important;
+  }
+  
+  .document-flow-accent::before {
+    content: '' !important;
+    position: absolute !important;
+    left: -5mm !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    width: 2pt !important;
+    background: linear-gradient(to bottom, transparent 20%, #1e40af 50%, transparent 80%) !important;
+    opacity: 0.2 !important;
+  }
+  
+  /* Page transition elements */
+  .page-transition-marker {
+    height: 3pt !important;
+    background: linear-gradient(45deg, #1e40af, transparent, #3b82f6, transparent, #1e40af) !important;
+    margin: 5mm 0 !important;
+    opacity: 0.3 !important;
+    border-radius: 1.5pt !important;
+  }
+  
+  /* Professional section headers with continuity */
+  .professional-section-header {
+    position: relative !important;
+    padding-left: 5mm !important;
+  }
+  
+  .professional-section-header::before {
+    content: '' !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    width: 3pt !important;
+    background: linear-gradient(to bottom, #1e40af, #3b82f6) !important;
+    border-radius: 1.5pt !important;
+  }
+  
+  .professional-section-header::after {
+    content: '' !important;
+    position: absolute !important;
+    left: 4pt !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 8mm !important;
+    height: 1pt !important;
+    background: linear-gradient(to right, #3b82f6, transparent) !important;
+    opacity: 0.5 !important;
+  }
+  
+  /* Legacy header styles for first page title */
+  .report-header {
+    text-align: center !important;
+    margin-bottom: 8mm !important;
+    padding-bottom: 4mm !important;
+    border-bottom: 2pt solid #1e40af !important;
+    page-break-after: avoid !important;
+    margin-top: 5mm !important; /* Additional space after fixed header */
+  }
+  
+  .company-logo {
+    width: 60px !important;
+    height: 60px !important;
+    margin: 0 auto 4mm !important;
+    display: block !important;
+  }
+  
+  .company-name {
+    font-size: 18pt !important;
+    font-weight: bold !important;
+    color: #1e40af !important;
+    margin-bottom: 3mm !important;
+  }
+  
+  .report-title {
+    font-size: 14pt !important;
+    font-weight: bold !important;
+    color: #374151 !important;
+    margin-bottom: 2mm !important;
+  }
+  
+  .report-subtitle {
+    font-size: 10pt !important;
+    color: #6b7280 !important;
+    font-style: italic !important;
+  }
+  
+  /* Property Information Box - Professional clean design */
+  .property-info {
+    background: #f8fafc !important;
+    border: none !important;
+    border-left: 3pt solid #1e40af !important;
+    border-radius: 0 !important;
+    padding: 4mm !important;
+    margin-bottom: 8mm !important;
+    page-break-inside: avoid !important;
+  }
+  
+  .property-info-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 3mm !important;
+  }
+  
+  .info-item {
+    margin-bottom: 2mm !important;
+    font-size: 10pt !important;
+  }
+  
+  .info-label {
+    font-weight: bold !important;
+    color: #1e40af !important;
+    display: inline-block !important;
+    min-width: 35mm !important;
+  }
+  
+  .info-value {
+    color: #374151 !important;
+  }
+  
+  /* Professional Tables - Clean design with horizontal dividers only */
+  .inspection-table, .professional-table, .enhanced-table {
+    width: 100% !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    margin: 4mm 0 6mm 0 !important;
+    font-size: 10pt !important;
+    page-break-inside: auto !important;
+    table-layout: fixed !important;
+    border: none !important;
+  }
+  
+  .inspection-table thead, .professional-table thead {
+    display: table-header-group !important;
+    page-break-inside: avoid !important;
+    page-break-after: avoid !important;
+  }
+  
+  .inspection-table tbody, .professional-table tbody {
+    display: table-row-group !important;
+  }
+  
+  .inspection-table tfoot, .professional-table tfoot {
+    display: table-footer-group !important;
+  }
+  
+  /* Clean table headers - no borders, just background */
+  .inspection-table th, .professional-table th, .enhanced-table th {
+    background: #f8fafc !important;
+    color: #1e40af !important;
+    font-weight: bold !important;
+    padding: 3mm 2mm !important;
+    border: none !important;
+    border-bottom: 1pt solid #e2e8f0 !important;
+    text-align: left !important;
+    font-size: 10pt !important;
+  }
+  
+  /* Clean table cells - horizontal dividers only */
+  .inspection-table td, .professional-table td, .enhanced-table td {
+    padding: 3mm 2mm !important;
+    border: none !important;
+    border-bottom: 1pt solid #e2e8f0 !important;
+    vertical-align: top !important;
+    font-size: 10pt !important;
+    line-height: 1.4 !important;
+  }
+  
+  .inspection-table tr, .professional-table tr, .enhanced-table tr {
+    page-break-inside: avoid !important;
+  }
+  
+  /* Remove alternating row colors for cleaner look */
+  .inspection-table tr:nth-child(even), .professional-table tr:nth-child(even), .enhanced-table tr:nth-child(even) {
+    background: transparent !important;
+  }
+  
+  /* Grade column highlighting - bold formatting only */
+  .inspection-table td.grade-column, .professional-table td.grade-column, .enhanced-table td.grade-column {
+    font-weight: bold !important;
+    text-align: center !important;
+  }
+  
+  /* Strategic color application for Grade D */
+  .grade-d, .grade-highlight-d {
+    background-color: #fef3c7 !important; /* Light amber background */
+    font-weight: bold !important;
+  }
+  
+  /* Enhanced Table Specific Styles */
+  .enhanced-table {
+    /* Ensure clean design with no excessive borders */
+    border: none !important;
+  }
+  
+  /* Report Page Structure for Multi-Page Printing */
+  .report-page {
+    page-break-after: always !important; /* ensures each page prints separately */
+    break-inside: avoid !important;      /* prevents splitting content across pages */
+    min-height: 297mm !important;        /* A4 height */
+    width: 210mm !important;             /* A4 width */
+    padding: 0 !important;               /* Padding handled by page margins */
+    margin: 0 !important;
+    position: relative !important;
+    display: block !important;
+  }
+  
+  /* Last page should not force a new page */
+  .report-page:last-child {
+    page-break-after: auto !important;
+  }
+  
+  /* Finding blocks that should not split across pages */
+  .finding {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 3mm !important;
+    margin-bottom: 5mm !important;
+    break-inside: avoid !important; /* prevents splitting a single finding across pages */
+    page-break-inside: avoid !important;
+  }
+  
+  /* Finding table specific styling */
+  .finding-table {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    margin-bottom: 0 !important;
+  }
+  
+  /* Ensure content blocks don't split */
+  .area-section,
+  .property-info-section,
+  .executive-summary-section,
+  .signatures-section,
+  .disclaimer-section {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  
+  /* Professional Design System Integration */
+  .professional-design-system .enhanced-table {
+    margin: 6mm 0 !important;
+  }
+  
+  .professional-design-system .professional-inspection-table {
+    page-break-inside: auto !important;
+  }
+  
+  .professional-design-system .property-information-table {
+    background: rgba(248, 250, 252, 0.3) !important;
+  }
+  
+  .professional-design-system .summary-results-table {
+    font-size: 11pt !important;
+  }
+  
+  .professional-design-system .signatures-table {
+    margin-top: 10mm !important;
+  }
+  
+  /* Professional Photo Integration in Tables */
+  .enhanced-table .professional-photo-evidence-container {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .enhanced-table .professional-photos-display {
+    display: flex !important;
+    gap: 2mm !important;
+    align-items: center !important;
+  }
+  
+  .enhanced-table .professional-evidence-photo {
+    width: 15mm !important;
+    height: 15mm !important;
+    object-fit: cover !important;
+    border-radius: 1mm !important;
+    border: 1pt solid #e2e8f0 !important;
+  }
+  
+  .enhanced-table .professional-evidence-summary {
+    font-size: 7pt !important;
+    color: #6b7280 !important;
+    margin-top: 1mm !important;
+  }
+  
+  .enhanced-table .no-photos-message {
+    font-size: 8pt !important;
+    color: #9ca3af !important;
+    font-style: italic !important;
+  }
+  
+  /* Professional Photo Container Styles for Table Integration */
+  .enhanced-table .professional-photo-container {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 2mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .enhanced-table .professional-photo-frame {
+    position: relative !important;
+    display: inline-block !important;
+  }
+  
+  .enhanced-table .professional-photo-image {
+    width: 15mm !important;
+    height: 15mm !important;
+    object-fit: cover !important;
+    border-radius: 1mm !important;
+    border: 1pt solid #e2e8f0 !important;
+    display: block !important;
+  }
+  
+  .enhanced-table .professional-photo-caption {
+    display: none !important; /* Hide captions in table cells to save space */
+  }
+  
+  .enhanced-table .professional-photo-overlay {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    background: rgba(30, 64, 175, 0.8) !important;
+    color: white !important;
+    font-size: 5pt !important;
+    padding: 0.5mm !important;
+    border-radius: 0 1mm 0 1mm !important;
+  }
+  
+  .enhanced-table .high-res-badge {
+    font-weight: bold !important;
+    font-size: 5pt !important;
+  }
+  
+  .enhanced-table .photo-evidence-connector {
+    display: none !important; /* Hide connectors in table layout */
+  }
+  
+  /* Professional Photo Size Classes for Table Context */
+  .enhanced-table .professional-photo-small .professional-photo-image {
+    width: 12mm !important;
+    height: 12mm !important;
+  }
+  
+  .enhanced-table .professional-photo-medium .professional-photo-image {
+    width: 18mm !important;
+    height: 18mm !important;
+  }
+  
+  .enhanced-table .professional-photo-large .professional-photo-image {
+    width: 25mm !important;
+    height: 25mm !important;
+  }
+  
+  .enhanced-table .professional-photo-grid .professional-photo-image {
+    width: 15mm !important;
+    height: 15mm !important;
+  }
+  
+  .enhanced-table .table-header {
+    /* Clean header styling */
+    background: #f8fafc !important;
+    color: #1e40af !important;
+    font-weight: bold !important;
+    padding: 3mm 2mm !important;
+    border: none !important;
+    border-bottom: 1pt solid #e2e8f0 !important;
+    text-align: left !important;
+    font-size: 10pt !important;
+  }
+  
+  .enhanced-table .table-cell {
+    /* Clean cell styling with horizontal dividers only */
+    padding: 3mm 2mm !important;
+    border: none !important;
+    border-bottom: 1pt solid #e2e8f0 !important;
+    vertical-align: top !important;
+    font-size: 10pt !important;
+    line-height: 1.4 !important;
+  }
+  
+  .enhanced-table .table-row {
+    /* Clean row styling */
+    background: transparent !important;
+    page-break-inside: avoid !important;
+  }
+  
+  /* Grade column specific styling - bold formatting exclusively */
+  .enhanced-table .grade-column-header {
+    text-align: center !important;
+    font-weight: bold !important;
+  }
+  
+  .enhanced-table .grade-column {
+    font-weight: bold !important;
+    text-align: center !important;
+  }
+  
+  /* Grade D highlighting with light amber background */
+  .enhanced-table .grade-highlight-d {
+    background-color: #fef3c7 !important;
+  }
+  
+  .enhanced-table .grade-highlight-d .grade-column {
+    background-color: #fef3c7 !important;
+    font-weight: bold !important;
+  }
+  
+  /* Responsive design for different screen sizes */
+  @media screen and (max-width: 768px) {
+    .enhanced-table {
+      font-size: 9pt !important;
+    }
+    
+    .enhanced-table .table-header,
+    .enhanced-table .table-cell {
+      padding: 2mm 1.5mm !important;
+      font-size: 9pt !important;
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .enhanced-table {
+      font-size: 8pt !important;
+    }
+    
+    .enhanced-table .table-header,
+    .enhanced-table .table-cell {
+      padding: 1.5mm 1mm !important;
+      font-size: 8pt !important;
+    }
+  }
+  
+  /* Column Widths */
+  .inspection-table th:nth-child(1),
+  .inspection-table td:nth-child(1) {
+    width: 30% !important;
+  }
+  
+  .inspection-table th:nth-child(2),
+  .inspection-table td:nth-child(2) {
+    width: 12% !important;
+    text-align: center !important;
+  }
+  
+  .inspection-table th:nth-child(3),
+  .inspection-table td:nth-child(3) {
+    width: 28% !important;
+  }
+  
+  .inspection-table th:nth-child(4),
+  .inspection-table td:nth-child(4) {
+    width: 30% !important;
+  }
+  
+  /* Professional Status Styling - Strategic color application */
+  .status-pass {
+    background: #dcfce7 !important;
+    color: #059669 !important;
+    font-weight: bold !important;
+    padding: 1.5mm 3mm !important;
+    border-radius: 2mm !important;
+    display: inline-block !important;
+    font-size: 9pt !important;
+  }
+  
+  .status-fail {
+    background: #fee2e2 !important;
+    color: #dc2626 !important;
+    font-weight: bold !important;
+    padding: 1.5mm 3mm !important;
+    border-radius: 2mm !important;
+    display: inline-block !important;
+    font-size: 9pt !important;
+  }
+  
+  .status-snags {
+    background: #fed7aa !important;
+    color: #d97706 !important;
+    font-weight: bold !important;
+    padding: 1.5mm 3mm !important;
+    border-radius: 2mm !important;
+    display: inline-block !important;
+    font-size: 9pt !important;
+  }
+  
+  /* Grade D specific highlighting */
+  .status-grade-d, .grade-d-status {
+    background: #fef3c7 !important; /* Amber background for Grade D */
+    color: #d97706 !important;
+    font-weight: bold !important;
+    padding: 1.5mm 3mm !important;
+    border-radius: 2mm !important;
+    display: inline-block !important;
+    font-size: 9pt !important;
+  }
+  
+  /* Enhanced Professional Spacing and Hierarchical Layout Utilities */
+  .professional-spacing {
+    margin: 4mm 0 !important;
+  }
+  
+  .section-spacing {
+    margin: 8mm 0 6mm 0 !important; /* Enhanced section spacing */
+  }
+  
+  .subsection-spacing {
+    margin: 6mm 0 3mm 0 !important; /* Consistent subsection spacing */
+  }
+  
+  .content-group-spacing {
+    margin: 5mm 0 !important; /* Logical content grouping */
+  }
+  
+  /* Strategic Whitespace Allocation Classes */
+  .whitespace-large {
+    margin: 10mm 0 !important; /* Large strategic whitespace */
+  }
+  
+  .whitespace-medium {
+    margin: 6mm 0 !important; /* Medium strategic whitespace */
+  }
+  
+  .whitespace-small {
+    margin: 3mm 0 !important; /* Small strategic whitespace */
+  }
+  
+  .whitespace-micro {
+    margin: 1.5mm 0 !important; /* Micro strategic whitespace */
+  }
+  
+  /* Hierarchical Content Containers */
+  .content-hierarchy-level-1 {
+    margin: 8mm 0 6mm 0 !important;
+    padding: 4mm 0 !important;
+    border-top: 2pt solid #1e40af !important;
+    border-bottom: 1pt solid #e2e8f0 !important;
+  }
+  
+  .content-hierarchy-level-2 {
+    margin: 6mm 0 4mm 0 !important;
+    padding: 3mm 0 3mm 4mm !important;
+    border-left: 3pt solid #3b82f6 !important;
+    background: linear-gradient(to right, rgba(59, 130, 246, 0.03), transparent 20mm) !important;
+  }
+  
+  .content-hierarchy-level-3 {
+    margin: 4mm 0 3mm 0 !important;
+    padding: 2mm 0 2mm 3mm !important;
+    border-left: 2pt solid #6b7280 !important;
+    background: linear-gradient(to right, rgba(107, 114, 128, 0.02), transparent 15mm) !important;
+  }
+  
+  /* Logical Content Grouping */
+  .content-group {
+    margin: 5mm 0 !important;
+    padding: 3mm !important;
+    background: rgba(248, 250, 252, 0.5) !important;
+    border-radius: 2mm !important;
+    border: 1pt solid rgba(226, 232, 240, 0.3) !important;
+  }
+  
+  .content-group-primary {
+    margin: 6mm 0 !important;
+    padding: 4mm !important;
+    background: linear-gradient(135deg, rgba(30, 64, 175, 0.02), rgba(59, 130, 246, 0.01)) !important;
+    border-left: 4pt solid #1e40af !important;
+    border-radius: 0 2mm 2mm 0 !important;
+  }
+  
+  .content-group-secondary {
+    margin: 4mm 0 !important;
+    padding: 3mm !important;
+    background: rgba(243, 244, 246, 0.3) !important;
+    border-left: 2pt solid #6b7280 !important;
+    border-radius: 0 1mm 1mm 0 !important;
+  }
+  
+  /* Multi-Column Layout Components for Information Density */
+  .multi-column-2 {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 5mm !important;
+    margin: 4mm 0 !important;
+    align-items: start !important;
+  }
+  
+  .multi-column-3 {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 4mm !important;
+    margin: 4mm 0 !important;
+    align-items: start !important;
+  }
+  
+  .multi-column-asymmetric {
+    display: grid !important;
+    grid-template-columns: 2fr 1fr !important;
+    gap: 5mm !important;
+    margin: 4mm 0 !important;
+    align-items: start !important;
+  }
+  
+  .multi-column-info-dense {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 3mm !important;
+    margin: 3mm 0 !important;
+    font-size: 9pt !important;
+    line-height: 1.3 !important;
+  }
+  
+  /* Column Content Styling */
+  .column-content {
+    padding: 2mm !important;
+    background: rgba(248, 250, 252, 0.3) !important;
+    border-radius: 1mm !important;
+    border: 1pt solid rgba(226, 232, 240, 0.2) !important;
+  }
+  
+  .column-content-primary {
+    padding: 3mm !important;
+    background: linear-gradient(135deg, rgba(30, 64, 175, 0.03), rgba(59, 130, 246, 0.01)) !important;
+    border-left: 3pt solid #1e40af !important;
+    border-radius: 0 1mm 1mm 0 !important;
+  }
+  
+  .column-content-secondary {
+    padding: 2mm !important;
+    background: rgba(243, 244, 246, 0.2) !important;
+    border-left: 2pt solid #6b7280 !important;
+    border-radius: 0 1mm 1mm 0 !important;
+  }
+  
+  /* Enhanced List Styling with Better Hierarchy */
+  ul, ol {
+    margin: 3mm 0 3mm 6mm !important;
+    padding-left: 4mm !important;
+  }
+  
+  li {
+    margin-bottom: 2mm !important;
+    font-size: 10pt !important;
+    line-height: 1.4 !important;
+    position: relative !important;
+  }
+  
+  /* Hierarchical List Styling */
+  ul.hierarchy-level-1 {
+    margin-left: 0 !important;
+    padding-left: 5mm !important;
+  }
+  
+  ul.hierarchy-level-2 {
+    margin-left: 5mm !important;
+    padding-left: 4mm !important;
+    font-size: 9pt !important;
+  }
+  
+  ul.hierarchy-level-3 {
+    margin-left: 8mm !important;
+    padding-left: 3mm !important;
+    font-size: 8pt !important;
+    color: #6b7280 !important;
+  }
+  
+  /* Enhanced List Item Markers */
+  ul.hierarchy-level-1 > li::marker {
+    color: #1e40af !important;
+    font-weight: bold !important;
+  }
+  
+  ul.hierarchy-level-2 > li::marker {
+    color: #3b82f6 !important;
+  }
+  
+  ul.hierarchy-level-3 > li::marker {
+    color: #6b7280 !important;
+  }
+  
+  /* Visual Flow and Attention Guidance */
+  .visual-flow-container {
+    position: relative !important;
+    margin: 4mm 0 !important;
+  }
+  
+  .visual-flow-container::before {
+    content: '' !important;
+    position: absolute !important;
+    left: -3mm !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    width: 2pt !important;
+    background: linear-gradient(to bottom, transparent, #1e40af 20%, #3b82f6 50%, #1e40af 80%, transparent) !important;
+    opacity: 0.3 !important;
+  }
+  
+  .attention-guide-primary {
+    border-left: 4pt solid #1e40af !important;
+    padding-left: 4mm !important;
+    margin: 5mm 0 !important;
+    background: linear-gradient(to right, rgba(30, 64, 175, 0.05), transparent 20mm) !important;
+    position: relative !important;
+  }
+  
+  .attention-guide-primary::after {
+    content: '' !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 4pt !important;
+    height: 8mm !important;
+    background: linear-gradient(to bottom, #3b82f6, #1e40af) !important;
+  }
+  
+  .attention-guide-secondary {
+    border-left: 3pt solid #3b82f6 !important;
+    padding-left: 3mm !important;
+    margin: 4mm 0 !important;
+    background: linear-gradient(to right, rgba(59, 130, 246, 0.03), transparent 15mm) !important;
+  }
+  
+  .reading-flow-indicator {
+    position: relative !important;
+    padding: 2mm 0 !important;
+  }
+  
+  .reading-flow-indicator::before {
+    content: '→' !important;
+    position: absolute !important;
+    left: -5mm !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    color: #1e40af !important;
+    font-weight: bold !important;
+    font-size: 12pt !important;
+    opacity: 0.4 !important;
+  }
+  
+  /* Enhanced Professional Emphasis with Hierarchy */
+  .highlight-text {
+    background: #fef3c7 !important;
+    padding: 1mm 2mm !important;
+    font-weight: bold !important;
+    border-radius: 1mm !important;
+    border: 1pt solid rgba(217, 119, 6, 0.2) !important;
+  }
+  
+  .highlight-primary {
+    background: linear-gradient(135deg, rgba(30, 64, 175, 0.1), rgba(59, 130, 246, 0.05)) !important;
+    color: #1e40af !important;
+    padding: 1.5mm 3mm !important;
+    font-weight: bold !important;
+    border-radius: 2mm !important;
+    border: 1pt solid rgba(30, 64, 175, 0.2) !important;
+  }
+  
+  .highlight-secondary {
+    background: rgba(243, 244, 246, 0.5) !important;
+    color: #374151 !important;
+    padding: 1mm 2mm !important;
+    font-weight: bold !important;
+    border-radius: 1mm !important;
+    border: 1pt solid rgba(107, 114, 128, 0.2) !important;
+  }
+  
+  .important-note {
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9) !important;
+    border-left: 3pt solid #1e40af !important;
+    border-top: 1pt solid rgba(30, 64, 175, 0.1) !important;
+    border-bottom: 1pt solid rgba(30, 64, 175, 0.1) !important;
+    padding: 3mm 4mm !important;
+    margin: 4mm 0 !important;
+    font-style: italic !important;
+    border-radius: 0 2mm 2mm 0 !important;
+    position: relative !important;
+  }
+  
+  .important-note::before {
+    content: '!' !important;
+    position: absolute !important;
+    left: -1.5pt !important;
+    top: 2mm !important;
+    width: 3pt !important;
+    height: 6mm !important;
+    background: #3b82f6 !important;
+    color: white !important;
+    font-weight: bold !important;
+    font-size: 8pt !important;
+    text-align: center !important;
+    line-height: 6mm !important;
+    border-radius: 0 1mm 1mm 0 !important;
+  }
+  
+  /* Key Data Relationship Highlighting */
+  .data-relationship-primary {
+    display: grid !important;
+    grid-template-columns: 1fr 2fr !important;
+    gap: 4mm !important;
+    margin: 4mm 0 !important;
+    padding: 3mm !important;
+    background: linear-gradient(135deg, rgba(30, 64, 175, 0.02), rgba(59, 130, 246, 0.01)) !important;
+    border: 1pt solid rgba(30, 64, 175, 0.1) !important;
+    border-radius: 2mm !important;
+  }
+  
+  .data-relationship-secondary {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 3mm !important;
+    margin: 3mm 0 !important;
+    padding: 2mm !important;
+    background: rgba(248, 250, 252, 0.3) !important;
+    border: 1pt solid rgba(226, 232, 240, 0.2) !important;
+    border-radius: 1mm !important;
+  }
+  
+  .data-key {
+    font-weight: bold !important;
+    color: #1e40af !important;
+    text-align: right !important;
+    padding-right: 2mm !important;
+  }
+  
+  .data-value {
+    color: #374151 !important;
+    padding-left: 2mm !important;
+    border-left: 2pt solid rgba(30, 64, 175, 0.1) !important;
+  }
+  
+  /* Photo Grid - Professional Layout */
+  .photo-evidence-container {
+    padding: 2mm !important;
+    page-break-inside: avoid !important;
+  }
+  
+  .photo-grid-print {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 2mm !important;
+    margin: 2mm 0 !important;
+  }
+  
+  .photo-item-print {
+    width: 100% !important;
+    max-width: 40mm !important;
+    height: 30mm !important;
+    object-fit: cover !important;
+    border: 0.5pt solid #cbd5e1 !important;
+    border-radius: 1mm !important;
+    display: block !important;
+    page-break-inside: avoid !important;
+  }
+  
+  .photo-caption-print {
+    font-size: 7pt !important;
+    text-align: center !important;
+    color: #666 !important;
+    margin-top: 1mm !important;
+    font-style: italic !important;
+  }
+  
+  /* Area Headers - Professional typography hierarchy */
+  .area-header {
+    background: #1e40af !important;
+    color: white !important;
+    padding: 3mm 4mm !important;
+    font-size: 14pt !important; /* Section header size */
+    font-weight: bold !important;
+    margin: 6mm 0 4mm 0 !important;
+    page-break-after: avoid !important;
+    border-radius: 2mm !important;
+  }
+  
+  /* Bilingual Disclaimer */
+  .bilingual-disclaimer {
+    margin: 5mm 0 !important;
+    page-break-inside: avoid !important;
+  }
+  
+  .bilingual-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin: 3mm 0 !important;
+  }
+  
+  .bilingual-table td {
+    padding: 2mm !important;
+    border: 0.5pt solid #e2e8f0 !important;
+    vertical-align: top !important;
+    font-size: 8pt !important;
+  }
+  
+  .bilingual-table td:first-child {
+    width: 48% !important;
+    text-align: left !important;
+  }
+  
+  .bilingual-table td:last-child {
+    width: 48% !important;
+    text-align: right !important;
+    direction: rtl !important;
+    font-family: 'Arial', 'Tahoma', sans-serif !important;
+  }
+  
+  /* Signature Section */
+  .signatures-section {
+    margin: 8mm 0 5mm 0 !important;
+    padding: 3mm !important;
+    border: 1pt solid #cbd5e1 !important;
+    border-radius: 2mm !important;
+    background: #fafafa !important;
+    page-break-inside: avoid !important;
+  }
+  
+  .signatures-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10mm !important;
+  }
+  
+  .signature-block {
+    text-align: center !important;
+  }
+  
+  .signature-line {
+    border-bottom: 1pt solid #333 !important;
+    height: 8mm !important;
+    margin-bottom: 2mm !important;
+  }
+  
+  .signature-label {
+    font-weight: bold !important;
+    font-size: 9pt !important;
+    color: #333 !important;
+  }
+  
+  .signature-date {
+    font-size: 8pt !important;
+    color: #666 !important;
+    margin-top: 1mm !important;
+  }
+  
+  /* Professional Disclaimer */
+  .disclaimer-section {
+    background: #fffbeb !important;
+    border: 1pt solid #f59e0b !important;
+    border-radius: 2mm !important;
+    padding: 3mm !important;
+    margin: 5mm 0 !important;
+    page-break-inside: avoid !important;
+  }
+  
+  .disclaimer-title {
+    font-size: 10pt !important;
+    font-weight: bold !important;
+    color: #92400e !important;
+    text-align: center !important;
+    margin-bottom: 2mm !important;
+    text-transform: uppercase !important;
+  }
+  
+  .disclaimer-content {
+    font-size: 8pt !important;
+    line-height: 1.4 !important;
+    text-align: justify !important;
+  }
+  
+  .disclaimer-content p {
+    margin-bottom: 2mm !important;
+  }
+  
+  .disclaimer-content ul {
+    margin: 2mm 0 2mm 5mm !important;
+    padding-left: 3mm !important;
+  }
+  
+  .disclaimer-content li {
+    margin-bottom: 1mm !important;
+    font-size: 8pt !important;
+  }
+  
+  /* Legacy Footer - for content footer (not page footer) */
+  .report-footer {
+    text-align: center !important;
+    margin-top: 8mm !important;
+    padding-top: 3mm !important;
+    border-top: 1pt solid #e2e8f0 !important;
+    font-size: 8pt !important;
+    color: #666 !important;
+    page-break-inside: avoid !important;
+    margin-bottom: 5mm !important; /* Space before page footer */
+  }
+  
+  .report-footer .footer-logo {
+    width: 30px !important;
+    height: 30px !important;
+    margin: 0 auto 2mm !important;
+    opacity: 0.7 !important;
+  }
+  
+  /* Page Breaks - Enhanced for multi-page printing */
+  .page-break {
+    page-break-before: always !important;
+    padding-top: 5mm !important;
+    display: block !important;
+  }
+  
+  .avoid-break {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  
+  /* Ensure First Page Fits */
+  .first-page-content {
+    page-break-after: auto !important;
+  }
+  
+  /* Enhanced Section Integration */
+  .property-info-section {
+    margin-top: 5mm !important;
+  }
+  
+  .executive-summary-section {
+    margin: 8mm 0 !important;
+  }
+  
+  .inspection-areas-main {
+    margin: 10mm 0 !important;
+  }
+  
+  .disclaimer-subsection {
+    margin: 3mm 0 !important;
+  }
+  
+  /* Property Grade Styling */
+  .property-grade {
+    font-size: 24pt !important;
+    font-weight: bold !important;
+    color: #1e40af !important;
+    text-align: center !important;
+    padding: 3mm !important;
+    background: linear-gradient(135deg, rgba(30, 64, 175, 0.1), rgba(59, 130, 246, 0.05)) !important;
+    border: 2pt solid #1e40af !important;
+    border-radius: 3mm !important;
+    margin: 2mm 0 !important;
+  }
+  
+  /* Enhanced Signature Styling */
+  .signature-block {
+    text-align: center !important;
+    padding: 3mm !important;
+  }
+  
+  .signature-line {
+    border-bottom: 1pt solid #333 !important;
+    height: 8mm !important;
+    margin-bottom: 2mm !important;
+  }
+  
+  .signature-label {
+    font-weight: bold !important;
+    font-size: 9pt !important;
+    color: #1e40af !important;
+    margin-bottom: 1mm !important;
+  }
+  
+  .signature-date {
+    font-size: 8pt !important;
+    color: #6b7280 !important;
+    margin-top: 1mm !important;
+  }
+  
+  /* Force content to be visible and printable */
+  .inspection-areas {
+    display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
+  .area-section {
+    display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+    overflow: visible !important;
+    margin-bottom: 5mm !important;
+  }
+  
+  /* Professional Summary Box */
+  .executive-summary {
+    background: #f8fafc !important;
+    border-left: 3pt solid #1e40af !important;
+    padding: 4mm 4mm 4mm 6mm !important;
+    margin: 6mm 0 !important;
+    page-break-inside: avoid !important;
+  }
+  
+  .summary-title {
+    font-size: 12pt !important; /* Subsection header size */
+    font-weight: bold !important;
+    color: #1e40af !important;
+    margin-bottom: 3mm !important;
+  }
+  
+  .summary-content {
+    font-size: 10pt !important; /* Body text size */
+    line-height: 1.4 !important;
+    color: #000000 !important;
+  }
+  
+  /* Grade Display */
+  .property-grade {
+    display: inline-block !important;
+    background: #1e40af !important;
+    color: white !important;
+    font-size: 14pt !important;
+    font-weight: bold !important;
+    padding: 2mm 5mm !important;
+    border-radius: 2mm !important;
+    margin: 2mm 0 !important;
+  }
+  
+  /* Watermark */
+  .watermark {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) rotate(-45deg) !important;
+    font-size: 60pt !important;
+    color: rgba(30, 64, 175, 0.03) !important;
+    font-weight: bold !important;
+    z-index: -1 !important;
+    pointer-events: none !important;
+  }
+  
+  /* Text Optimization */
+  p, li, td {
+    orphans: 3 !important;
+    widows: 3 !important;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid !important;
+    orphans: 3 !important;
+    widows: 3 !important;
+  }
+  
+  /* Links in print */
+  a {
+    text-decoration: none !important;
+    color: #333 !important;
+  }
+  
+  a[href]:after {
+    content: none !important;
+  }
+  
+  /* Images optimization */
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid !important;
+  }
+  
+  /* Ensure content doesn't overflow */
+  * {
+    overflow: visible !important;
+    max-width: 100% !important;
+  }
+  
+  /* Grid Layout System - Professional 2/3 text, 1/3 image layout */
+  .grid-layout-container {
+    display: grid !important;
+    grid-template-columns: 2fr 1fr !important; /* 2/3 text, 1/3 image */
+    gap: 5mm !important;
+    align-items: start !important;
+    margin: 3mm 0 !important;
+    page-break-inside: avoid !important;
+    width: 100% !important;
+  }
+  
+  .grid-layout-reverse {
+    grid-template-columns: 1fr 2fr !important; /* Reverse: 1/3 image, 2/3 text */
+  }
+  
+  .grid-text-section {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    padding: 2mm !important;
+    background: transparent !important;
+    min-height: 20mm !important;
+  }
+  
+  .grid-image-section {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding: 2mm !important;
+    background: transparent !important;
+    min-height: 20mm !important;
+  }
+  
+  /* Grid text content styling */
+  .grid-text-section h3,
+  .grid-text-section .finding-title {
+    font-size: 11pt !important;
+    font-weight: bold !important;
+    color: #1e40af !important;
+    margin: 0 0 2mm 0 !important;
+    line-height: 1.3 !important;
+  }
+  
+  .grid-text-section .finding-description,
+  .grid-text-section p {
+    font-size: 10pt !important;
+    line-height: 1.4 !important;
+    color: #000000 !important;
+    margin: 0 0 2mm 0 !important;
+  }
+  
+  .grid-text-section .finding-status {
+    display: inline-block !important;
+    margin: 2mm 0 !important;
+  }
+  
+  .grid-text-section .finding-comments {
+    font-size: 9pt !important;
+    color: #374151 !important;
+    font-style: italic !important;
+    margin: 2mm 0 0 0 !important;
+    padding: 2mm !important;
+    background: #f8fafc !important;
+    border-left: 2pt solid #e2e8f0 !important;
+  }
+  
+  .grid-text-section .finding-location {
+    font-size: 9pt !important;
+    color: #6b7280 !important;
+    margin: 1mm 0 0 0 !important;
+  }
+  
+  /* Grid image content styling */
+  .grid-image-section img {
+    width: 100% !important;
+    max-width: 45mm !important;
+    height: auto !important;
+    max-height: 35mm !important;
+    object-fit: cover !important;
+    border: 0.5pt solid #cbd5e1 !important;
+    border-radius: 2mm !important;
+    margin-bottom: 2mm !important;
+    page-break-inside: avoid !important;
+  }
+  
+  .grid-image-section .image-caption {
+    font-size: 7pt !important;
+    color: #6b7280 !important;
+    text-align: center !important;
+    font-style: italic !important;
+    margin-top: 1mm !important;
+  }
+  
+  .grid-image-section .multiple-images {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 2mm !important;
+    width: 100% !important;
+  }
+  
+  .grid-image-section .multiple-images img {
+    max-width: 20mm !important;
+    max-height: 20mm !important;
+  }
+  
+  /* Grid layout for findings presentation - replaces traditional tables */
+  .findings-grid-container {
+    display: block !important;
+    margin: 4mm 0 !important;
+  }
+  
+  .finding-item-grid {
+    display: grid !important;
+    grid-template-columns: 2fr 1fr !important;
+    gap: 5mm !important;
+    align-items: start !important;
+    margin: 4mm 0 !important;
+    padding: 3mm !important;
+    border-bottom: 1pt solid #e2e8f0 !important;
+    page-break-inside: avoid !important;
+    background: transparent !important;
+  }
+  
+  .finding-item-grid:nth-child(even) {
+    background: #fafafa !important;
+  }
+  
+  .finding-content {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2mm !important;
+  }
+  
+  .finding-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: 3mm !important;
+    margin-bottom: 2mm !important;
+  }
+  
+  .finding-category {
+    font-size: 11pt !important;
+    font-weight: bold !important;
+    color: #1e40af !important;
+    margin: 0 !important;
+  }
+  
+  .finding-point {
+    font-size: 9pt !important;
+    color: #6b7280 !important;
+    margin: 0 !important;
+  }
+  
+  .finding-evidence {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+  }
+  
+  /* Perfect alignment utilities for grid system */
+  .grid-align-top {
+    align-items: flex-start !important;
+  }
+  
+  .grid-align-center {
+    align-items: center !important;
+  }
+  
+  .grid-align-bottom {
+    align-items: flex-end !important;
+  }
+  
+  .grid-justify-start {
+    justify-content: flex-start !important;
+  }
+  
+  .grid-justify-center {
+    justify-content: center !important;
+  }
+  
+  .grid-justify-end {
+    justify-content: flex-end !important;
+  }
+  
+  /* Responsive grid adjustments for different paper sizes */
+  @page A4 {
+    .grid-layout-container {
+      gap: 4mm !important;
+    }
+  }
+  
+  @page Letter {
+    .grid-layout-container {
+      gap: 5mm !important;
+    }
+  }
+  
+  /* Grid system for multi-column content presentation */
+  .multi-column-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(40mm, 1fr)) !important;
+    gap: 4mm !important;
+    margin: 3mm 0 !important;
+  }
+  
+  .column-item {
+    padding: 2mm !important;
+    background: #f8fafc !important;
+    border-left: 2pt solid #e2e8f0 !important;
+  }
+  
+  /* Enhanced styles for FindingGridItem and FindingsGridContainer */
+  .findings-grid-list {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .finding-item {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .finding-item.first-item {
+    border-top: 1pt solid #e2e8f0 !important;
+  }
+  
+  .finding-item.last-item {
+    border-bottom: 2pt solid #e2e8f0 !important;
+  }
+  
+  .finding-grid-layout {
+    width: 100% !important;
+  }
+  
+  .no-findings {
+    padding: 15mm !important;
+    text-align: center !important;
+    font-style: italic !important;
+    color: #6b7280 !important;
+    background: #f8fafc !important;
+    border: 1pt dashed #e2e8f0 !important;
+    border-radius: 2mm !important;
+  }
+  
+  /* Photo container styles for grid layout */
+  .photo-container {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 2mm !important;
+  }
+  
+  .photo-container.multiple-images {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 2mm !important;
+  }
+  
+  .photo-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    page-break-inside: avoid !important;
+  }
+  
+  .grid-photo {
+    width: 100% !important;
+    max-width: 40mm !important;
+    height: auto !important;
+    max-height: 30mm !important;
+    object-fit: cover !important;
+    border: 0.5pt solid #cbd5e1 !important;
+    border-radius: 2mm !important;
+    display: block !important;
+  }
+  
+  .additional-photos-indicator {
+    font-size: 7pt !important;
+    color: #6b7280 !important;
+    font-style: italic !important;
+    text-align: center !important;
+    margin-top: 2mm !important;
+    grid-column: 1 / -1 !important;
+  }
+  
+  .no-photos {
+    font-size: 8pt !important;
+    color: #9ca3af !important;
+    font-style: italic !important;
+    text-align: center !important;
+    padding: 5mm !important;
+  }
+
+  /* Professional Photo Display System - Enhanced Treatment */
+  
+  /* Professional photo container with enhanced visual treatment */
+  .professional-photo-container {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    margin: 2mm 0 !important;
+    page-break-inside: avoid !important;
+    background: transparent !important;
+  }
+  
+  /* Professional photo frame with subtle styling */
+  .professional-photo-frame {
+    position: relative !important;
+    display: block !important;
+    background: white !important;
+    border: 0.5pt solid #e2e8f0 !important;
+    border-radius: 2mm !important;
+    padding: 1mm !important;
+    box-shadow: 0 1pt 3pt rgba(0, 0, 0, 0.1) !important;
+    overflow: hidden !important;
+  }
+  
+  /* Professional photo image with high-resolution optimization */
+  .professional-photo-image {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    border-radius: 1mm !important;
+    object-fit: cover !important;
+    background: #f8fafc !important;
+  }
+  
+  /* High-resolution optimization for professional display */
+  .professional-photo-image.high-resolution-optimized {
+    image-rendering: -webkit-optimize-contrast !important;
+    image-rendering: crisp-edges !important;
+    image-rendering: pixelated !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  /* Professional photo sizing - approximately one-third of finding width */
+  .professional-photo-small {
+    max-width: 25mm !important;
+    max-height: 20mm !important;
+  }
+  
+  .professional-photo-medium {
+    max-width: 35mm !important;
+    max-height: 28mm !important;
+  }
+  
+  .professional-photo-large {
+    max-width: 50mm !important;
+    max-height: 40mm !important;
+  }
+  
+  /* Grid photo sizing - one-third of finding width as per requirement 7.1 */
+  .professional-photo-grid {
+    max-width: 45mm !important; /* Approximately one-third of content width */
+    max-height: 35mm !important;
+    min-width: 30mm !important;
+    min-height: 20mm !important;
+  }
+  
+  /* Professional photo positioning for adjacent placement */
+  .photo-position-adjacent {
+    align-self: flex-start !important;
+    margin-left: 2mm !important;
+  }
+  
+  .photo-position-inline {
+    display: inline-block !important;
+    vertical-align: top !important;
+    margin: 0 2mm 2mm 0 !important;
+  }
+  
+  .photo-position-standalone {
+    margin: 4mm auto !important;
+    align-self: center !important;
+  }
+  
+  /* Professional photo overlay for quality indicators */
+  .professional-photo-overlay {
+    position: absolute !important;
+    top: 1mm !important;
+    right: 1mm !important;
+    display: flex !important;
+    gap: 1mm !important;
+    pointer-events: none !important;
+  }
+  
+  .photo-quality-indicator {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5mm !important;
+  }
+  
+  .high-res-badge {
+    background: #059669 !important;
+    color: white !important;
+    font-size: 6pt !important;
+    font-weight: bold !important;
+    padding: 0.5mm 1mm !important;
+    border-radius: 1mm !important;
+    line-height: 1 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.2pt !important;
+  }
+  
+  /* Professional photo caption with metadata */
+  .professional-photo-caption {
+    font-size: 7pt !important;
+    color: #6b7280 !important;
+    text-align: center !important;
+    font-style: italic !important;
+    margin-top: 1mm !important;
+    line-height: 1.2 !important;
+    max-width: 100% !important;
+    word-wrap: break-word !important;
+  }
+  
+  /* Visual connection indicator between photos and findings */
+  .photo-evidence-connector {
+    position: absolute !important;
+    left: -2mm !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 1pt !important;
+    height: 15mm !important;
+    background: linear-gradient(to bottom, transparent, #1e40af, transparent) !important;
+    opacity: 0.3 !important;
+    border-radius: 0.5pt !important;
+  }
+  
+  /* Enhanced photo loading states */
+  .professional-photo-container.photo-loaded .professional-photo-frame {
+    border-color: #1e40af !important;
+    box-shadow: 0 1pt 4pt rgba(30, 64, 175, 0.15) !important;
+  }
+  
+  .professional-photo-container.photo-error .professional-photo-frame {
+    border-color: #dc2626 !important;
+    background: #fef2f2 !important;
+  }
+  
+  .professional-photo-container.photo-error::after {
+    content: 'Image not available' !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    font-size: 7pt !important;
+    color: #dc2626 !important;
+    font-style: italic !important;
+  }
+  
+  /* Multiple photos in professional treatment */
+  .professional-photos-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 2mm !important;
+    width: 100% !important;
+    max-width: 45mm !important;
+  }
+  
+  .professional-photos-grid .professional-photo-container {
+    margin: 0 !important;
+  }
+  
+  .professional-photos-grid .professional-photo-grid {
+    max-width: 20mm !important;
+    max-height: 18mm !important;
+  }
+  
+  /* Professional photo integration with grid layout */
+  .grid-image-section .professional-photo-container {
+    width: 100% !important;
+    max-width: 45mm !important;
+  }
+  
+  .grid-image-section .professional-photo-grid {
+    width: 100% !important;
+  }
+  
+  /* Enhanced visual connection in grid layout */
+  .finding-item-grid .professional-photo-container {
+    position: relative !important;
+  }
+  
+  .finding-item-grid .professional-photo-container::before {
+    content: '' !important;
+    position: absolute !important;
+    left: -5mm !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    width: 2pt !important;
+    background: linear-gradient(to bottom, transparent, #1e40af, #3b82f6, #1e40af, transparent) !important;
+    opacity: 0.2 !important;
+    border-radius: 1pt !important;
+  }
+  
+  /* Professional Photo Container System */
+  
+  /* Professional photo evidence container */
+  .professional-photo-evidence-container {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: 3mm 0 !important;
+    page-break-inside: avoid !important;
+  }
+  
+  /* Professional photo title */
+  .professional-photo-title {
+    font-size: 9pt !important;
+    font-weight: bold !important;
+    color: #1e40af !important;
+    margin-bottom: 2mm !important;
+    text-align: center !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.3pt !important;
+  }
+  
+  /* Professional photos display area */
+  .professional-photos-display {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 2mm !important;
+    width: 100% !important;
+  }
+  
+  /* Professional photos grid layout */
+  .professional-photos-grid .professional-photos-display {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 2mm !important;
+    max-width: 45mm !important;
+    justify-items: center !important;
+  }
+  
+  /* Professional photos single layout */
+  .professional-photos-single .professional-photos-display {
+    display: flex !important;
+    justify-content: center !important;
+    max-width: 45mm !important;
+  }
+  
+  /* Professional photos stack layout */
+  .professional-photos-stack .professional-photos-display {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 3mm !important;
+    max-width: 45mm !important;
+  }
+  
+  /* Professional photos inline layout */
+  .professional-photos-inline .professional-photos-display {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 2mm !important;
+    max-width: 100% !important;
+  }
+  
+  /* Additional photos indicator - professional styling */
+  .additional-photos-professional {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: #f8fafc !important;
+    border: 1pt dashed #cbd5e1 !important;
+    border-radius: 2mm !important;
+    padding: 3mm !important;
+    margin: 1mm !important;
+    min-height: 15mm !important;
+    text-align: center !important;
+  }
+  
+  .additional-count {
+    font-size: 8pt !important;
+    font-weight: bold !important;
+    color: #1e40af !important;
+    margin-bottom: 0.5mm !important;
+  }
+  
+  .additional-note {
+    font-size: 6pt !important;
+    color: #6b7280 !important;
+    font-style: italic !important;
+    line-height: 1.2 !important;
+  }
+  
+  /* Professional evidence summary */
+  .professional-evidence-summary {
+    display: flex !important;
+    align-items: center !important;
+    gap: 2mm !important;
+    margin-top: 2mm !important;
+    font-size: 7pt !important;
+    color: #6b7280 !important;
+    text-align: center !important;
+  }
+  
+  .evidence-count {
+    font-weight: bold !important;
+    color: #374151 !important;
+  }
+  
+  .evidence-total {
+    font-style: italic !important;
+    color: #9ca3af !important;
+  }
+  
+  /* No photos available message - professional styling */
+  .no-photos-available {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 25mm !important;
+    background: #f9fafb !important;
+    border: 1pt dashed #d1d5db !important;
+    border-radius: 2mm !important;
+    margin: 2mm 0 !important;
+  }
+  
+  .no-photos-message {
+    font-size: 8pt !important;
+    color: #9ca3af !important;
+    font-style: italic !important;
+    text-align: center !important;
+  }
+  
+  /* Professional evidence photo specific styling */
+  .professional-evidence-photo {
+    position: relative !important;
+  }
+  
+  .professional-evidence-photo::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: -1mm !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 8mm !important;
+    height: 0.5pt !important;
+    background: linear-gradient(to right, transparent, #1e40af, transparent) !important;
+    opacity: 0.4 !important;
+  }
+  
+  /* Professional photo treatment for different paper sizes */
+  @media print and (max-width: 210mm) { /* A4 width */
+    .professional-photo-grid {
+      max-width: 40mm !important;
+      max-height: 30mm !important;
+    }
+    
+    .professional-photos-grid .professional-photos-display {
+      max-width: 40mm !important;
+    }
+    
+    .professional-photos-single .professional-photos-display {
+      max-width: 40mm !important;
+    }
+  }
+  
+  @media print and (max-width: 216mm) { /* Letter width */
+    .professional-photo-grid {
+      max-width: 42mm !important;
+      max-height: 32mm !important;
+    }
+    
+    .professional-photos-grid .professional-photos-display {
+      max-width: 42mm !important;
+    }
+    
+    .professional-photos-single .professional-photos-display {
+      max-width: 42mm !important;
+    }
+  }
+  
+  /* Professional photo print optimization */
+  @media print {
+    .professional-photo-image {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    
+    .professional-photo-frame {
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+    
+    .professional-photo-container {
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+    
+    .professional-photo-evidence-container {
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+  }
+  
+  /* Perfect alignment utilities for grid elements */
+  .finding-content {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2mm !important;
+    width: 100% !important;
+    align-items: flex-start !important;
+  }
+  
+  .finding-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: 3mm !important;
+    margin-bottom: 2mm !important;
+    width: 100% !important;
+    flex-wrap: wrap !important;
+  }
+  
+  .finding-category {
+    font-size: 11pt !important;
+    font-weight: bold !important;
+    color: #1e40af !important;
+    margin: 0 !important;
+    flex: 1 !important;
+  }
+  
+  .finding-status {
+    flex-shrink: 0 !important;
+  }
+  
+  .finding-point {
+    font-size: 9pt !important;
+    color: #6b7280 !important;
+    margin: 0 0 2mm 0 !important;
+    line-height: 1.4 !important;
+  }
+  
+  .finding-comments {
+    font-size: 9pt !important;
+    color: #374151 !important;
+    margin: 2mm 0 !important;
+    padding: 2mm !important;
+    background: #f8fafc !important;
+    border-left: 2pt solid #e2e8f0 !important;
+    border-radius: 0 2mm 2mm 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  .finding-comments strong {
+    color: #1e40af !important;
+    font-weight: bold !important;
+  }
+  
+  .finding-location {
+    font-size: 9pt !important;
+    color: #6b7280 !important;
+    margin: 1mm 0 0 0 !important;
+  }
+  
+  .finding-location strong {
+    color: #374151 !important;
+    font-weight: bold !important;
+  }
+  
+  .finding-evidence {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  
+  /* Grid system enhancements for better visual hierarchy */
+  .grid-layout-container {
+    position: relative !important;
+  }
+  
+  .grid-layout-container::before {
+    content: '' !important;
+    position: absolute !important;
+    left: 66.666% !important; /* At 2/3 mark */
+    top: 0 !important;
+    bottom: 0 !important;
+    width: 1pt !important;
+    background: linear-gradient(to bottom, transparent, #e2e8f0, transparent) !important;
+    opacity: 0.5 !important;
+  }
+  
+  .grid-layout-reverse::before {
+    left: 33.333% !important; /* At 1/3 mark for reversed layout */
+  }
+  
+  /* Enhanced spacing for grid items */
+  .finding-item-grid {
+    margin: 0 !important;
+    padding: 4mm 2mm !important;
+    border-bottom: 1pt solid #e2e8f0 !important;
+    background: transparent !important;
+    page-break-inside: avoid !important;
+  }
+  
+  .finding-item-grid:nth-child(even) {
+    background: rgba(248, 250, 252, 0.5) !important;
+  }
+  
+  .finding-item-grid:hover {
+    background: rgba(30, 64, 175, 0.02) !important;
+  }
+  
+  /* Grid Layout System - Screen Display Styles */
+  @media screen {
+    .grid-layout-container {
+      display: grid !important;
+      grid-template-columns: 2fr 1fr !important;
+      gap: 20px !important;
+      align-items: start !important;
+      margin: 15px 0 !important;
+      padding: 15px !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 8px !important;
+      background: #fafafa !important;
+    }
+    
+    .grid-text-section {
+      background: white !important;
+      padding: 15px !important;
+      border-radius: 6px !important;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+    }
+    
+    .grid-image-section {
+      background: white !important;
+      padding: 15px !important;
+      border-radius: 6px !important;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+    }
+    
+    .findings-grid-container {
+      margin: 20px 0 !important;
+    }
+    
+    .finding-item-grid {
+      margin: 10px 0 !important;
+      border-radius: 8px !important;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
+    }
+  }
+  
+  /* Responsive Grid Adjustments */
+  @media screen and (max-width: 768px) {
+    .grid-layout-container {
+      grid-template-columns: 1fr !important;
+      gap: 15px !important;
+    }
+    
+    .grid-layout-container .grid-image-section {
+      order: -1 !important; /* Show images first on mobile */
+    }
+  }
+  
+  /* Grid System Validation Markers (for development/testing) */
+  .grid-debug .grid-layout-container::after {
+    content: '2/3 | 1/3' !important;
+    position: absolute !important;
+    top: -20px !important;
+    right: 0 !important;
+    font-size: 10px !important;
+    color: #6b7280 !important;
+    background: #f3f4f6 !important;
+    padding: 2px 6px !important;
+    border-radius: 3px !important;
+  }
+  
+  /* Perfect Alignment Verification Grid */
+  .grid-alignment-guide .grid-layout-container {
+    background-image: 
+      linear-gradient(to right, transparent 66.666%, rgba(30, 64, 175, 0.1) 66.666%, rgba(30, 64, 175, 0.1) 66.667%, transparent 66.667%) !important;
+  }
+  
+  /* Force all sections to be printable */
+  section, div, main, article {
+    display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
+  /* Ensure tables span across pages properly */
+  table {
+    page-break-inside: auto !important;
+  }
+  
+  tbody tr {
+    page-break-inside: avoid !important;
+    page-break-after: auto !important;
+  }
+  
+  /* Prevent content from being cut off */
+  .report-container > * {
+    display: block !important;
+    visibility: visible !important;
+  }
+  
+  /* Ensure proper spacing between sections */
+  .area-section + .area-section {
+    margin-top: 8mm !important;
+  }
+}
+
+/* Screen Preview Styles - Professional design system */
+@media screen {
+  .print-preview {
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 31.75mm; /* Match print margins */
+    background: white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .print-preview .report-container {
+    font-family: 'Arial', 'Helvetica', sans-serif;
+    line-height: 1.4;
+    color: #000000;
+    font-size: 10pt;
+  }
+  
+  /* Apply professional typography hierarchy in preview */
+  .print-preview h1, .print-preview .main-heading {
+    font-size: 18pt;
+    font-weight: bold;
+    color: #1e40af;
+    margin: 0 0 4mm 0;
+  }
+  
+  .print-preview h2, .print-preview .section-header {
+    font-size: 14pt;
+    font-weight: bold;
+    color: #374151;
+    margin: 6mm 0 3mm 0;
+  }
+  
+  .print-preview h3, .print-preview .subsection-header {
+    font-size: 12pt;
+    font-weight: bold;
+    color: #6b7280;
+    margin: 4mm 0 2mm 0;
+  }
+  
+  /* Professional table preview */
+  .print-preview .professional-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border: none;
+    margin: 4mm 0 6mm 0;
+  }
+  
+  .print-preview .professional-table th {
+    background: #f8fafc;
+    color: #1e40af;
+    font-weight: bold;
+    padding: 3mm 2mm;
+    border: none;
+    border-bottom: 1pt solid #e2e8f0;
+  }
+  
+  .print-preview .professional-table td {
+    padding: 3mm 2mm;
+    border: none;
+    border-bottom: 1pt solid #e2e8f0;
+  }
+  
+  .print-preview .grade-d {
+    background-color: #fef3c7;
+    font-weight: bold;
+  }
+}

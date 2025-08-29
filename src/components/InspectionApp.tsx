@@ -5,10 +5,15 @@ import { StorageService } from '@/services/storage-service';
 import type { SavedInspection } from '@/services/storage-service';
 import { PhotoDisplay } from './PhotoDisplay';
 import { StorageStatus } from './StorageStatus';
-import { ProfessionalReport } from './ProfessionalReport';
+import { SimplePrintReport } from './SimplePrintReport';
+import { ModernPrintReport } from './ModernPrintReport';
+import { MinimalistPrintReport } from './MinimalistPrintReport';
 import { BilingualDisclaimer } from './BilingualDisclaimer';
 import { ThemeToggle } from './ThemeToggle';
 import Logo from './Logo';
+import { ErrorBoundary } from './ErrorBoundary';
+import { ClientManagement } from './ClientManagement';
+import { ProfessionalInvoiceGenerator } from './ProfessionalInvoiceGenerator';
 
 import { getDisplayName } from '@/utils/user';
 import { Button } from './ui/button';
@@ -245,6 +250,20 @@ function Sidebar({
       label: 'Billing', 
       icon: <BillingIcon />, 
       description: 'Invoices & Payments',
+      badge: null
+    },
+    { 
+      id: 'clientManagement', 
+      label: 'Clients', 
+      icon: <User />, 
+      description: 'Manage Client Relationships',
+      badge: null
+    },
+    { 
+      id: 'createInvoice', 
+      label: 'Create Invoice', 
+      icon: <BillingIcon />, 
+      description: 'Generate Professional Invoices',
       badge: null
     },
     { 
@@ -501,8 +520,9 @@ export default function InspectionApp({
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="flex h-screen">
+    <ErrorBoundary>
+      <div className="min-h-screen bg-background">
+        <div className="flex h-screen">
         {/* Sidebar */}
         <Sidebar
           currentPage={currentPage}
@@ -532,6 +552,12 @@ export default function InspectionApp({
               {currentPage === 'billing' && (
                 <Billing navigateTo={navigateTo} />
               )}
+              {currentPage === 'clientManagement' && (
+                <ClientManagement onNavigate={navigateTo} />
+              )}
+              {currentPage === 'createInvoice' && (
+                <ProfessionalInvoiceGenerator onNavigate={navigateTo} />
+              )}
               {currentPage === 'newInspection' && (
                 <InspectionForm 
                   navigateTo={navigateTo} 
@@ -552,9 +578,9 @@ export default function InspectionApp({
                 />
               )}
               {currentPage === 'professionalReport' && selectedInspectionId && (
-                <ProfessionalReport 
+                <MinimalistPrintReport 
                   inspection={inspections.find(i => i.id === selectedInspectionId)!}
-                  onBack={() => navigateTo('dashboard')} 
+                  onBack={() => navigateTo('savedInspections')} 
                 />
               )}
               {currentPage === 'savedInspections' && (
@@ -602,7 +628,8 @@ export default function InspectionApp({
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </ErrorBoundary>
   );
 }
 
@@ -1934,7 +1961,7 @@ function InspectionView({
         </div>
         <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
           <button
-            onClick={() => navigateTo('editInspection')}
+            onClick={() => navigateTo('editInspection', inspection.id)}
             className="flex items-center gap-2 bg-accent text-accent-foreground px-3 sm:px-4 py-2 rounded-lg hover:bg-accent/80 transition-colors font-medium text-sm sm:text-base justify-center"
           >
             <EditIcon className="w-4 h-4" />

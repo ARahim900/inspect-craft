@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Photo Display System Test</title>
+    <style>
+        /* Import the professional photo styles from print-styles.css */
+        
+        /* Professional Photo Display System - Enhanced Treatment */
+        
+        /* Professional photo container with enhanced visual treatment */
+        .professional-photo-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 2mm 0;
+            page-break-inside: avoid;
+            background: transparent;
+        }
+        
+        /* Professional photo frame with subtle styling */
+        .professional-photo-frame {
+            position: relative;
+            display: block;
+            background: white;
+            border: 0.5pt solid #e2e8f0;
+            border-radius: 2mm;
+            padding: 1mm;
+            box-shadow: 0 1pt 3pt rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        /* Professional photo image with high-resolution optimization */
+        .professional-photo-image {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 1mm;
+            object-fit: cover;
+            background: #f8fafc;
+        }
+        
+        /* Grid photo sizing - one-third of finding width as per requirement 7.1 */
+        .professional-photo-grid {
+            max-width: 45mm; /* Approximately one-third of content width */
+            max-height: 35mm;
+            min-width: 30mm;
+            min-height: 20mm;
+        }
+        
+        /* Professional photo positioning for adjacent placement */
+        .photo-position-adjacent {
+            align-self: flex-start;
+            margin-left: 2mm;
+        }
+        
+        /* Professional photo overlay for quality indicators */
+        .professional-photo-overlay {
+            position: absolute;
+            top: 1mm;
+            right: 1mm;
+            display: flex;
+            gap: 1mm;
+            pointer-events: none;
+        }
+        
+        .photo-quality-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5mm;
+        }
+        
+        .high-res-badge {
+            background: #059669;
+            color: white;
+            font-size: 6pt;
+            font-weight: bold;
+            padding: 0.5mm 1mm;
+            border-radius: 1mm;
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: 0.2pt;
+        }
+        
+        /* Professional photo caption with metadata */
+        .professional-photo-caption {
+            font-size: 7pt;
+            color: #6b7280;
+            text-align: center;
+            font-style: italic;
+            margin-top: 1mm;
+            line-height: 1.2;
+            max-width: 100%;
+            word-wrap: break-word;
+        }
+        
+        /* Visual connection indicator between photos and findings */
+        .photo-evidence-connector {
+            position: absolute;
+            left: -2mm;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1pt;
+            height: 15mm;
+            background: linear-gradient(to bottom, transparent, #1e40af, transparent);
+            opacity: 0.3;
+            border-radius: 0.5pt;
+        }
+        
+        /* Professional Photo Container System */
+        
+        /* Professional photo evidence container */
+        .professional-photo-evidence-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin: 3mm 0;
+            page-break-inside: avoid;
+        }
+        
+        /* Professional photos display area */
+        .professional-photos-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2mm;
+            width: 100%;
+        }
+        
+        /* Professional photos grid layout */
+        .professional-photos-grid .professional-photos-display {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2mm;
+            max-width: 45mm;
+            justify-items: center;
+        }
+        
+        /* Professional photos single layout */
+        .professional-photos-single .professional-photos-display {
+            display: flex;
+            justify-content: center;
+            max-width: 45mm;
+        }
+        
+        /* Grid Layout System */
+        .grid-layout-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr; /* 2/3 text, 1/3 image */
+            gap: 5mm;
+            align-items: start;
+            margin: 3mm 0;
+            page-break-inside: avoid;
+            width: 100%;
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        
+        .grid-text-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 2mm;
+            background: #f8fafc;
+            min-height: 20mm;
+            border-radius: 2px;
+        }
+        
+        .grid-image-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 2mm;
+            background: #f0f9ff;
+            min-height: 20mm;
+            border-radius: 2px;
+        }
+        
+        /* Test specific styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .test-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1e40af;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #1e40af;
+            padding-bottom: 5px;
+        }
+        
+        .finding-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2mm;
+            width: 100%;
+            align-items: flex-start;
+        }
+        
+        .finding-header {
+            display: flex;
+            align-items: center;
+            gap: 3mm;
+            margin-bottom: 2mm;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+        
+        .finding-category {
+            font-size: 11pt;
+            font-weight: bold;
+            color: #1e40af;
+            margin: 0;
+            flex: 1;
+        }
+        
+        .finding-status {
+            flex-shrink: 0;
+            background: #dcfce7;
+            color: #059669;
+            font-weight: bold;
+            padding: 1.5mm 3mm;
+            border-radius: 2mm;
+            display: inline-block;
+            font-size: 9pt;
+        }
+        
+        .finding-point {
+            font-size: 9pt;
+            color: #6b7280;
+            margin: 0 0 2mm 0;
+            line-height: 1.4;
+        }
+        
+        .finding-evidence {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Professional Photo Display System Test</h1>
+    <p>Testing the enhanced photo display system with professional treatment as per requirements 7.1-7.5</p>
+    
+    <!-- Test 1: Single Photo in Grid Layout -->
+    <div class="test-section">
+        <div class="test-title">Test 1: Single Photo - Grid Layout (One-third width)</div>
+        <div class="grid-layout-container">
+            <div class="grid-text-section">
+                <div class="finding-content">
+                    <div class="finding-header">
+                        <h3 class="finding-category">Electrical System</h3>
+                        <span class="finding-status">Pass</span>
+                    </div>
+                    <p class="finding-point">Main electrical panel is properly labeled and in good condition. All circuit breakers are functioning correctly.</p>
+                </div>
+            </div>
+            <div class="grid-image-section">
+                <div class="finding-evidence">
+                    <div class="professional-photo-evidence-container professional-photos-single">
+                        <div class="professional-photos-display">
+                            <div class="professional-photo-container photo-position-adjacent">
+                                <div class="professional-photo-frame">
+                                    <img src="/placeholder.svg" alt="Electrical panel evidence" class="professional-photo-image professional-photo-grid">
+                                    <div class="professional-photo-overlay">
+                                        <div class="photo-quality-indicator">
+                                            <span class="high-res-badge">HD</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="professional-photo-caption">Evidence 1 (1200×900, High-res)</div>
+                                <div class="photo-evidence-connector"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Test 2: Multiple Photos in Grid Layout -->
+    <div class="test-section">
+        <div class="test-title">Test 2: Multiple Photos - Grid Layout</div>
+        <div class="grid-layout-container">
+            <div class="grid-text-section">
+                <div class="finding-content">
+                    <div class="finding-header">
+                        <h3 class="finding-category">Plumbing System</h3>
+                        <span class="finding-status" style="background: #fed7aa; color: #d97706;">Snags</span>
+                    </div>
+                    <p class="finding-point">Minor leaks detected under kitchen sink. Requires attention but not critical.</p>
+                </div>
+            </div>
+            <div class="grid-image-section">
+                <div class="finding-evidence">
+                    <div class="professional-photo-evidence-container professional-photos-grid">
+                        <div class="professional-photos-display">
+                            <div class="professional-photo-container photo-position-adjacent">
+                                <div class="professional-photo-frame">
+                                    <img src="/placeholder.svg" alt="Plumbing evidence 1" class="professional-photo-image professional-photo-grid">
+                                    <div class="professional-photo-overlay">
+                                        <div class="photo-quality-indicator">
+                                            <span class="high-res-badge">HD</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="professional-photo-caption">Evidence 1</div>
+                                <div class="photo-evidence-connector"></div>
+                            </div>
+                            <div class="professional-photo-container photo-position-adjacent">
+                                <div class="professional-photo-frame">
+                                    <img src="/placeholder.svg" alt="Plumbing evidence 2" class="professional-photo-image professional-photo-grid">
+                                    <div class="professional-photo-overlay">
+                                        <div class="photo-quality-indicator">
+                                            <span class="high-res-badge">HD</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="professional-photo-caption">Evidence 2</div>
+                                <div class="photo-evidence-connector"></div>
+                            </div>
+                        </div>
+                        <div class="professional-evidence-summary">
+                            <span class="evidence-count">2 photos shown</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Test 3: No Photos Available -->
+    <div class="test-section">
+        <div class="test-title">Test 3: No Photos Available</div>
+        <div class="grid-layout-container">
+            <div class="grid-text-section">
+                <div class="finding-content">
+                    <div class="finding-header">
+                        <h3 class="finding-category">HVAC System</h3>
+                        <span class="finding-status">Pass</span>
+                    </div>
+                    <p class="finding-point">Heating and cooling system is functioning properly. No visual issues detected.</p>
+                </div>
+            </div>
+            <div class="grid-image-section">
+                <div class="finding-evidence">
+                    <div class="professional-photo-evidence-container no-photos-available">
+                        <div class="no-photos-message">
+                            <em>No photographic evidence available</em>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Test 4: Photo Sizing Verification -->
+    <div class="test-section">
+        <div class="test-title">Test 4: Photo Sizing Verification (One-third width requirement)</div>
+        <p><strong>Requirement 7.1:</strong> Photos should occupy approximately one-third of finding's width</p>
+        <div style="border: 2px solid #1e40af; padding: 10px; background: #f0f9ff;">
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px; align-items: start;">
+                <div style="background: #e0f2fe; padding: 10px; text-align: center; border: 1px dashed #0891b2;">
+                    <strong>Text Content Area (2/3 width)</strong><br>
+                    This area contains the finding description, status, and other textual information.
+                </div>
+                <div style="background: #fef3c7; padding: 10px; text-align: center; border: 1px dashed #d97706;">
+                    <strong>Photo Area (1/3 width)</strong><br>
+                    <div class="professional-photo-container">
+                        <div class="professional-photo-frame">
+                            <img src="/placeholder.svg" alt="Size test" class="professional-photo-image professional-photo-grid" style="width: 100%; max-width: 45mm;">
+                        </div>
+                        <div class="professional-photo-caption">Photo occupies ~1/3 width</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Test 5: High Resolution Display -->
+    <div class="test-section">
+        <div class="test-title">Test 5: High Resolution Display & Visual Connection</div>
+        <p><strong>Requirements 7.2, 7.3:</strong> High resolution display and immediate visual connection</p>
+        <div class="grid-layout-container">
+            <div class="grid-text-section">
+                <div class="finding-content">
+                    <div class="finding-header">
+                        <h3 class="finding-category">Structural Issues</h3>
+                        <span class="finding-status" style="background: #fee2e2; color: #dc2626;">Fail</span>
+                    </div>
+                    <p class="finding-point">Crack detected in foundation wall. Requires immediate professional assessment.</p>
+                    <div style="background: #fef2f2; padding: 5px; border-left: 3px solid #dc2626; margin-top: 5px;">
+                        <strong>Critical Finding:</strong> This issue requires immediate attention and professional evaluation.
+                    </div>
+                </div>
+            </div>
+            <div class="grid-image-section">
+                <div class="finding-evidence">
+                    <div class="professional-photo-evidence-container professional-photos-single">
+                        <div class="professional-photos-display">
+                            <div class="professional-photo-container photo-position-adjacent">
+                                <div class="professional-photo-frame" style="border-color: #dc2626;">
+                                    <img src="/placeholder.svg" alt="Foundation crack evidence" class="professional-photo-image professional-photo-grid high-resolution-optimized">
+                                    <div class="professional-photo-overlay">
+                                        <div class="photo-quality-indicator">
+                                            <span class="high-res-badge">HD</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="professional-photo-caption">Critical Evidence (2400×1800, High-res)</div>
+                                <div class="photo-evidence-connector" style="background: linear-gradient(to bottom, transparent, #dc2626, transparent);"></div>
+                            </div>
+                        </div>
+                        <div class="professional-evidence-summary">
+                            <span class="evidence-count">1 photo shown</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <div class="test-title">Requirements Verification</div>
+        <ul>
+            <li><strong>7.1 ✓</strong> Photo sizing to occupy approximately one-third of finding's width - Implemented with max-width: 45mm in grid layout</li>
+            <li><strong>7.2 ✓</strong> High resolution display and proper positioning adjacent to descriptions - Professional photo frame with high-res optimization</li>
+            <li><strong>7.3 ✓</strong> Immediate visual connection between findings and evidence photos - Visual connector lines and professional styling</li>
+            <li><strong>7.4 ✓</strong> Eliminate need for separate photo appendices - Photos integrated directly with content in grid layout</li>
+            <li><strong>7.5 ✓</strong> Create immediate visual connection - Professional photo treatment with visual indicators and positioning</li>
+        </ul>
+    </div>
+</body>
+</html>

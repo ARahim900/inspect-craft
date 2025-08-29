@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Print Styles Test</title>
+    <link rel="stylesheet" href="src/styles/print-styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 31.75mm;
+            max-width: 210mm;
+            margin: 0 auto;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1 class="main-heading">Professional Typography Test</h1>
+        <h2 class="section-header">Section Header Example</h2>
+        <h3 class="subsection-header">Subsection Header Example</h3>
+        <p class="body-text">This is body text demonstrating the professional typography hierarchy with proper font sizes and spacing.</p>
+        
+        <h2 class="section-header">Professional Table Test</h2>
+        <table class="professional-table">
+            <thead>
+                <tr>
+                    <th>Inspection Point</th>
+                    <th>Grade</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Electrical System</td>
+                    <td class="grade-column">A</td>
+                    <td>All electrical components functioning properly</td>
+                    <td><span class="status-pass">Pass</span></td>
+                </tr>
+                <tr>
+                    <td>Plumbing System</td>
+                    <td class="grade-column">B</td>
+                    <td>Minor issues with water pressure</td>
+                    <td><span class="status-snags">Snags</span></td>
+                </tr>
+                <tr class="grade-d">
+                    <td>Structural Issues</td>
+                    <td class="grade-column">D</td>
+                    <td>Significant structural concerns requiring attention</td>
+                    <td><span class="status-grade-d">Grade D</span></td>
+                </tr>
+                <tr>
+                    <td>Safety Systems</td>
+                    <td class="grade-column">C</td>
+                    <td>Adequate but could be improved</td>
+                    <td><span class="status-fail">Fail</span></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="property-info">
+            <h3>Property Information</h3>
+            <div class="property-info-grid">
+                <div class="info-item">
+                    <span class="info-label">Client Name:</span>
+                    <span class="info-value">John Doe</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Property Type:</span>
+                    <span class="info-value">Residential</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="executive-summary">
+            <div class="summary-title">Executive Summary</div>
+            <div class="summary-content">
+                This test demonstrates the professional design system with clean tables, proper typography hierarchy, and strategic color application for Grade D highlighting.
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function printTest() {
+            window.print();
+        }
+    </script>
+    
+    <button onclick="printTest()" style="margin: 20px auto; display: block; padding: 10px 20px; background: #1e40af; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        Test Print Preview
+    </button>
+</body>
+</html>
