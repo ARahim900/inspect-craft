@@ -1010,17 +1010,11 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
                                  
                                  return (
                                    <div key={idx} style={{ textAlign: 'center' }}>
-                                     <PhotoDisplay
-                                       photoId={photoId}
-                                       style={{ 
-                                         width: '100px', 
-                                         height: '75px', 
-                                         objectFit: 'cover',
-                                         border: '1px solid #666',
-                                         display: 'block'
-                                       }}
-                                       alt={`Photo ${idx + 1}`}
-                                     />
+                                      <PhotoDisplay
+                                        photoId={photoId}
+                                        className="w-24 h-20 object-cover border border-gray-500 block"
+                                        alt={`Photo ${idx + 1}`}
+                                      />
                                      <div style={{ fontSize: '7pt', color: '#666', marginTop: '2px' }}>
                                        Photo {idx + 1}
                                      </div>

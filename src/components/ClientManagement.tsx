@@ -137,7 +137,7 @@ export function ClientManagement({ onNavigate }: ClientManagementProps) {
             name: invoice.clientName,
             email: existing?.email || invoice.clientEmail || '',
             phone: existing?.phone || '',
-            address: existing?.address || invoice.propertyAddress || '',
+            address: existing?.address || invoice.propertyLocation || '',
             totalRevenue: (existing?.totalRevenue || 0) + (invoice.status === 'paid' ? invoice.totalAmount : 0)
           } as Client);
         }
@@ -155,7 +155,7 @@ export function ClientManagement({ onNavigate }: ClientManagementProps) {
               name: schedule.clientName,
               email: schedule.clientEmail || '',
               phone: schedule.clientPhone || '',
-              address: schedule.propertyAddress || '',
+              address: schedule.propertyLocation || '',
               type: 'individual',
               status: 'active',
               createdAt: schedule.date,
@@ -167,7 +167,7 @@ export function ClientManagement({ onNavigate }: ClientManagementProps) {
               ...existing,
               email: existing.email || schedule.clientEmail || '',
               phone: existing.phone || schedule.clientPhone || '',
-              address: existing.address || schedule.propertyAddress || ''
+              address: existing.address || schedule.propertyLocation || ''
             });
           }
         }

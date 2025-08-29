@@ -73,8 +73,8 @@ export function ProfessionalInvoiceGenerator({
     clientEmail: existingInvoice?.clientEmail || '',
     clientPhone: '',
     clientAddress: '',
-    propertyAddress: existingInvoice?.propertyAddress || '',
-    items: existingInvoice?.items ? existingInvoice.items.map((item, index) => ({
+    propertyAddress: existingInvoice?.propertyLocation || '',
+    items: existingInvoice?.services ? existingInvoice.services.map((item, index) => ({
       id: index.toString(),
       description: item.description,
       quantity: item.quantity,
@@ -163,23 +163,25 @@ export function ProfessionalInvoiceGenerator({
         invoiceNumber: invoice.invoiceNumber,
         clientName: invoice.clientName,
         clientEmail: invoice.clientEmail,
-        propertyAddress: invoice.propertyAddress,
-        date: invoice.date,
+        propertyLocation: invoice.propertyAddress,
+        propertyType: 'residential',
+        issueDate: invoice.date,
         dueDate: invoice.dueDate,
-        items: invoice.items.map(item => ({
+        amount: invoice.subtotal,
+        tax: invoice.taxAmount,
+        totalAmount: invoice.totalAmount,
+        status: status as any,
+        services: invoice.items.map(item => ({
+          id: item.id,
           description: item.description,
           quantity: item.quantity,
           rate: item.rate,
           amount: item.amount
         })),
-        subtotal: invoice.subtotal,
-        taxAmount: invoice.taxAmount,
-        totalAmount: invoice.totalAmount,
-        status: status as any,
         notes: invoice.notes
       };
 
-      await InvoiceService.addInvoice(billingItem);
+      await InvoiceService.createInvoice(billingItem);
       
       // Navigate back to billing section
       onNavigate?.('billing');

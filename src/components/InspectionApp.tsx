@@ -1961,7 +1961,7 @@ function InspectionView({
         </div>
         <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
           <button
-            onClick={() => navigateTo('editInspection', inspection.id)}
+            onClick={() => navigateTo('editInspection')}
             className="flex items-center gap-2 bg-accent text-accent-foreground px-3 sm:px-4 py-2 rounded-lg hover:bg-accent/80 transition-colors font-medium text-sm sm:text-base justify-center"
           >
             <EditIcon className="w-4 h-4" />
