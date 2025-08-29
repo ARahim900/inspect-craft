@@ -22,10 +22,10 @@ export class PDFGenerationService {
     format: 'a4',
     orientation: 'portrait',
     margins: {
-      top: 20,
-      right: 20,
-      bottom: 20,
-      left: 20
+      top: 15,
+      right: 15,
+      bottom: 15,
+      left: 15
     }
   };
 

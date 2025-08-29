@@ -165,66 +165,7 @@ export function BilingualDisclaimer({
         </div>
       </div>
 
-      {/* Grade Table */}
-      <div className="grade-table-section border-2 border-blue-800 rounded-lg overflow-hidden">
-        <div className="bg-blue-800 text-white p-3">
-          <div className="flex justify-between">
-            <h3 className="font-bold text-lg">Property Grade Classification</h3>
-            <h3 className="font-bold text-lg" dir="rtl">تصنيف درجة العقار</h3>
-          </div>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="border border-gray-300 p-3 text-sm font-bold">Grade</th>
-                {content.gradeTable.grades.map((grade) => (
-                  <th 
-                    key={grade.code} 
-                    className={cn(
-                      "border border-gray-300 p-3 text-sm font-bold",
-                      propertyGrade === grade.code ? "bg-orange-200 text-orange-900" : ""
-                    )}
-                  >
-                    {grade.code}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border border-gray-300 p-3 text-sm font-medium">Description</td>
-                {content.gradeTable.grades.map((grade) => (
-                  <td 
-                    key={`${grade.code}-desc`} 
-                    className={cn(
-                      "border border-gray-300 p-3 text-sm text-center",
-                      propertyGrade === grade.code ? "bg-orange-100 font-bold text-orange-900" : ""
-                    )}
-                  >
-                    {grade.english}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td className="border border-gray-300 p-3 text-sm font-medium" dir="rtl">الوصف</td>
-                {content.gradeTable.grades.map((grade) => (
-                  <td 
-                    key={`${grade.code}-arabic`} 
-                    className={cn(
-                      "border border-gray-300 p-3 text-sm text-center",
-                      propertyGrade === grade.code ? "bg-orange-100 font-bold text-orange-900" : ""
-                    )}
-                    dir="rtl"
-                  >
-                    {grade.arabic}
-                  </td>
-                ))}
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      {/* Grade Table Section Removed - as per user request */}
 
       {/* Print-specific styles */}
       <style>{`
