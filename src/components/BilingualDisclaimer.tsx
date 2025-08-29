@@ -301,27 +301,27 @@ export function BilingualDisclaimer({
           
           .overview-section {
             margin-bottom: 8mm !important;
-            page-break-inside: avoid;
+            page-break-inside: auto;
           }
           
           .disclaimer-boxes > * {
             margin-bottom: 6mm !important;
-            page-break-inside: avoid;
+            page-break-inside: auto;
           }
           
           .confidentiality-section {
             margin-bottom: 8mm !important;
-            page-break-inside: avoid;
+            page-break-inside: auto;
           }
           
           .signature-section {
             margin-bottom: 8mm !important;
-            page-break-inside: avoid;
+            page-break-inside: auto;
           }
           
           .grade-table-section {
             margin-bottom: 6mm !important;
-            page-break-inside: avoid;
+            page-break-inside: auto;
           }
           
           .bg-blue-800 {

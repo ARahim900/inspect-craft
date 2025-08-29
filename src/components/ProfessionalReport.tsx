@@ -75,15 +75,6 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
       const printContent = printRef.current.innerHTML;
       const currentDate = new Date().toLocaleDateString();
       
-      // Get computed styles from the original element to maintain consistency
-      // Enhanced pixel-perfect style extraction
-      const computedStyles = window.getComputedStyle(printRef.current);
-      const originalFontFamily = computedStyles.fontFamily;
-      const originalLineHeight = computedStyles.lineHeight;
-      const originalFontSize = computedStyles.fontSize;
-      const originalColor = computedStyles.color;
-      const originalBackgroundColor = computedStyles.backgroundColor;
-      
       printWindow.document.write(`
         <!DOCTYPE html>
         <html>
@@ -99,34 +90,35 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
             }
           </style>
           <style>
+            @page {
+              size: A4;
+              margin: 10mm;
+            }
+            
             * {
               margin: 0;
               padding: 0;
               box-sizing: border-box;
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+              color-adjust: exact !important;
             }
             
             body {
-              font-family: ${originalFontFamily || "'Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif"};
-              line-height: ${originalLineHeight || '1.5'};
-              color: ${originalColor || '#333'};
-              background: ${originalBackgroundColor || 'white'};
-              font-size: ${originalFontSize || '11pt'};
+              font-family: 'Arial', 'Helvetica', sans-serif;
+              line-height: 1.6;
+              color: #000;
+              background: white;
+              font-size: 11pt;
               padding: 0;
               margin: 0;
-              -webkit-print-color-adjust: exact;
-              print-color-adjust: exact;
-              color-adjust: exact;
-              box-sizing: border-box;
-              min-height: 100vh;
               width: 100%;
-              transform: scale(1);
-              transform-origin: top left;
             }
             
             @media print {
               @page {
                 size: A4;
-                margin: 15mm 12mm;
+                margin: 10mm;
               }
               
               body { 
@@ -149,7 +141,7 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
                 background: white !important;
                 width: 100% !important;
                 max-width: none !important;
-                min-height: 100vh !important;
+                min-height: auto !important;
                 position: relative !important;
                 overflow: visible !important;
                 display: block !important;
@@ -213,12 +205,12 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
               
               .bilingual-disclaimer-section {
                 margin-bottom: 8mm !important;
-                page-break-inside: avoid;
+                page-break-inside: auto;
               }
               
               .area-section {
                 margin-bottom: 6mm !important;
-                page-break-inside: avoid;
+                page-break-inside: auto;
               }
               
               .area-header {
@@ -260,24 +252,31 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
               
               /* Enhanced Table improvements */
               .inspection-table {
-                margin-bottom: 4mm !important;
                 width: 100% !important;
+                border-collapse: collapse !important;
+                margin-bottom: 10px !important;
                 table-layout: fixed !important;
                 page-break-inside: auto !important;
               }
               
               .inspection-table th {
-                padding: 2mm !important;
+                padding: 8px !important;
                 font-size: 9pt !important;
-                background-color: #f5f5f5 !important;
+                background-color: #f0f0f0 !important;
+                border: 1px solid #333 !important;
+                font-weight: bold !important;
+                text-align: left !important;
                 -webkit-print-color-adjust: exact;
               }
               
               .inspection-table td {
-                padding: 2mm !important;
+                padding: 8px !important;
                 font-size: 8pt !important;
                 line-height: 1.3 !important;
+                border: 1px solid #333 !important;
+                vertical-align: top !important;
                 word-wrap: break-word !important;
+                word-break: break-word !important;
               }
               
               .inspection-table tr {
@@ -286,22 +285,28 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
               
             /* Enhanced Photo Grid for Inspection Tables */
             .photo-grid {
-                display: grid !important;
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 2mm !important;
-                margin-top: 2mm !important;
+                display: flex !important;
+                flex-wrap: wrap !important;
+                gap: 5px !important;
+                margin-top: 5px !important;
                 width: 100% !important;
             }
             
             .photo-item {
-                width: 100% !important;
-                max-width: 65mm !important;
-                height: 48mm !important;
+                width: 80px !important;
+                height: 60px !important;
                 object-fit: cover !important;
-                border: 0.5pt solid #ddd !important;
-                border-radius: 2mm !important;
+                border: 1px solid #333 !important;
+                display: inline-block !important;
                 page-break-inside: avoid !important;
+            }
+            
+            img {
+                max-width: 100% !important;
+                height: auto !important;
                 display: block !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
             
             .photo-caption {
@@ -312,14 +317,10 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
             }
 
             /* Fix inspection table column widths */
-            .inspection-table {
-                table-layout: fixed !important;
-                width: 100% !important;
-            }
-            
             .inspection-table th:nth-child(1),
             .inspection-table td:nth-child(1) {
-                width: 30% !important;
+                width: 25% !important;
+                word-wrap: break-word !important;
             }
             
             .inspection-table th:nth-child(2),
@@ -330,12 +331,14 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
             
             .inspection-table th:nth-child(3),
             .inspection-table td:nth-child(3) {
-                width: 30% !important;
+                width: 35% !important;
+                word-wrap: break-word !important;
             }
             
             .inspection-table th:nth-child(4),
             .inspection-table td:nth-child(4) {
                 width: 30% !important;
+                word-wrap: break-word !important;
             }
               
               /* Text spacing optimization */
@@ -522,25 +525,51 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
               width: 100%;
               border-collapse: collapse;
               margin-bottom: 20px;
+              table-layout: fixed;
             }
             
             .inspection-table th,
             .inspection-table td {
-              border: 1px solid #d1d5db;
-              padding: 12px 8px;
+              border: 1px solid #000;
+              padding: 10px;
               vertical-align: top;
               text-align: left;
+              word-wrap: break-word;
+              word-break: break-word;
             }
             
             .inspection-table th {
-              background: #f3f4f6;
+              background: #e0e0e0;
               font-weight: bold;
               font-size: 10pt;
-              text-align: center;
+              text-align: left;
+              border: 1px solid #000;
             }
             
             .inspection-table td {
-              font-size: 10pt;
+              font-size: 9pt;
+              border: 1px solid #000;
+            }
+            
+            .inspection-table th:nth-child(1),
+            .inspection-table td:nth-child(1) {
+              width: 25%;
+            }
+            
+            .inspection-table th:nth-child(2),
+            .inspection-table td:nth-child(2) {
+              width: 10%;
+              text-align: center;
+            }
+            
+            .inspection-table th:nth-child(3),
+            .inspection-table td:nth-child(3) {
+              width: 35%;
+            }
+            
+            .inspection-table th:nth-child(4),
+            .inspection-table td:nth-child(4) {
+              width: 30%;
             }
             
             .status-pass { 
@@ -563,31 +592,40 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
             
             /* Photo Grid */
             .photo-section {
-              margin-top: 15px;
+              margin-top: 10px;
+              page-break-inside: avoid;
             }
             
             .photo-grid {
-              display: grid;
-              grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-              gap: 15px;
-              margin-top: 10px;
+              display: flex;
+              flex-wrap: wrap;
+              gap: 8px;
+              margin-top: 8px;
             }
             
             .photo-item {
-              width: 150px !important;
-              height: 110px !important;
+              width: 100px !important;
+              height: 75px !important;
               object-fit: cover;
-              border: 2px solid #e5e7eb;
-              border-radius: 6px;
+              border: 1px solid #333;
+              display: inline-block;
               page-break-inside: avoid;
             }
             
             .photo-caption {
-              font-size: 9pt;
+              font-size: 8pt;
               text-align: center;
-              color: #666;
-              margin-top: 5px;
+              color: #333;
+              margin-top: 3px;
               font-style: italic;
+            }
+            
+            img {
+              max-width: 100%;
+              height: auto;
+              display: block;
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
             }
             
             /* Signature Section */
@@ -801,7 +839,7 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
         </head>
         <body onload="setTimeout(() => { window.print(); window.onafterprint = () => window.close(); }, 500);">
           <div class="watermark">SOLUTION PROPERTY</div>
-          <div class="print-wrapper" style="margin: 0; padding: 0; max-width: 190mm;">
+          <div class="print-wrapper" style="margin: 0; padding: 10px; max-width: 190mm;">
             ${printContent}
           </div>
         </body>
@@ -838,46 +876,60 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
 
       <div ref={printRef} className="report-container bg-white border border-gray-200 rounded-xl shadow-sm">
         {/* Header */}
-        <header className="report-header">
+        <header style={{ 
+          textAlign: 'center', 
+          marginBottom: '30px', 
+          paddingBottom: '20px', 
+          borderBottom: '3px solid #1e40af' 
+        }}>
           <img 
             src="/logo.jpeg" 
             alt="Solution Property Logo" 
-            className="company-logo"
+            style={{ width: '80px', height: '80px', margin: '0 auto 15px', display: 'block' }}
             onError={(e) => {
               const target = e.target as HTMLImageElement;
               target.style.display = 'none';
             }}
           />
-          <div className="company-name">Solution Property</div>
-          <div className="report-title">Property Inspection Report</div>
-          <div className="report-subtitle">Professional Assessment Document</div>
+          <div style={{ fontSize: '24pt', fontWeight: 'bold', color: '#1e40af', marginBottom: '5px' }}>Solution Property</div>
+          <div style={{ fontSize: '18pt', fontWeight: 'bold', color: '#333', marginBottom: '5px' }}>Property Inspection Report</div>
+          <div style={{ fontSize: '12pt', color: '#666', fontStyle: 'italic' }}>Professional Assessment Document</div>
         </header>
 
         {/* Property Information */}
-        <section className="property-info">
-          <div className="info-item">
-            <span className="info-label">Client Name:</span>
-            <span className="info-value">{inspection.clientName || 'N/A'}</span>
+        <section style={{ 
+          backgroundColor: '#f8f8f8', 
+          border: '2px solid #ddd', 
+          borderRadius: '8px', 
+          padding: '15px', 
+          marginBottom: '20px',
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '10px'
+        }}>
+          <div style={{ marginBottom: '8px' }}>
+            <span style={{ fontWeight: 'bold', color: '#1e40af', display: 'inline-block', minWidth: '120px' }}>Client Name:</span>
+            <span style={{ color: '#333' }}>{inspection.clientName || 'N/A'}</span>
           </div>
-          <div className="info-item">
-            <span className="info-label">Inspector:</span>
-            <span className="info-value">{inspection.inspectorName}</span>
+          <div style={{ marginBottom: '8px' }}>
+            <span style={{ fontWeight: 'bold', color: '#1e40af', display: 'inline-block', minWidth: '120px' }}>Inspector:</span>
+            <span style={{ color: '#333' }}>{inspection.inspectorName}</span>
           </div>
-          <div className="info-item">
-            <span className="info-label">Property Location:</span>
-            <span className="info-value">{inspection.propertyLocation}</span>
+          <div style={{ marginBottom: '8px' }}>
+            <span style={{ fontWeight: 'bold', color: '#1e40af', display: 'inline-block', minWidth: '120px' }}>Property Location:</span>
+            <span style={{ color: '#333' }}>{inspection.propertyLocation}</span>
           </div>
-          <div className="info-item">
-            <span className="info-label">Report Date:</span>
-            <span className="info-value">{new Date(reportDate).toLocaleDateString()}</span>
+          <div style={{ marginBottom: '8px' }}>
+            <span style={{ fontWeight: 'bold', color: '#1e40af', display: 'inline-block', minWidth: '120px' }}>Report Date:</span>
+            <span style={{ color: '#333' }}>{new Date(reportDate).toLocaleDateString()}</span>
           </div>
-          <div className="info-item">
-            <span className="info-label">Property Type:</span>
-            <span className="info-value">{inspection.propertyType}</span>
+          <div style={{ marginBottom: '8px' }}>
+            <span style={{ fontWeight: 'bold', color: '#1e40af', display: 'inline-block', minWidth: '120px' }}>Property Type:</span>
+            <span style={{ color: '#333' }}>{inspection.propertyType}</span>
           </div>
-          <div className="info-item">
-            <span className="info-label">Inspection Date:</span>
-            <span className="info-value">{new Date(inspection.inspectionDate).toLocaleDateString()}</span>
+          <div style={{ marginBottom: '8px' }}>
+            <span style={{ fontWeight: 'bold', color: '#1e40af', display: 'inline-block', minWidth: '120px' }}>Inspection Date:</span>
+            <span style={{ color: '#333' }}>{new Date(inspection.inspectionDate).toLocaleDateString()}</span>
           </div>
         </section>
 
@@ -899,82 +951,90 @@ export const ProfessionalReport: React.FC<ProfessionalReportProps> = ({ inspecti
               </h2>
               
               {area.items.length > 0 ? (
-                <table className="inspection-table">
+                <table className="inspection-table" style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
                   <thead>
                     <tr>
-                      <th style={{ width: '35%' }}>Inspection Point</th>
-                      <th style={{ width: '12%' }}>Status</th>
-                      <th style={{ width: '28%' }}>Comments & Location</th>
-                      <th style={{ width: '25%' }}>Photographic Evidence</th>
+                      <th style={{ width: '25%', border: '1px solid #333', padding: '10px', backgroundColor: '#e0e0e0', textAlign: 'left' }}>Inspection Point</th>
+                      <th style={{ width: '10%', border: '1px solid #333', padding: '10px', backgroundColor: '#e0e0e0', textAlign: 'center' }}>Status</th>
+                      <th style={{ width: '35%', border: '1px solid #333', padding: '10px', backgroundColor: '#e0e0e0', textAlign: 'left' }}>Comments & Location</th>
+                      <th style={{ width: '30%', border: '1px solid #333', padding: '10px', backgroundColor: '#e0e0e0', textAlign: 'left' }}>Photographic Evidence</th>
                     </tr>
                   </thead>
                   <tbody>
                     {area.items.map(item => (
                       <tr key={item.id}>
-                        <td>
+                        <td style={{ border: '1px solid #333', padding: '10px', verticalAlign: 'top', wordWrap: 'break-word' }}>
                           <strong>{item.category}</strong><br />
-                          {item.point}
+                          <span style={{ fontSize: '9pt' }}>{item.point}</span>
                         </td>
-                        <td className={cn(
-                          item.status === 'Pass' && "status-pass",
-                          item.status === 'Fail' && "status-fail",
-                          item.status === 'Snags' && "status-snags"
-                        )}>
+                        <td style={{ 
+                          border: '1px solid #333', 
+                          padding: '10px', 
+                          textAlign: 'center', 
+                          verticalAlign: 'middle',
+                          backgroundColor: item.status === 'Pass' ? '#e8f5e8' : item.status === 'Fail' ? '#ffe8e8' : '#fff3cd',
+                          fontWeight: 'bold'
+                        }}>
                           {item.status}
                         </td>
-                        <td>
+                        <td style={{ border: '1px solid #333', padding: '10px', verticalAlign: 'top', wordWrap: 'break-word' }}>
                           {item.comments && (
                             <div style={{ marginBottom: '8px' }}>
-                              <strong>Comments:</strong><br />
-                              {item.comments}
+                              <strong style={{ fontSize: '9pt' }}>Comments:</strong><br />
+                              <span style={{ fontSize: '9pt' }}>{item.comments}</span>
                             </div>
                           )}
                           {item.location && (
                             <div>
-                              <strong>Location:</strong><br />
-                              {item.location}
+                              <strong style={{ fontSize: '9pt' }}>Location:</strong><br />
+                              <span style={{ fontSize: '9pt' }}>{item.location}</span>
                             </div>
                           )}
+                          {!item.comments && !item.location && (
+                            <em style={{ fontSize: '9pt', color: '#666' }}>No details</em>
+                          )}
                         </td>
-                         <td>
+                         <td style={{ border: '1px solid #333', padding: '10px', verticalAlign: 'top' }}>
                            {item.photos.length > 0 && item.photos.some(photoId => {
-                             // Check if at least one photo exists in storage
                              const isBase64 = photoId.startsWith('data:');
                              const isUrl = photoId.startsWith('http://') || photoId.startsWith('https://');
                              return isBase64 || isUrl || LocalStorageService.getPhoto(photoId);
                            }) ? (
-                             <div className="photo-section">
-                               <div className="photo-grid">
-                                 {item.photos.slice(0, 2).map((photoId, idx) => {
-                                   // Only render if photo exists
-                                   const isBase64 = photoId.startsWith('data:');
-                                   const isUrl = photoId.startsWith('http://') || photoId.startsWith('https://');
-                                   const hasPhoto = isBase64 || isUrl || LocalStorageService.getPhoto(photoId);
-                                   
-                                   if (!hasPhoto) return null;
-                                   
-                                   return (
-                                     <div key={idx}>
-                                       <PhotoDisplay
-                                         photoId={photoId}
-                                         className="photo-item"
-                                         alt={`${item.point} - Photo ${idx + 1}`}
-                                       />
-                                       <div className="photo-caption">
-                                         Photo {idx + 1}
-                                       </div>
+                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
+                               {item.photos.slice(0, 2).map((photoId, idx) => {
+                                 const isBase64 = photoId.startsWith('data:');
+                                 const isUrl = photoId.startsWith('http://') || photoId.startsWith('https://');
+                                 const hasPhoto = isBase64 || isUrl || LocalStorageService.getPhoto(photoId);
+                                 
+                                 if (!hasPhoto) return null;
+                                 
+                                 return (
+                                   <div key={idx} style={{ textAlign: 'center' }}>
+                                     <PhotoDisplay
+                                       photoId={photoId}
+                                       style={{ 
+                                         width: '100px', 
+                                         height: '75px', 
+                                         objectFit: 'cover',
+                                         border: '1px solid #666',
+                                         display: 'block'
+                                       }}
+                                       alt={`Photo ${idx + 1}`}
+                                     />
+                                     <div style={{ fontSize: '7pt', color: '#666', marginTop: '2px' }}>
+                                       Photo {idx + 1}
                                      </div>
-                                   );
-                                 }).filter(Boolean)}
-                               </div>
+                                   </div>
+                                 );
+                               }).filter(Boolean)}
                                {item.photos.length > 2 && (
-                                 <p style={{ fontSize: '9pt', fontStyle: 'italic', marginTop: '10px' }}>
-                                   + {item.photos.length - 2} additional photo(s)
-                                 </p>
+                                 <div style={{ width: '100%', fontSize: '7pt', fontStyle: 'italic', marginTop: '5px', textAlign: 'center' }}>
+                                   +{item.photos.length - 2} more
+                                 </div>
                                )}
                              </div>
                            ) : (
-                             <em style={{ color: '#666', fontSize: '9pt' }}>No photos</em>
+                             <em style={{ color: '#666', fontSize: '8pt' }}>No photos</em>
                            )}
                          </td>
                       </tr>
